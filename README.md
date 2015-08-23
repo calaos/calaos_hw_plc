@@ -1,4 +1,3 @@
-
 # Intro
 
 Calaos IO is an electronic board designed to controlled as many I/O as possible. It's intented to replace the wago IO modules in a house. It takes places in the electronic board.
