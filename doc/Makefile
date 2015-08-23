@@ -13,4 +13,4 @@ endef
 $(foreach odg,$(ODG_FILES),$(eval $(call odg_to_png,$(odg))))
 
 clean:
-	rm $(PNG_FILES)
+	rm -f $(PNG_FILES)

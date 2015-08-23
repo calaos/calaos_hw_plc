@@ -27,11 +27,10 @@ private:
 	uint8_t in_buffer[MAX_MESSAGE_SIZE];
 
 	int read_single_message(uint16_t slave_id, void *buf, uint16_t buf_len, uint16_t *read_len);
-	
-public:
 	int write_message(uint16_t slave_id, uint8_t *buf, uint16_t len);
 	int read_message(uint16_t slave_id, void *buf, uint16_t buf_len, uint16_t *read_len);
 	
+public:
 	CalaosPLCBus(PinName tx, PinName rx, PinName de) : bus_serial(tx, rx), de(de) {};
 	~CalaosPLCBus() {};
 };
