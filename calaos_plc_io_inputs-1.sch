@@ -1,0 +1,500 @@
+EESchema Schematic File Version 2
+LIBS:transistors
+LIBS:switches
+LIBS:stm32
+LIBS:regul
+LIBS:power
+LIBS:opto
+LIBS:interface
+LIBS:diode
+LIBS:device
+LIBS:dc-dc
+LIBS:conn
+LIBS:ac-dc
+LIBS:74xx
+LIBS:74xgxx
+LIBS:pca9505
+EELAYER 25 0
+EELAYER END
+$Descr A3 16535 11693
+encoding utf-8
+Sheet 2 3
+Title "calaos_plc_io"
+Date "2015-08-23"
+Rev "v1"
+Comp "Calaos"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L PCA9505 U7
+U 1 1 55DBB486
+P 1050 8700
+F 0 "U7" H 1150 9300 60  0000 C CNN
+F 1 "PCA9505" H 1250 8050 60  0000 C CNN
+F 2 "" H 1250 8050 60  0000 C CNN
+F 3 "" H 1250 8050 60  0000 C CNN
+	1    1050 8700
+	1    0    0    -1  
+$EndComp
+$Comp
+L PCA9505 U7
+U 2 1 55DBB67F
+P 3200 8650
+F 0 "U7" H 3300 9250 60  0000 C CNN
+F 1 "PCA9505" H 3400 8000 60  0000 C CNN
+F 2 "" H 3400 8000 60  0000 C CNN
+F 3 "" H 3400 8000 60  0000 C CNN
+	2    3200 8650
+	1    0    0    -1  
+$EndComp
+$Comp
+L PCA9505 U7
+U 3 1 55DBBDC5
+P 5550 8650
+F 0 "U7" H 5650 9250 60  0000 C CNN
+F 1 "PCA9505" H 5750 8000 60  0000 C CNN
+F 2 "" H 5750 8000 60  0000 C CNN
+F 3 "" H 5750 8000 60  0000 C CNN
+	3    5550 8650
+	1    0    0    -1  
+$EndComp
+$Comp
+L PCA9505 U7
+U 4 1 55DBBF06
+P 8300 8500
+F 0 "U7" H 8400 9100 60  0000 C CNN
+F 1 "PCA9505" H 8500 7850 60  0000 C CNN
+F 2 "" H 8500 7850 60  0000 C CNN
+F 3 "" H 8500 7850 60  0000 C CNN
+	4    8300 8500
+	1    0    0    -1  
+$EndComp
+$Comp
+L PCA9505 U7
+U 5 1 55DBC103
+P 10700 8550
+F 0 "U7" H 10800 9150 60  0000 C CNN
+F 1 "PCA9505" H 10900 7900 60  0000 C CNN
+F 2 "" H 10900 7900 60  0000 C CNN
+F 3 "" H 10900 7900 60  0000 C CNN
+	5    10700 8550
+	1    0    0    -1  
+$EndComp
+$Comp
+L PCA9505 U7
+U 6 1 55DBC23A
+P 14100 2550
+F 0 "U7" H 14200 3150 60  0000 C CNN
+F 1 "PCA9505" H 14200 2400 60  0000 C CNN
+F 2 "" H 14300 1900 60  0000 C CNN
+F 3 "" H 14300 1900 60  0000 C CNN
+	6    14100 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L PCA9505 U7
+U 7 1 55DBC693
+P 14100 5300
+F 0 "U7" V 13700 5400 60  0000 C CNN
+F 1 "PCA9505" V 14500 5500 60  0000 C CNN
+F 2 "" H 14300 4650 60  0000 C CNN
+F 3 "" H 14300 4650 60  0000 C CNN
+	7    14100 5300
+	1    0    0    -1  
+$EndComp
+Text Label 1600 8200 0    60   ~ 0
+I0_0
+Text Label 1600 8350 0    60   ~ 0
+I0_1
+Text Label 1600 8500 0    60   ~ 0
+I0_2
+Text Label 1600 8650 0    60   ~ 0
+I0_3
+Text Label 1600 8800 0    60   ~ 0
+I0_4
+Text Label 1600 8950 0    60   ~ 0
+I0_5
+Text Label 1600 9100 0    60   ~ 0
+I0_6
+Text Label 1600 9250 0    60   ~ 0
+I0_7
+Text Label 3750 8150 0    60   ~ 0
+I1_0
+Text Label 3750 8300 0    60   ~ 0
+I1_1
+Text Label 3750 8450 0    60   ~ 0
+I1_2
+Text Label 3750 8600 0    60   ~ 0
+I1_3
+Text Label 3750 8750 0    60   ~ 0
+I1_4
+Text Label 3750 8900 0    60   ~ 0
+I1_5
+Text Label 3750 9050 0    60   ~ 0
+I1_6
+Text Label 3750 9200 0    60   ~ 0
+I1_7
+Text Label 6100 8150 0    60   ~ 0
+I2_0
+Text Label 6100 8300 0    60   ~ 0
+I2_1
+Text Label 6100 8450 0    60   ~ 0
+I2_2
+Text Label 6100 8600 0    60   ~ 0
+I2_3
+Text Label 6100 8750 0    60   ~ 0
+I2_4
+Text Label 6100 8900 0    60   ~ 0
+I2_5
+Text Label 6100 9050 0    60   ~ 0
+I2_6
+Text Label 6100 9200 0    60   ~ 0
+I2_7
+Text Label 8850 8000 0    60   ~ 0
+I3_0
+Text Label 8850 8150 0    60   ~ 0
+I3_1
+Text Label 8850 8300 0    60   ~ 0
+I3_2
+Text Label 8850 8450 0    60   ~ 0
+I3_3
+Text Label 8850 8600 0    60   ~ 0
+I3_4
+Text Label 8850 8750 0    60   ~ 0
+I3_5
+Text Label 8850 8900 0    60   ~ 0
+I3_6
+Text Label 8850 9050 0    60   ~ 0
+I3_7
+Text Label 11250 8050 0    60   ~ 0
+I4_0
+Text Label 11250 8200 0    60   ~ 0
+I4_1
+Text Label 11250 8350 0    60   ~ 0
+I4_2
+Text Label 11250 8500 0    60   ~ 0
+I4_3
+Text Label 11250 8650 0    60   ~ 0
+I4_4
+Text Label 11250 8800 0    60   ~ 0
+I4_5
+Text Label 11250 8950 0    60   ~ 0
+I4_6
+Text Label 11250 9100 0    60   ~ 0
+I4_7
+Text HLabel 13600 2050 0    60   Input ~ 0
+SCL
+Text HLabel 13600 2150 0    60   Input ~ 0
+SDA
+$Comp
+L GND #PWR33
+U 1 1 55DDCFB1
+P 13400 2700
+F 0 "#PWR33" H 13400 2450 50  0001 C CNN
+F 1 "GND" H 13400 2550 50  0000 C CNN
+F 2 "" H 13400 2700 60  0000 C CNN
+F 3 "" H 13400 2700 60  0000 C CNN
+	1    13400 2700
+	1    0    0    -1  
+$EndComp
+Text HLabel 14600 2300 2    60   Output ~ 0
+INT_INPUTS
+$Comp
+L GND #PWR35
+U 1 1 55DDD54C
+P 14100 5750
+F 0 "#PWR35" H 14100 5500 50  0001 C CNN
+F 1 "GND" H 14100 5600 50  0000 C CNN
+F 2 "" H 14100 5750 60  0000 C CNN
+F 3 "" H 14100 5750 60  0000 C CNN
+	1    14100 5750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1550 8200 1800 8200
+Wire Wire Line
+	1550 8350 1800 8350
+Wire Wire Line
+	1550 8500 1800 8500
+Wire Wire Line
+	1550 8650 1800 8650
+Wire Wire Line
+	1550 8800 1800 8800
+Wire Wire Line
+	1550 8950 1800 8950
+Wire Wire Line
+	1550 9100 1800 9100
+Wire Wire Line
+	1550 9250 1800 9250
+Wire Wire Line
+	3700 8150 3950 8150
+Wire Wire Line
+	3700 8300 3950 8300
+Wire Wire Line
+	3700 8450 3950 8450
+Wire Wire Line
+	3700 8600 3950 8600
+Wire Wire Line
+	3700 8750 3950 8750
+Wire Wire Line
+	3700 8900 3950 8900
+Wire Wire Line
+	3700 9050 3950 9050
+Wire Wire Line
+	3700 9200 3950 9200
+Wire Wire Line
+	6050 8150 6300 8150
+Wire Wire Line
+	6050 8300 6300 8300
+Wire Wire Line
+	6050 8450 6300 8450
+Wire Wire Line
+	6050 8600 6300 8600
+Wire Wire Line
+	6050 8750 6300 8750
+Wire Wire Line
+	6050 8900 6300 8900
+Wire Wire Line
+	6050 9050 6300 9050
+Wire Wire Line
+	6050 9200 6300 9200
+Wire Wire Line
+	8800 8000 9050 8000
+Wire Wire Line
+	8800 8150 9050 8150
+Wire Wire Line
+	8800 8300 9050 8300
+Wire Wire Line
+	8800 8450 9050 8450
+Wire Wire Line
+	8800 8600 9050 8600
+Wire Wire Line
+	8800 8750 9050 8750
+Wire Wire Line
+	8800 8900 9050 8900
+Wire Wire Line
+	8800 9050 9050 9050
+Wire Wire Line
+	11200 8050 11450 8050
+Wire Wire Line
+	11200 8200 11450 8200
+Wire Wire Line
+	11200 8350 11450 8350
+Wire Wire Line
+	11200 8500 11450 8500
+Wire Wire Line
+	11200 8650 11450 8650
+Wire Wire Line
+	11200 8800 11450 8800
+Wire Wire Line
+	11200 8950 11450 8950
+Wire Wire Line
+	11200 9100 11450 9100
+Wire Wire Line
+	13850 5550 13850 5650
+Wire Wire Line
+	13850 5650 14350 5650
+Wire Wire Line
+	14350 5650 14350 5550
+Wire Wire Line
+	14250 5550 14250 5650
+Connection ~ 14250 5650
+Wire Wire Line
+	14150 5550 14150 5650
+Connection ~ 14150 5650
+Wire Wire Line
+	14050 5550 14050 5650
+Connection ~ 14050 5650
+Wire Wire Line
+	13950 5550 13950 5650
+Connection ~ 13950 5650
+Wire Wire Line
+	14100 5750 14100 5650
+Connection ~ 14100 5650
+Wire Wire Line
+	14050 4700 14050 4600
+Wire Wire Line
+	14050 4600 14150 4600
+Wire Wire Line
+	14150 4600 14150 4700
+Wire Wire Line
+	14100 4500 14100 4600
+Connection ~ 14100 4600
+$Comp
+L R R5
+U 1 1 55DF167D
+P 1800 1350
+F 0 "R5" V 1880 1350 50  0000 C CNN
+F 1 "390" V 1800 1350 50  0000 C CNN
+F 2 "" V 1730 1350 30  0000 C CNN
+F 3 "" H 1800 1350 30  0000 C CNN
+	1    1800 1350
+	0    1    1    0   
+$EndComp
+$Comp
+L R R6
+U 1 1 55DF1720
+P 2300 1350
+F 0 "R6" V 2380 1350 50  0000 C CNN
+F 1 "390" V 2300 1350 50  0000 C CNN
+F 2 "" V 2230 1350 30  0000 C CNN
+F 3 "" H 2300 1350 30  0000 C CNN
+	1    2300 1350
+	0    1    1    0   
+$EndComp
+$Comp
+L TVS D2
+U 1 1 55DF175B
+P 2050 1750
+F 0 "D2" H 2050 1900 50  0000 C CNN
+F 1 "TVS 3v3" H 2050 1600 50  0000 C CNN
+F 2 "" H 2050 1750 60  0000 C CNN
+F 3 "" H 2050 1750 60  0000 C CNN
+	1    2050 1750
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	1950 1350 2150 1350
+Wire Wire Line
+	2050 1450 2050 1350
+Connection ~ 2050 1350
+$Comp
+L OPTO-TRANSISTOR-4 U8
+U 1 1 55DF1862
+P 2950 1450
+F 0 "U8" H 2750 1650 50  0000 L CNN
+F 1 "LTV-847" H 2750 1250 50  0000 L CNN
+F 2 "" H 2750 1250 50  0000 L CIN
+F 3 "" H 2950 1450 50  0000 L CNN
+	1    2950 1450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2450 1350 2650 1350
+Wire Wire Line
+	2650 1550 2600 1550
+Wire Wire Line
+	2600 1550 2600 2050
+Connection ~ 2050 2050
+Wire Wire Line
+	1650 1350 1300 1350
+$Comp
+L R R7
+U 1 1 55DF1B47
+P 3350 1150
+F 0 "R7" V 3430 1150 50  0000 C CNN
+F 1 "10k" V 3350 1150 50  0000 C CNN
+F 2 "" V 3280 1150 30  0000 C CNN
+F 3 "" H 3350 1150 30  0000 C CNN
+	1    3350 1150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3250 1350 3850 1350
+Wire Wire Line
+	3350 1350 3350 1300
+$Comp
+L +5V #PWR31
+U 1 1 55DF1C8C
+P 3350 900
+F 0 "#PWR31" H 3350 750 50  0001 C CNN
+F 1 "+5V" H 3350 1040 50  0000 C CNN
+F 2 "" H 3350 900 60  0000 C CNN
+F 3 "" H 3350 900 60  0000 C CNN
+	1    3350 900 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3350 1000 3350 900 
+$Comp
+L GNDREF #PWR30
+U 1 1 55DF1D32
+P 1300 2150
+F 0 "#PWR30" H 1300 1900 50  0001 C CNN
+F 1 "GNDREF" H 1300 2000 50  0000 C CNN
+F 2 "" H 1300 2150 60  0000 C CNN
+F 3 "" H 1300 2150 60  0000 C CNN
+	1    1300 2150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1300 2150 1300 2050
+Wire Wire Line
+	1300 2050 2600 2050
+Wire Wire Line
+	3250 1550 3350 1550
+Wire Wire Line
+	3350 1550 3350 2150
+$Comp
+L GND #PWR32
+U 1 1 55DF1FA5
+P 3350 2150
+F 0 "#PWR32" H 3350 1900 50  0001 C CNN
+F 1 "GND" H 3350 2000 50  0000 C CNN
+F 2 "" H 3350 2150 60  0000 C CNN
+F 3 "" H 3350 2150 60  0000 C CNN
+	1    3350 2150
+	1    0    0    -1  
+$EndComp
+Connection ~ 3350 1350
+Text HLabel 1300 1350 0    60   Output ~ 0
+DI_01
+Text Label 3650 1350 0    60   ~ 0
+I0_0
+$Comp
+L R R8
+U 1 1 55E198BB
+P 14700 1900
+F 0 "R8" V 14780 1900 50  0000 C CNN
+F 1 "10k" V 14700 1900 50  0000 C CNN
+F 2 "" V 14630 1900 30  0000 C CNN
+F 3 "" H 14700 1900 30  0000 C CNN
+	1    14700 1900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	14600 2200 14700 2200
+Wire Wire Line
+	14700 2200 14700 2050
+$Comp
+L +5V #PWR36
+U 1 1 55E199EA
+P 14700 1700
+F 0 "#PWR36" H 14700 1550 50  0001 C CNN
+F 1 "+5V" H 14700 1840 50  0000 C CNN
+F 2 "" H 14700 1700 60  0000 C CNN
+F 3 "" H 14700 1700 60  0000 C CNN
+	1    14700 1700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	14700 1750 14700 1700
+$Comp
+L +5V #PWR34
+U 1 1 55E19BAB
+P 14100 4500
+F 0 "#PWR34" H 14100 4350 50  0001 C CNN
+F 1 "+5V" H 14100 4640 50  0000 C CNN
+F 2 "" H 14100 4500 60  0000 C CNN
+F 3 "" H 14100 4500 60  0000 C CNN
+	1    14100 4500
+	1    0    0    -1  
+$EndComp
+Text Notes 650  1900 0    60   ~ 0
+30mA @ 24V\n25mA @ 12V\n5mA @ 5V\n=> 35V -> 5V input  \nwith opto like LTV-847 ?
+Text Notes 13600 2900 0    60   ~ 0
+I2C address : 0x40
+Wire Wire Line
+	13600 2550 13400 2550
+Wire Wire Line
+	13400 2350 13400 2700
+Wire Wire Line
+	13600 2350 13400 2350
+Connection ~ 13400 2550
+Wire Wire Line
+	13600 2450 13400 2450
+Connection ~ 13400 2450
+$EndSCHEMATC
