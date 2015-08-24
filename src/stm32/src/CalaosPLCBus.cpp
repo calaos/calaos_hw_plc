@@ -110,6 +110,23 @@ int CalaosPLCBus::read_message(uint16_t slave_id, uint16_t request_type, void *b
 	return ret;
 }
 
+int CalaosPLCBus::parse_discover(CalaosPLCBusSlave *slave, uint8_t *buffer)
+{
+	struct cpbp_req *hdr = (struct cpbp_req *) buffer;
+	struct cpbp_cap_desc *cap_desc;
+	uint16_t i;
+
+	printf("%d capabilities\n", hdr->cap_count);
+
+	cap_desc = (struct cpbp_cap_desc *) &buffer[sizeof(struct cpbp_req)];
+	for (i = 0; i < hdr->cap_count; i++) {
+		printf("Capability %d\n", cap_desc->type);
+		cap_desc++;
+	}
+
+	return 0;
+}
+
 int CalaosPLCBus::discover()
 {
 	uint16_t slave_id;
@@ -132,7 +149,8 @@ int CalaosPLCBus::discover()
 			continue;
 
 		printf("Slave discovered with id %x\n", slave_id);
-		slave = new CalaosPLCBusSlave(slave_id, 0);
+		slave = new CalaosPLCBusSlave(slave_id);
+		parse_discover(slave, read_buffer);
 		slaves.push_back(slave);
 		
 	}

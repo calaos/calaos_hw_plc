@@ -9,7 +9,7 @@ private:
 	string name;
 	uint32_t capabilities;
 public:
-	CalaosPLCBusSlave(uint16_t slave_id, uint32_t capabilities): slave_id(slave_id), capabilities(capabilities) {};
+	CalaosPLCBusSlave(uint16_t slave_id, uint32_t capabilities = 0): slave_id(slave_id), capabilities(capabilities) {};
 	~CalaosPLCBusSlave() {};
 
 	bool has_capability(uint32_t cap) { return (capabilities & cap);};
