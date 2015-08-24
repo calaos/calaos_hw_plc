@@ -3,11 +3,6 @@
 
 #include <string> 
 
-#define CALAOS_BUS_CAP_INPUT		(1 << 0)
-#define CALAOS_BUS_CAP_OUTPUT		(1 << 1)
-#define CALAOS_BUS_CAP_TEMP		(1 << 2)
-#define CALAOS_BUS_CAP_HUMID		(1 << 3)
-
 class CalaosPLCBusSlave {
 private:
 	uint16_t slave_id;
