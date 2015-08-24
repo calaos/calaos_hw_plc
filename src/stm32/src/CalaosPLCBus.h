@@ -9,13 +9,15 @@
 #include "CalaosPLCBusSlave.h"
 
 /* FIXME application dependent */
-#define REQUEST_TIMEOUT_MSEC		4
+#define REQUEST_TIMEOUT_MSEC		3
 
 #define INTER_FRAME_SILENCE_USEC	750
 
 #define MAX_MESSAGE_SIZE		1024
 
 #define MAX_BUS_TRIALS			3
+
+#define MAX_SLAVE_NODES			128
 
 enum calaos_plc_bus_err {
 	CALAOS_PLC_BUS_WRITE_ERR = 1,

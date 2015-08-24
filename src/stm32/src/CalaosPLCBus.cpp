@@ -20,7 +20,7 @@ int CalaosPLCBus::write_message(uint16_t slave_id, uint16_t request_type, uint8_
 	/* Send the header */
 	for(i = 0; i < sizeof(struct plc_bus_msg_header); i++) {
 		ret = bus_serial.putc(ptr[i]);
-		if (ret != 0)
+		if (ret != ptr[i])
 			return CALAOS_PLC_BUS_WRITE_ERR;
 	}
 	crc = crc16(crc, &hdr, sizeof(struct plc_bus_msg_header));
@@ -28,7 +28,7 @@ int CalaosPLCBus::write_message(uint16_t slave_id, uint16_t request_type, uint8_
 	/* Send the message */
 	for(i = 0; i < len; i++) {
 		ret = bus_serial.putc(buf[i]);
-		if (ret != 0)
+		if (ret != buf[i])
 			return CALAOS_PLC_BUS_WRITE_ERR;
 	}
 	crc = crc16(crc, buf, len);
@@ -37,9 +37,11 @@ int CalaosPLCBus::write_message(uint16_t slave_id, uint16_t request_type, uint8_
 	/* Finally, send the CRC */
 	for(i = 0; i < sizeof(crc); i++) {
 		ret = bus_serial.putc(ptr[i]);
-		if (ret != 0)
+		if (ret != ptr[i])
 			return CALAOS_PLC_BUS_WRITE_ERR;
 	}
+	
+	printf("Message sent to slave id %d\r\n", slave_id);
 
 	return 0;
 }
@@ -51,16 +53,19 @@ int CalaosPLCBus::read_single_message(uint16_t slave_id, uint16_t request_type, 
 	struct plc_bus_msg_header *hdr;
 	uint16_t len = 0, *expected_crc16;
 
+	printf("Starting to wait for slave %d response\r\n", slave_id);
+	
 	/* Wait to receive a first char and handle timeout */
 	t.start();
 	while (!bus_serial.readable()) {
 		if (t.read_ms() > REQUEST_TIMEOUT_MSEC) {
 			t.stop();
+			printf("Timeout while waiting answer\r\n");
 			return CALAOS_PLC_BUS_TIMEOUT;
 		}
 	}
-
-	t.start();
+	printf("Received data from slave\r\n");
+	t.reset();
 	while (1) {
 		/* Read any char if available */
 		while (bus_serial.readable()) {
@@ -101,7 +106,7 @@ int CalaosPLCBus::read_message(uint16_t slave_id, uint16_t request_type, void *b
 	int ret, i;
 
 	for (i = 0; i < MAX_BUS_TRIALS; i++) {
-		ret = read_message(slave_id, request_type, buf, buf_len, read_len);
+		ret = read_single_message(slave_id, request_type, buf, buf_len, read_len);
 		if (ret == 0)
 			return 0;
 		/* Actually, we might consider a timeout as a direct failure for faster discovery */
@@ -116,11 +121,11 @@ int CalaosPLCBus::parse_discover(CalaosPLCBusSlave *slave, uint8_t *buffer)
 	struct cpbp_cap_desc *cap_desc;
 	uint16_t i;
 
-	printf("%d capabilities\n", hdr->cap_count);
+	printf("%d capabilities\r\n", hdr->cap_count);
 
 	cap_desc = (struct cpbp_cap_desc *) &buffer[sizeof(struct cpbp_req)];
 	for (i = 0; i < hdr->cap_count; i++) {
-		printf("Capability %d\n", cap_desc->type);
+		printf("Capability %d\r\n", cap_desc->type);
 		cap_desc++;
 	}
 
@@ -138,21 +143,25 @@ int CalaosPLCBus::discover()
 	read_buffer = new uint8_t[MAX_MESSAGE_SIZE];
 	if (!read_buffer)
 		return 1;
+		
+	printf("Discovering bus\r\n");
 
-	for(slave_id = 0; slave_id < (uint16_t) -1; slave_id++) {
+	for(slave_id = 0; slave_id < MAX_SLAVE_NODES; slave_id++) {
+		printf("Scanning slave id %d\r\n", slave_id);
 		ret = write_message(slave_id, CALAOS_PLC_BUS_REQ_DISCOVER, NULL, 0);
-		if (ret != 0)
+		if (ret != 0) {
+			printf("Write returned with err %d\r\n", ret);
 			continue;
+		}
 
 		ret = read_message(slave_id, CALAOS_PLC_BUS_REQ_DISCOVER, read_buffer, MAX_MESSAGE_SIZE, &read_len);
 		if (ret != 0)
 			continue;
 
-		printf("Slave discovered with id %x\n", slave_id);
+		printf("Slave discovered with id %x\r\n", slave_id);
 		slave = new CalaosPLCBusSlave(slave_id);
 		parse_discover(slave, read_buffer);
 		slaves.push_back(slave);
-		
 	}
 
 	delete read_buffer;
