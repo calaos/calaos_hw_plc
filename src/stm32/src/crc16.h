@@ -28,6 +28,14 @@
 #ifndef _CRC16_H_
 #define _CRC16_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 unsigned short crc16(unsigned short crc, const void *buf, int len);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _CRC16_H_ */
