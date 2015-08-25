@@ -2,28 +2,20 @@
 #include "CalaosPLCBusProtocol.h"
 #include "crc16.h"
 
-#define CRC_SIZE	2
-
-struct plc_bus_msg_header {
-	uint16_t slave_id;
-	uint16_t payload_length;
-	uint16_t request_type;
-};
-
 int CalaosPLCBus::write_message(uint16_t slave_id, uint16_t request_type, uint8_t *buf, uint16_t len)
 {	
 	ssize_t ret;
 	uint16_t crc = 0, i;
-	struct plc_bus_msg_header hdr = {.slave_id = slave_id, .payload_length = len, .request_type = request_type};
+	struct cpbp_msg_header hdr = {.slave_id = slave_id, .payload_length = len, .request_type = request_type};
 	uint8_t *ptr = (uint8_t *) &hdr;
 
 	/* Send the header */
-	for(i = 0; i < sizeof(struct plc_bus_msg_header); i++) {
+	for(i = 0; i < sizeof(struct cpbp_msg_header); i++) {
 		ret = bus_serial.putc(ptr[i]);
 		if (ret != ptr[i])
 			return CALAOS_PLC_BUS_WRITE_ERR;
 	}
-	crc = crc16(crc, &hdr, sizeof(struct plc_bus_msg_header));
+	crc = crc16(crc, &hdr, sizeof(struct cpbp_msg_header));
 
 	/* Send the message */
 	for(i = 0; i < len; i++) {
@@ -50,21 +42,23 @@ int CalaosPLCBus::read_single_message(uint16_t slave_id, uint16_t request_type, 
 {
 	Timer t;
 	int ret;
-	struct plc_bus_msg_header *hdr;
+	struct cpbp_msg_header *hdr;
 	uint16_t len = 0, *expected_crc16;
 
 	printf("Starting to wait for slave %d response\r\n", slave_id);
-	
+
 	/* Wait to receive a first char and handle timeout */
 	t.start();
 	while (!bus_serial.readable()) {
-		if (t.read_ms() > REQUEST_TIMEOUT_MSEC) {
+		if (t.read_ms() > CPBP_REQUEST_TIMEOUT_MSEC) {
 			t.stop();
 			printf("Timeout while waiting answer\r\n");
 			return CALAOS_PLC_BUS_TIMEOUT;
 		}
 	}
 	printf("Received data from slave\r\n");
+
+	hdr = (struct cpbp_msg_header *) in_buffer;
 	t.reset();
 	while (1) {
 		/* Read any char if available */
@@ -76,26 +70,32 @@ int CalaosPLCBus::read_single_message(uint16_t slave_id, uint16_t request_type, 
 			}
 			in_buffer[len++] = ret;
 			t.reset();
+
 		}
-		if (t.read_us() > INTER_FRAME_SILENCE_USEC)
+		/* Check if we have received the length header */
+		if (len >= (offsetof(struct cpbp_msg_header, payload_length) + sizeof(hdr->payload_length)))
+			if (len == (sizeof(struct cpbp_msg_header) + hdr->payload_length + CPBP_CRC_SIZE))
+				break;
+
+		if (t.read_us() > CPBP_INTER_FRAME_SILENCE_USEC)
 			break;
+		
 	}
 	t.stop();
 
 	/* Check the CRC */
-	expected_crc16 = (uint16_t *) &in_buffer[len - CRC_SIZE - 1];
+	expected_crc16 = (uint16_t *) &in_buffer[len - CPBP_CRC_SIZE - 1];
 
-	if (crc16(0, in_buffer, len - CRC_SIZE - 1) != *expected_crc16)
+	if (crc16(0, in_buffer, len - CPBP_CRC_SIZE - 1) != *expected_crc16)
 		return CALAOS_PLC_BUS_CRC_ERR;
 
-	hdr = (struct plc_bus_msg_header *) in_buffer;
 	if (hdr->slave_id != slave_id)
 		return CALAOS_PLC_BUS_SLAVE_ERR;
 	if (hdr->request_type != request_type)
 		return CALAOS_PLC_BUS_REQUEST_ERR;
 
-	len = len - sizeof(struct plc_bus_msg_header) + CRC_SIZE;
-	memcpy(buf, &in_buffer[sizeof(struct plc_bus_msg_header)], len);
+	len = len - sizeof(struct cpbp_msg_header) + CPBP_CRC_SIZE;
+	memcpy(buf, &in_buffer[sizeof(struct cpbp_msg_header)], len);
 	*read_len = len;
 
 	return 0;
@@ -105,7 +105,7 @@ int CalaosPLCBus::read_message(uint16_t slave_id, uint16_t request_type, void *b
 {
 	int ret, i;
 
-	for (i = 0; i < MAX_BUS_TRIALS; i++) {
+	for (i = 0; i < CPBP_MAX_BUS_TRIALS; i++) {
 		ret = read_single_message(slave_id, request_type, buf, buf_len, read_len);
 		if (ret == 0)
 			return 0;
@@ -117,13 +117,13 @@ int CalaosPLCBus::read_message(uint16_t slave_id, uint16_t request_type, void *b
 
 int CalaosPLCBus::parse_discover(CalaosPLCBusSlave *slave, uint8_t *buffer)
 {
-	struct cpbp_req *hdr = (struct cpbp_req *) buffer;
+	struct cpbp_cap_resp *hdr = (struct cpbp_cap_resp *) buffer;
 	struct cpbp_cap_desc *cap_desc;
 	uint16_t i;
 
 	printf("%d capabilities\r\n", hdr->cap_count);
 
-	cap_desc = (struct cpbp_cap_desc *) &buffer[sizeof(struct cpbp_req)];
+	cap_desc = (struct cpbp_cap_desc *) &buffer[sizeof(struct cpbp_cap_resp)];
 	for (i = 0; i < hdr->cap_count; i++) {
 		printf("Capability %d\r\n", cap_desc->type);
 		cap_desc++;
@@ -140,7 +140,7 @@ int CalaosPLCBus::discover()
 	uint16_t read_len;
 	CalaosPLCBusSlave *slave;
 
-	read_buffer = new uint8_t[MAX_MESSAGE_SIZE];
+	read_buffer = new uint8_t[CPBP_MAX_MESSAGE_SIZE];
 	if (!read_buffer)
 		return 1;
 		
@@ -154,7 +154,7 @@ int CalaosPLCBus::discover()
 			continue;
 		}
 
-		ret = read_message(slave_id, CALAOS_PLC_BUS_REQ_DISCOVER, read_buffer, MAX_MESSAGE_SIZE, &read_len);
+		ret = read_message(slave_id, CALAOS_PLC_BUS_REQ_DISCOVER, read_buffer, CPBP_MAX_MESSAGE_SIZE, &read_len);
 		if (ret != 0)
 			continue;
 

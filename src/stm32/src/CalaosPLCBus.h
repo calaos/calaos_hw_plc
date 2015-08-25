@@ -7,15 +7,7 @@
 #include <list>
 
 #include "CalaosPLCBusSlave.h"
-
-/* FIXME application dependent */
-#define REQUEST_TIMEOUT_MSEC		3
-
-#define INTER_FRAME_SILENCE_USEC	750
-
-#define MAX_MESSAGE_SIZE		1024
-
-#define MAX_BUS_TRIALS			3
+#include "CalaosPLCBusProtocol.h"
 
 #define MAX_SLAVE_NODES			128
 
@@ -32,7 +24,7 @@ class CalaosPLCBus {
 private:
 	RawSerial bus_serial;
 	DigitalOut de;
-	uint8_t in_buffer[MAX_MESSAGE_SIZE];
+	uint8_t in_buffer[CPBP_MAX_MESSAGE_SIZE];
 	list<CalaosPLCBusSlave *> slaves;
 
 	int read_single_message(uint16_t slave_id, uint16_t request_type, void *buf, uint16_t buf_len, uint16_t *read_len);
