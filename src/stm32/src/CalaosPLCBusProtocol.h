@@ -27,6 +27,11 @@
  */
 #define CPBP_MAX_BUS_TRIALS		3
 
+/**
+ * Maimum length of node name reported for discover
+ */
+#define CPBP_MAX_NODE_NAME_LEN		10
+
 #define __packed__ __attribute__((packed))
 
 /**
@@ -42,7 +47,7 @@ enum cpbp_cap_type{
 /**
  * List of requests type
  */
-enum cpbp_cap_resp_type {
+enum cpbp_discover_resp_type {
 	CALAOS_PLC_BUS_REQ_DISCOVER = 0,/**< Send a discover request, the slave should answer with a response */
 };
 
@@ -58,12 +63,13 @@ struct cpbp_msg_header {
 /**
  * First header sent by node after in answer to CALAOS_PLC_BUS_REQ_DISCOVER
  */
-struct cpbp_cap_resp {
+struct cpbp_discover_resp {
+	const char name[10];	/**< Node name */
 	uint16_t cap_count;	/**< Count of capabilities descriptors in response */
 } ;
 
 /**
- * Struct located after struct cpbp_cap_resp to describe capabilities
+ * Struct located after struct cpbp_discover_resp to describe capabilities
  */
 struct cpbp_cap_desc {
 	uint8_t type;		/**< Capability type */

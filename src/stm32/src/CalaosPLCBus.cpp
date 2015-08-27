@@ -117,13 +117,13 @@ int CalaosPLCBus::read_message(uint16_t slave_id, uint16_t request_type, void *b
 
 int CalaosPLCBus::parse_discover(CalaosPLCBusSlave *slave, uint8_t *buffer)
 {
-	struct cpbp_cap_resp *hdr = (struct cpbp_cap_resp *) buffer;
+	struct cpbp_discover_resp *hdr = (struct cpbp_discover_resp *) buffer;
 	struct cpbp_cap_desc *cap_desc;
 	uint16_t i;
 
 	printf("%d capabilities\r\n", hdr->cap_count);
 
-	cap_desc = (struct cpbp_cap_desc *) &buffer[sizeof(struct cpbp_cap_resp)];
+	cap_desc = (struct cpbp_cap_desc *) &buffer[sizeof(struct cpbp_discover_resp)];
 	for (i = 0; i < hdr->cap_count; i++) {
 		printf("Capability %d\r\n", cap_desc->type);
 		cap_desc++;
