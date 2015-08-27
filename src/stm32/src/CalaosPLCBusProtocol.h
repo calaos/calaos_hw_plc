@@ -1,6 +1,8 @@
 #ifndef CALAOSPLCBUSPROTOCOL_H
 #define CALAOSPLCBUSPROTOCOL_H
 
+#include <stdint.h>
+
 /**
  * This depends on how long the node must answer a master request
  */
@@ -15,7 +17,7 @@
  * Even if the protocol can make frame up to 65536 btyes, set maximum frame size to a much lower
  * value since microcontroller don't have much memory
  */
-#define CPBP_MAX_MESSAGE_SIZE		512
+#define CPBP_MAX_MESSAGE_SIZE		1024
 
 /**
  * CRC size (crc16)
@@ -33,6 +35,16 @@
 #define CPBP_MAX_NODE_NAME_LEN		10
 
 #define __packed__ __attribute__((packed))
+
+
+enum cpbp_err {
+	CALAOS_PLC_BUS_WRITE_ERR = 1,
+	CALAOS_PLC_BUS_READ_ERR,
+	CALAOS_PLC_BUS_TIMEOUT,
+	CALAOS_PLC_BUS_CRC_ERR,
+	CALAOS_PLC_BUS_SLAVE_ERR,
+	CALAOS_PLC_BUS_REQUEST_ERR,
+};
 
 /**
  * Capabilities

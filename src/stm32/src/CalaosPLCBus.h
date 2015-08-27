@@ -11,15 +11,6 @@
 
 #define MAX_SLAVE_NODES			128
 
-enum calaos_plc_bus_err {
-	CALAOS_PLC_BUS_WRITE_ERR = 1,
-	CALAOS_PLC_BUS_READ_ERR,
-	CALAOS_PLC_BUS_TIMEOUT,
-	CALAOS_PLC_BUS_CRC_ERR,
-	CALAOS_PLC_BUS_SLAVE_ERR,
-	CALAOS_PLC_BUS_REQUEST_ERR,
-};
-
 class CalaosPLCBus {
 private:
 	RawSerial bus_serial;
