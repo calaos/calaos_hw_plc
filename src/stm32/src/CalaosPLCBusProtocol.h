@@ -78,7 +78,7 @@ struct cpbp_msg_header {
 struct cpbp_discover_resp {
 	const char name[10];	/**< Node name */
 	uint16_t cap_count;	/**< Count of capabilities descriptors in response */
-} ;
+} __packed__;
 
 /**
  * Struct located after struct cpbp_discover_resp to describe capabilities

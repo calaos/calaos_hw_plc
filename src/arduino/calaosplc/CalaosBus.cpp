@@ -22,16 +22,17 @@ void CalaosBus::set_bus_speed(int speed)
 	plc_bus.begin(speed);
 }
 
-int CalaosBus::get_message()
+int CalaosBus::get_message(uint8_t **msg_buffer, uint16_t *msg_len, uint16_t *request_type)
 {
 	struct cpbp_msg_header *hdr;
 	uint16_t len = 0, *expected_crc16;
+	unsigned long start;
 
 	if (!plc_bus.available())
 		return 0;
 
 	/* Ok, we have data, start accumulating */
-	unsigned long start = micros();
+	start = micros();
 
 	hdr = (struct cpbp_msg_header *) buffer;
 	while (1) {
@@ -56,6 +57,10 @@ int CalaosBus::get_message()
 
 	if (hdr->slave_id != node.get_id())
 		return CALAOS_PLC_BUS_SLAVE_ERR;
-		
+
+	*msg_buffer = &buffer[sizeof(struct cpbp_msg_header)];
+	*msg_len = hdr->payload_length;
+	*request_type = hdr->request_type;
+
 	return 0;
 }

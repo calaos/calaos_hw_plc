@@ -15,7 +15,7 @@ private:
 public:
 	CalaosBus(int tx_pin, int rx_pin, int de_pin, CalaosPLCBusNode node);
 	void set_bus_speed(int speed);
-	int get_message();
+	int get_message(uint8_t **msg_buffer, uint16_t *msg_len, uint16_t *request_type);
 };
 
 #endif
