@@ -23,9 +23,9 @@ void loop ()
 	uint16_t msg_len, req_type; 
 	int ret;
 
-	ret = plc_bus.get_message(&msg, &len, &req_type);
+	ret = plc_bus.get_message(&msg, &msg_len, &req_type);
 	if (ret)
-		continue;
+		return;
 
 	if (req_type == CALAOS_PLC_BUS_REQ_DISCOVER) {
 		
