@@ -33,7 +33,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
-Sheet 1 3
+Sheet 1 4
 Title ""
 Date ""
 Rev ""
@@ -124,7 +124,7 @@ F0 "ethernet" 60
 F1 "ethernet.sch" 60
 $EndSheet
 $Sheet
-S 6850 5100 1700 1250
+S 6000 5750 1700 1250
 U 55E93E03
 F0 "can" 60
 F1 "can.sch" 60
