@@ -1,6 +1,6 @@
-update=dim. 23 août 2015 10:58:50 CEST
+update=09/10/2015 14:43:34
 version=1
-last_client=kicad
+last_client=eeschema
 [general]
 version=1
 RootSch=
@@ -30,19 +30,24 @@ NetIExt=net
 [eeschema]
 version=1
 LibDir=
+NetFmtName=
+RptD_X=0
+RptD_Y=100
+RptLab=1
+LabSize=60
 [eeschema/libraries]
 LibName1=transistors
-LibName2=switches
-LibName3=stm32
-LibName4=regul
-LibName5=power
-LibName6=opto
-LibName7=interface
-LibName8=diode
-LibName9=device
-LibName10=dc-dc
-LibName11=conn
-LibName12=ac-dc
-LibName13=74xx
-LibName14=74xgxx
-LibName15=pca9505
+LibName2=stm32
+LibName3=regul
+LibName4=power
+LibName5=opto
+LibName6=interface
+LibName7=device
+LibName8=dc-dc
+LibName9=conn
+LibName10=ac-dc
+LibName11=74xx
+LibName12=74xgxx
+LibName13=pca9505
+LibName14=relays
+LibName15=borniers
