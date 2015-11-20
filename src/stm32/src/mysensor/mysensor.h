@@ -6,7 +6,7 @@
 #define MYSENSOR_MAX_MSG_LENGTH		64
 
 typedef struct mysensor_sensor {
-	char *name[MYSENSOR_MAX_NAME_LENGTH];
+	char name[MYSENSOR_MAX_NAME_LENGTH];
 	unsigned int node_id;
 } mysensor_sensor_t;
 
@@ -122,9 +122,12 @@ typedef enum
 void mysensor_init();
 
 /**
- * Initialize mysensor lib
+ * Create a sensor
+ * @param type Sensor type
+ * @param name Sensor name
+ * @return a pointer to a sensor struct
  */
-mysensor_sensor_t *mysensor_create_sensor(mysensor_sensortype_t type);
+mysensor_sensor_t *mysensor_create_sensor(mysensor_sensortype_t type, const char *name);
 
 
 #endif

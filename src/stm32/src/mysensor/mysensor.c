@@ -1,7 +1,9 @@
 #include "HAL.h"
 #include "mysensor.h"
 
+#include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 static unsigned int current_sensor_id = 0;
