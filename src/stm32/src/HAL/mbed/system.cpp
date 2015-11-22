@@ -6,17 +6,35 @@ extern "C" {
 
 Serial pc_serial(USBTX, USBRX);
 
-extern "C" void hal_system_init()
+extern "C" void
+hal_system_init()
 {
-	int baudrate;
-	config_get_int("baudrate", &baudrate);
-	
-	pc_serial.baud(baudrate);
+	pc_serial.baud(115200);
 }
 
 
-int hal_serial_puts(const char *str)
+extern "C" int
+hal_serial_puts(const char *str)
 {
-	pc_serial.printf("%s\n", str);
+	pc_serial.puts(str);
+
+	return 0;
+}
+
+
+extern "C" int
+hal_debug_puts(const char *str)
+{
+	pc_serial.puts(str);
+
+	return 0;
+}
+
+
+extern "C" int
+hal_serial_getc(char *c)
+{
+	*c = pc_serial.getc();
+
 	return 0;
 }
