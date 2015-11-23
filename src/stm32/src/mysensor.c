@@ -1,6 +1,5 @@
 #include "HAL.h"
 #include "mysensor.h"
-#include "initcall.h"
 
 #include <stdio.h>
 #include <stdint.h>
