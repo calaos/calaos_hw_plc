@@ -1,0 +1,48 @@
+#include "debug.h"
+#include "module.h"
+
+#include <stdlib.h>
+
+#define MAX_MODULES	10
+
+static const module_t *modules[MAX_MODULES];
+static unsigned int module_count = 0;
+
+int module_register(const module_t * mod)
+{
+	if (module_count == MAX_MODULES)
+		return 1;
+
+	debug_puts("Registering module %s\r\n", mod->name);
+
+	modules[module_count++] = mod;
+
+	return 0;
+}
+
+int module_config_handler(const char* section, const char* name, const char* value)
+{
+	unsigned int i;
+	for (i = 0; i < module_count; i++) {
+		if (modules[i]->config_handler != NULL) {
+			if (modules[i]->config_handler(section, name, value))
+				return 1;
+		}
+	}
+	
+	return 0;
+}
+
+/**
+ * Call the module main loop functions
+ */
+void module_main_loop()
+{
+	unsigned int i;
+
+	for( i = 0; i < module_count; i++) {
+		if (modules[i]->main_loop) {
+			modules[i]->main_loop();
+		}
+	}
+}

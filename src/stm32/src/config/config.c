@@ -4,8 +4,9 @@
 
 #include "ini.h"
 #include "HAL.h"
-#include "config.h"
 #include "debug.h"
+#include "config.h"
+#include "module.h"
 
 #define DEFAULT_BAUDRATE	115200
 
@@ -39,6 +40,7 @@ config_ini_reader(char* str, int num, void* stream)
 static int
 config_ini_handler(void* user, const char* section, const char* name, const char* value)
 {
+	module_config_handler(section, name, value);
 
 	if (strcmp(name, "baudrate") == 0)
 		baudrate = atoi(value);

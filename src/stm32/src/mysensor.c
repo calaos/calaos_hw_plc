@@ -1,4 +1,6 @@
 #include "HAL.h"
+#include "debug.h"
+#include "module.h"
 #include "mysensor.h"
 
 #include <stdio.h>
@@ -73,10 +75,31 @@ mysensor_update_value_str(mysensor_sensor_t *s, mysensor_datatype_t dt, char *st
 	return mysensor_send_message(s->node_id, SET_VARIABLE, REQUEST, dt, str);
 }
 
+static int
+mysensor_config_handler(const char* section, const char* name, const char* value)
+{
+	if (strcmp(section, "sensor") != 0)
+		return 0;
+
+	if (name != NULL)
+		debug_puts("Name %s, value %s\r\n", name, value);
+	else
+		debug_puts("Section: %s\r\n", section);
+
+	return 1;
+}
+
+const module_t mysensor_module = {
+	.name = "mysensor",
+	.main_loop = NULL,
+	.config_handler = mysensor_config_handler,
+};
 
 void
 mysensor_init()
 {
+	module_register(&mysensor_module);
+
 	mysensor_send_raw_message(0, 0, INTERNAL, REQUEST, 0, "");
 	/* Wait message */
 	assigned_node_id = 1;

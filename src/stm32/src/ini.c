@@ -121,6 +121,8 @@ int ini_parse_stream(ini_reader reader, void* stream, ini_handler handler,
                 *end = '\0';
                 strncpy0(section, start + 1, sizeof(section));
                 *prev_name = '\0';
+                if (!handler(user, section, NULL, NULL) && !error)
+                        error = lineno;
             }
             else if (!error) {
                 /* No ']' found on section line */

@@ -1,15 +1,16 @@
 #include "HAL.h"
-#include "config.h"
-#include "mysensor.h"
 #include "debug.h"
+#include "config.h"
+#include "module.h"
+#include "mysensor.h"
 
 int
 main()
 {
 	hal_system_init();
-	config_init();
 	
 	mysensor_init();
+	config_init();
 
 	mysensor_create_sensor(S_LIGHT, "SW1");
 	
