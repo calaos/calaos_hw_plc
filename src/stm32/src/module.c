@@ -20,19 +20,6 @@ int module_register(const module_t * mod)
 	return 0;
 }
 
-int module_config_handler(const char* section, const char* name, const char* value)
-{
-	unsigned int i;
-	for (i = 0; i < module_count; i++) {
-		if (modules[i]->config_handler != NULL) {
-			if (modules[i]->config_handler(section, name, value))
-				return 1;
-		}
-	}
-	
-	return 0;
-}
-
 /**
  * Call the module main loop functions
  */

@@ -8,7 +8,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 static unsigned int current_sensor_id = 0;
 static unsigned int assigned_node_id;
@@ -43,7 +42,8 @@ static const char *sensor_type_str[] = {
 };
 
 
-static int mysensor_typestr_to_type(const char *name)
+int
+mysensor_typestr_to_type(const char *name)
 {
 	unsigned int i;
 
@@ -120,44 +120,16 @@ mysensor_update_value_str(mysensor_sensor_t *s, mysensor_datatype_t dt, char *st
 	return mysensor_send_message(s->node_id, SET_VARIABLE, REQUEST, dt, str);
 }
 
-
 static int
-mysensor_config_handler(const char* section, const char* name, const char* value)
+mysensor_json_parse(json_value* value)
 {
-	static bool s_fill = 0;
-	static int s_type;
-	static char s_name[MYSENSOR_MAX_NAME_LENGTH];
-
-	/* We only handle sensor sections */
-	if (strcmp(section, "sensor") != 0)
-		return 0;
-
-	/* New sensor section */
-	if (name == NULL) {
-		/* If we are filling a sensor */
-		if (s_fill) {
-			mysensor_create_sensor(s_type, s_name);
-			s_fill = false;
-		} else {
-			s_fill = true;
-		}
-	} else {
-		if (strcmp(name, "type") == 0) {
-			mysensor_typestr_to_type(value);
-		} else if (strcmp(name, "name") == 0) {
-			strncpy(s_name, value, MYSENSOR_MAX_NAME_LENGTH);
-		} else {
-			debug_puts("Unknown option %s\r\n", name);
-		}
-	}
-
-	return 1;
+	return 0;
 }
 
 const module_t mysensor_module = {
 	.name = "mysensor",
 	.main_loop = NULL,
-	.config_handler = mysensor_config_handler,
+	.json_parse = mysensor_json_parse,
 };
 
 void

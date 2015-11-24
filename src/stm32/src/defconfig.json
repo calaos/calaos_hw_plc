@@ -1,0 +1,24 @@
+{
+    "global": {
+        "baudrate": 115200,
+        "debug": true,
+        "node_id": 42
+    },
+    "sensors": [
+        {
+            "name": "sw1",
+            "type": "S_LIGHT",
+            "pin": "PC_13"
+        },
+        {
+            "name": "sw2",
+            "type": "S_LIGHT",
+            "pin": "PC_12"
+        },
+        {
+            "name": "sw3",
+            "type": "S_LIGHT",
+            "pin": "PC_11"
+        }
+    ]
+}
