@@ -57,34 +57,33 @@ mysensor_typestr_to_type(const char *name)
 }
 
 static int
-mysensor_send_raw_message(uint16_t node_id,
-				uint8_t child_sensor_id,
-				uint16_t message_type,
-				uint8_t ack,
-				uint16_t sub_type,
-				char *payload)
+mysensor_send_message_str(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+				uint8_t ack, uint16_t sub_type, char *payload)
 {
 	char msg[MYSENSOR_MAX_MSG_LENGTH];
-
 	sprintf(msg, "%d;%d;%d;%d;%d;%s\n", node_id, child_sensor_id, message_type, ack, sub_type, payload);
-
 	return hal_serial_puts(msg);
 }
 
 static int
-mysensor_send_message(uint8_t child_sensor_id,
-				uint16_t message_type,
-				uint8_t ack,
-				uint16_t sub_type,
-				char *payload)
+mysensor_send_message_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+				uint8_t ack, uint16_t sub_type, float value)
 {
-	return mysensor_send_raw_message(assigned_node_id, child_sensor_id, message_type, ack, sub_type, payload);
+	char msg[MYSENSOR_MAX_MSG_LENGTH];
+	sprintf(msg, "%d;%d;%d;%d;%d;%f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
+	return hal_serial_puts(msg);
 }
 
-static int
-mysensor_send_presentation(mysensor_sensor_t * s)
+int
+mysensor_update_value_float(mysensor_sensor_t *s, mysensor_datatype_t dt, float value)
 {
-	return mysensor_send_message(s->node_id, PRESENTATION, REQUEST, s->type, s->name);
+	return mysensor_send_message_float(assigned_node_id, s->node_id, SET_VARIABLE, REQUEST, dt, value);
+}
+
+int
+mysensor_update_value_str(mysensor_sensor_t *s, mysensor_datatype_t dt, char *str)
+{
+	return mysensor_send_message_str(assigned_node_id, s->node_id, SET_VARIABLE, REQUEST, dt, str);
 }
 
 mysensor_sensor_t *
@@ -99,31 +98,76 @@ mysensor_create_sensor(mysensor_sensortype_t type, const char *name)
 	strncpy(s->name, name, MYSENSOR_MAX_NAME_LENGTH);
 	s->node_id = current_sensor_id++;
 	s->type = type;
-	mysensor_send_presentation(s);
+	mysensor_send_message_str(assigned_node_id, s->node_id, PRESENTATION, REQUEST, s->type, s->name);
 
 	return s;
 }
 
-int
-mysensor_update_value_float(mysensor_sensor_t *s, mysensor_datatype_t dt, float value)
+
+static int
+mysensor_json_parse_sensor(json_value* sensor)
 {
-	char payload[10];
+	int length, i;
+	const char *name;
+	char s_name[MYSENSOR_MAX_NAME_LENGTH];
+	int s_type = -1;
+	json_value *value;
+        length = sensor->u.object.length;
+        for (i = 0; i < length; i++) {
+		value = sensor->u.object.values[i].value;
+		name = sensor->u.object.values[i].name;
 
-	sprintf(payload, "%.02f", value);
+		if (strcmp(name, "name") == 0) {
+			strcpy(s_name, value->u.string.ptr);
+		} else if (strcmp(name, "pin") == 0) {
 
-	return mysensor_send_message(s->node_id, SET_VARIABLE, REQUEST, dt, payload);
+		} else if (strcmp(name, "type") == 0) {
+			s_type = mysensor_typestr_to_type(value->u.string.ptr);
+		}
+        }
+
+	mysensor_create_sensor(s_type, s_name);
+	
+	return 0;
 }
 
-int
-mysensor_update_value_str(mysensor_sensor_t *s, mysensor_datatype_t dt, char *str)
+static int
+mysensor_json_parse_sensors(json_value* array)
 {
-	return mysensor_send_message(s->node_id, SET_VARIABLE, REQUEST, dt, str);
+	int length, i;
+	json_value* sensor;
+	if (array == NULL || array->type != json_array)
+		return -1;
+
+	debug_puts("Got sensors section\r\n");
+
+        length = array->u.array.length;
+        for (i = 0; i < length; i++) {
+		sensor = array->u.array.values[i];
+		mysensor_json_parse_sensor(sensor);
+        }
+	
+	return 0;
 }
 
 static int
 mysensor_json_parse(json_value* value)
 {
-	return 0;
+        int length, x;
+	if (value == NULL || value->type != json_object) {
+                return -1;
+        }
+     
+        length = value->u.object.length;
+        for (x = 0; x < length; x++) {
+		/* We only care about sensor section*/
+		if (strcmp(value->u.object.values[x].name,"sensors") != 0)
+			continue;
+
+                return mysensor_json_parse_sensors(value->u.object.values[x].value);
+        }
+
+        return -1;
 }
 
 const module_t mysensor_module = {
@@ -137,7 +181,7 @@ mysensor_init()
 {
 	module_register(&mysensor_module);
 
-	mysensor_send_raw_message(0, 0, INTERNAL, REQUEST, 0, "");
+	mysensor_send_message_str(0, 0, INTERNAL, REQUEST, 0, "1.0");
 	/* Wait message */
 	assigned_node_id = 1;
 }

@@ -25,4 +25,6 @@ int module_register(const module_t * mod);
  */
 void module_main_loop();
 
+int module_json_parse(json_value* value);
+
 #endif

@@ -1,6 +1,8 @@
 #ifndef _HAL_H
 #define _HAL_H
 
+#include <stdarg.h>
+
 /**
  * Initialize the system
  */
@@ -13,7 +15,7 @@ hal_system_init();
  * @return 0 on success, a positive value on error
  */
 int
-hal_serial_puts(const char *str);
+hal_serial_puts(const char *format, ...);
 
 /**
  * Get a char from the serial port

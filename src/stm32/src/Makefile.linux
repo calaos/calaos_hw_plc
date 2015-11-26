@@ -1,0 +1,15 @@
+SRC_FILES	:= $(wildcard *.c *.S HAL/linux/*.c)
+OBJ_FILES	:= $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(SRC_FILES)))
+HDR_FILES	:= $(wildcard *.h HAL/linux/*.h HAL/*.h)
+CONFIG 		:= configs/linux_config.json
+CFLAGS		:= -I. -IHAL -Wall -Wextra -Werror
+ASFLAGS 	:= -DCONFIG_PATH='"$(CONFIG)"'
+LFLAGS		:= -lm
+
+all: hw_plc
+
+hw_plc: $(OBJ_FILES) $(HDR_FILES) 
+	gcc $(OBJ_FILES) $(LFLAGS) $(INCLUDES) -o $@
+
+clean:
+	rm -f hw_plc $(OBJ_FILES)

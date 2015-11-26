@@ -33,3 +33,16 @@ void module_main_loop()
 		}
 	}
 }
+
+int module_json_parse(json_value* value)
+{
+	unsigned int i;
+
+	for( i = 0; i < module_count; i++) {
+		if (modules[i]->json_parse) {
+			modules[i]->json_parse(value);
+		}
+	}
+
+	return 0;
+}

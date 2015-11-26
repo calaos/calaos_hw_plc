@@ -8,17 +8,18 @@
         {
             "name": "sw1",
             "type": "S_LIGHT",
-            "pin": "PC_13"
+            "pin": "13",
+            "reverse": true
         },
         {
             "name": "sw2",
             "type": "S_LIGHT",
-            "pin": "PC_12"
+            "pin": "12"
         },
         {
             "name": "sw3",
             "type": "S_LIGHT",
-            "pin": "PC_11"
+            "pin": "11"
         }
     ]
 }
