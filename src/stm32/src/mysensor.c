@@ -137,8 +137,6 @@ mysensor_update_value_str(mysensor_sensor_t *s, mysensor_datatype_t dt, char *st
 mysensor_sensor_t *
 mysensor_create_sensor(mysensor_sensortype_t type, const char *name)
 {
-	
-	static unsigned int current_sensor_id = 0;
 	mysensor_sensor_t *s;
 
 	s = calloc(1, sizeof(*s));
@@ -146,10 +144,11 @@ mysensor_create_sensor(mysensor_sensortype_t type, const char *name)
 		return NULL;
 
 	strncpy(s->name, name, MYSENSOR_MAX_NAME_LENGTH);
-	s->node_id = current_sensor_id++;
+	s->node_id = g_sensor_count;
 	s->type = type;
-	g_sensors[g_sensor_count++] = s;
+	g_sensors[g_sensor_count] = s;
 	mysensor_send_message_str(g_assigned_node_id, s->node_id, PRESENTATION, REQUEST, s->type, s->name);
+	g_sensor_count++;
 
 	return s;
 }
