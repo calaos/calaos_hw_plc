@@ -16,7 +16,7 @@
             "name": "output1",
             "type": "S_LIGHT",
             "direction": "output",
-            "gpio": "PC_12"
+            "gpio": "PA_5"
         },
     ]
 }
