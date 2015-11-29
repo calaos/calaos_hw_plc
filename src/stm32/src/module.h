@@ -17,14 +17,22 @@ typedef struct module {
  * @param mod Module to register
  * @return 0 if the module was registered without errors, a positive value on error
  */
-int module_register(const module_t * mod);
-
+int
+module_register(const module_t * mod);
 
 /**
  * Call the module main loop functions
  */
-void module_main_loop();
+void
+module_main_loop();
 
-int module_json_parse(json_value* value);
+
+/**
+ * Call the module json parsing function
+ * @param value The json tree
+ * @return 1 if the module handled the json or 0 if not
+ */
+int
+module_json_parse(json_value* value);
 
 #endif

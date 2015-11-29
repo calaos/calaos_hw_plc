@@ -27,13 +27,6 @@ config_init()
 	module_json_parse(value);
 
         json_value_free(value);
-        
 
 	return;
-}
-
-int
-config_get_int(const char *str, int *value)
-{
-	return 0;
 }

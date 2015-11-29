@@ -2,7 +2,7 @@
 #define _MYSENSOR
 
 
-#define MYSENSOR_MAX_NAME_LENGTH	32
+#define MYSENSOR_MAX_NAME_LENGTH	332
 #define MYSENSOR_MAX_MSG_LENGTH		64
 
 typedef enum
@@ -55,8 +55,8 @@ typedef enum
 {
     V_TEMP = 0,                 // Temperature
     V_HUM = 1,                  // Humidity
-    V_LIGHT = 2,                // Light status. 0=off 1=on
-    V_DIMMER = 3,               // Dimmer value. 0-100%
+    V_STATUS = 2,               // Light status. 0=off 1=on
+    V_PERCENTAGE = 3,           // Dimmer value. 0-100%
     V_PRESSURE = 4,             // Atmospheric Pressure
     V_FORECAST = 5,             // Whether forecast. One of "stable", "sunny", "cloudy", "unstable", "thunderstorm" or "unknown"
     V_RAIN = 6,                 // Amount of rain
@@ -118,14 +118,7 @@ typedef enum
     I_GATEWAY_READY = 14,       // Send by gateway to controller when startup is complete.
 } mysensor_internaltype_t;
 
-/**
- * Sensor struct
- */
-typedef struct mysensor_sensor {
-	char name[MYSENSOR_MAX_NAME_LENGTH];
-	unsigned int node_id;
-        mysensor_sensortype_t type;
-} mysensor_sensor_t;
+typedef struct mysensor_sensor mysensor_sensor_t;
 
 /**
  * Initialize mysensor lib

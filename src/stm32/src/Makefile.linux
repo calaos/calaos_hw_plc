@@ -8,7 +8,11 @@ LFLAGS		:= -lm
 
 all: hw_plc
 
-hw_plc: $(OBJ_FILES) $(HDR_FILES) 
+incconfig.o: $(CONFIG)
+
+$(OBJ_FILES): $(firstword $(MAKEFILE_LIST))
+
+hw_plc: $(OBJ_FILES) $(HDR_FILES)
 	gcc $(OBJ_FILES) $(LFLAGS) $(INCLUDES) -o $@
 
 clean:

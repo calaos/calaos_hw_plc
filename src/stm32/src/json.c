@@ -75,12 +75,12 @@ typedef struct
 
 } json_state;
 
-static void * default_alloc (size_t size, int zero, void * user_data)
+static void * default_alloc (size_t size, int zero, __attribute__((unused)) void * user_data)
 {
    return zero ? calloc (1, size) : malloc (size);
 }
 
-static void default_free (void * ptr, void * user_data)
+static void default_free (void * ptr, __attribute__((unused)) void * user_data)
 {
    free (ptr);
 }

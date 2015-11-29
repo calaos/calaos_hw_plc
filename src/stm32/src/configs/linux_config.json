@@ -6,20 +6,17 @@
     },
     "sensors": [
         {
-            "name": "sw1",
+            "name": "input1",
             "type": "S_LIGHT",
-            "pin": "13",
+            "gpio": "0",
+            "direction": "input",
             "reverse": true
         },
         {
-            "name": "sw2",
+            "name": "output1",
             "type": "S_LIGHT",
-            "pin": "12"
+            "direction": "output",
+            "gpio": "1"
         },
-        {
-            "name": "sw3",
-            "type": "S_LIGHT",
-            "pin": "11"
-        }
     ]
 }
