@@ -16,6 +16,7 @@ main()
 	debug_puts("Entering main loop\r\n");
 	while(1) {
 		/* Main loop */
+		module_main_loop();
 	}
 	
 	return 0;
