@@ -5,6 +5,7 @@ extern "C" {
 }
 
 Serial pc_serial(USBTX, USBRX);
+Serial debug_serial(PA_9, PA_10);
 
 extern "C" void
 hal_system_init()
@@ -25,7 +26,7 @@ hal_serial_puts(const char *str)
 extern "C" int
 hal_debug_puts(const char *str)
 {
-	pc_serial.puts(str);
+	debug_serial.puts(str);
 
 	return 0;
 }
