@@ -126,20 +126,5 @@ typedef struct mysensor_sensor mysensor_sensor_t;
 void
 mysensor_init();
 
-/**
- * Create a sensor
- * @param type Sensor type
- * @param name Sensor name
- * @return a pointer to a sensor struct
- */
-mysensor_sensor_t *
-mysensor_create_sensor(mysensor_sensortype_t type, const char *name);
-
-int
-mysensor_update_value_float(mysensor_sensor_t *s, mysensor_datatype_t dt, float value);
-
-int
-mysensor_update_value_str(mysensor_sensor_t *s, mysensor_datatype_t dt, char *str);
-
 
 #endif

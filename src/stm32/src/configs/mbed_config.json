@@ -1,22 +1,21 @@
 {
-    "global": {
-        "baudrate": 115200,
-        "debug": true,
-        "node_id": 42
-    },
-    "sensors": [
-        {
-            "name": "input1",
-            "type": "S_LIGHT",
-            "gpio": "PC_13",
-            "direction": "input",
-            "reverse": true
-        },
-        {
-            "name": "output1",
-            "type": "S_LIGHT",
-            "direction": "output",
-            "gpio": "PA_5"
-        },
-    ]
+	"global": {
+		"baudrate": 115200,
+		"debug": true
+	},
+	"mysensors": {
+		"node_id": 42,
+		"sensors": [{
+			"name": "input1",
+			"type": "S_LIGHT",
+			"gpio": "PC_13",
+			"direction": "input",
+			"reverse": true
+		}, {
+			"name": "output1",
+			"type": "S_LIGHT",
+			"direction": "output",
+			"gpio": "PC_12"
+		}]
+	}
 }

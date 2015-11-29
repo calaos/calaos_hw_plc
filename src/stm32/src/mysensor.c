@@ -34,7 +34,7 @@ typedef struct mysensor_sensor {
 /**
  * Node id requested from controller
  */
-static unsigned int g_assigned_node_id;
+static unsigned int g_assigned_node_id = 0;
 
 /**
  * Sensor management
@@ -190,20 +190,30 @@ mysensor_json_parse_sensor(json_value* sensor)
 }
 
 static int
-mysensor_json_parse_sensors(json_value* array)
+mysensor_json_parse_sensors(json_value* section)
 {
-	int length, i;
+	unsigned int i, j;
+	json_value* entry;
 	json_value* sensor;
-	if (array == NULL || array->type != json_array)
+	if (section == NULL || section->type != json_object)
 		return -1;
 
-	debug_puts("Got sensors section\r\n");
-
-        length = array->u.array.length;
-        for (i = 0; i < length; i++) {
-		sensor = array->u.array.values[i];
-		mysensor_json_parse_sensor(sensor);
+	debug_puts("Got mysensors section\r\n");
+     
+        for (i = 0; i < section->u.object.length; i++) {
+		entry = section->u.object.values[i].value;
+		if (strcmp(section->u.object.values[i].name, "sensors") == 0) {
+			for (j = 0; j < entry->u.array.length; j++) {
+				sensor = entry->u.array.values[j];
+				mysensor_json_parse_sensor(sensor);
+			}
+		} else if (strcmp(section->u.object.values[i].name, "node_id") == 0) {
+			g_assigned_node_id = entry->u.integer;
+			debug_puts("Node id: %d\n", g_assigned_node_id);
+		}
         }
+
+
 	
 	return 0;
 }
@@ -211,19 +221,26 @@ mysensor_json_parse_sensors(json_value* array)
 static int
 mysensor_json_parse(json_value* value)
 {
-        int length, x;
+        int length, i;
 	if (value == NULL || value->type != json_object) {
                 return -1;
         }
      
         length = value->u.object.length;
-        for (x = 0; x < length; x++) {
+        for (i = 0; i < length; i++) {
 		/* We only care about sensor section*/
-		if (strcmp(value->u.object.values[x].name,"sensors") != 0)
+		if (strcmp(value->u.object.values[i].name, "mysensors") != 0)
 			continue;
 
-                return mysensor_json_parse_sensors(value->u.object.values[x].value);
+		mysensor_json_parse_sensors(value->u.object.values[i].value);
+		
         }
+	
+	if (g_assigned_node_id == 0) {
+		mysensor_send_message_str(0, 0, INTERNAL, REQUEST, 0, "1.0");
+		/* Wait message */
+		g_assigned_node_id = 1;
+	}
 
         return -1;
 }
@@ -291,7 +308,5 @@ mysensor_init()
 {
 	module_register(&mysensor_module);
 
-	mysensor_send_message_str(0, 0, INTERNAL, REQUEST, 0, "1.0");
-	/* Wait message */
-	g_assigned_node_id = 1;
+
 }
