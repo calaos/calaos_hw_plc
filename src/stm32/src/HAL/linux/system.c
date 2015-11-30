@@ -27,6 +27,5 @@ int
 hal_serial_getc(char *c)
 {
 	*c = getchar();
-
-	return 0;
+	return 1;
 }

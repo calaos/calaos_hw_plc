@@ -4,8 +4,10 @@ extern "C" {
 #include "config.h"
 }
 
+
 Serial pc_serial(USBTX, USBRX);
 Serial debug_serial(PA_9, PA_10);
+
 
 extern "C" void
 hal_system_init()
@@ -35,7 +37,10 @@ hal_debug_puts(const char *str)
 extern "C" int
 hal_serial_getc(char *c)
 {
-	*c = pc_serial.getc();
+	if (pc_serial.readable()) {
+		*c = pc_serial.getc();
+		return 1;
+	}
 
 	return 0;
 }

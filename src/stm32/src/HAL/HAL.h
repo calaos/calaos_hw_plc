@@ -28,7 +28,7 @@ hal_serial_getc(char *c);
 /**
  * Output a string on the serial port
  * @param str The string to output
- * @return 0 on success, a positive value on error
+ * @return 1 if there is a char, 0 if not
  */
 int
 hal_debug_puts(const char *str);

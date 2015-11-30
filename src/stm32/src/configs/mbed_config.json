@@ -10,12 +10,14 @@
 			"type": "S_LIGHT",
 			"gpio": "PC_13",
 			"direction": "input",
-			"reverse": true
+			"reverse": true,
+			"id": 0
 		}, {
 			"name": "output1",
 			"type": "S_LIGHT",
 			"direction": "output",
-			"gpio": "PC_12"
+			"gpio": "PC_12",
+			"id": 1
 		}]
 	}
 }
