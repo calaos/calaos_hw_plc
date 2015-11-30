@@ -6,7 +6,7 @@
 #define MAX_BUF_SIZE	2048
 
 void
-debug_puts(const char *format, ...)
+_debug_puts(const char *format, ...)
 {
   va_list args;
   char buffer[MAX_BUF_SIZE] = "[DBG] ";
