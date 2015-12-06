@@ -34,16 +34,28 @@ hal_gpio_setup(const char *gpio_name, int reverse, hal_gpio_dir_t direction);
 
 /**
  * Set a gpio state
- * @param 
+ * @param gpio The gpio to set value
+ * @param state State to set
+ * @return 0 on success, a positive value on error
  */
 int
 hal_gpio_write(hal_gpio_t *gpio, int state);
 
 /**
  * Get a gpio state
- * @param gpio The gpio to get 
+ * @param gpio The gpio to get value from
+ * @return 0 on success, a positive value on error
  */
 int
 hal_gpio_read(hal_gpio_t *gpio);
+
+/**
+ * Get gpio dir
+ * @param gpio Gpio to get the dir from
+ * @return Gpio direction
+ */
+hal_gpio_dir_t
+hal_gpio_get_dir(hal_gpio_t *gpio);
+
 
 #endif

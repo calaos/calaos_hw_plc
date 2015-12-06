@@ -40,3 +40,9 @@ hal_gpio_read(hal_gpio_t *gpio)
 	gpio = gpio;
 	return 0;
 }
+
+hal_gpio_dir_t
+hal_gpio_get_dir(hal_gpio_t *gpio)
+{
+	return gpio->direction;
+}

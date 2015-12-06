@@ -10,7 +10,24 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct mysensor_sensor_ops {
+	/**
+	 * Function call in main loop
+	 */
+	void (* poll)(mysensor_sensor_t *);
+	/**
+	 * Function call when set is received from controller
+	 */
+	void (* set)(mysensor_sensor_t *, int subtype, const char *payload);
+	/**
+	 * Function call when request is received from controller
+	 */
+	void (* req)(mysensor_sensor_t *, int subtype, const char *payload);
+} mysensor_sensor_ops_t;
 
+/**
+ * S_LIGHT specific data
+ */
 typedef struct mysensor_s_light{
 	hal_gpio_t *io;
 	int last_state;
@@ -23,6 +40,7 @@ typedef struct mysensor_sensor {
 	char name[MYSENSOR_MAX_NAME_LENGTH];
 	unsigned int id;
         mysensor_sensortype_t type;
+	const mysensor_sensor_ops_t *ops;
         union {
 		mysensor_s_light_t s_light;
 	} _;
@@ -35,6 +53,8 @@ typedef struct mysensor_sensor {
  * Node id requested from controller
  */
 static unsigned char g_assigned_node_id = 0;
+
+static const mysensor_sensor_ops_t* g_sensor_ops[];
 
 /**
  * Sensor management
@@ -71,8 +91,7 @@ static const char *sensor_type_str[] = {
     [25] = "S_SCENE_CONTROLLER",    // Scene controller device
 };
 
-
-int
+static int
 mysensor_typestr_to_type(const char *name)
 {
 	unsigned int i;
@@ -109,7 +128,7 @@ static int mysensor_serial_get_message(char *str)
 
 	g_mysensor_str[g_str_cur_index++] = c;
 	if (g_str_cur_index == MYSENSOR_MAX_MSG_LENGTH) {
-		debug_puts("Recevied too long string from controller, discarding\r\n");
+		debug_puts("Received string too long from controller, discarding\r\n");
 		g_str_cur_index = 0;
 	}
 
@@ -142,6 +161,7 @@ static int mysensor_handle_serial()
 	char query[MYSENSOR_MAX_MSG_LENGTH];
 	unsigned char child_sensor_id, message_type, ack, subtype;
 	char *split_str[6], *payload;
+	mysensor_sensor_t *sensor;
 
 	/* Check for serial message */
 	if (!mysensor_serial_get_message(query))
@@ -157,12 +177,25 @@ static int mysensor_handle_serial()
 	if (g_sensors[child_sensor_id] == NULL)
 		return 0;
 
+	sensor = g_sensors[child_sensor_id];
+
 	message_type = atoi(split_str[2]);
 	ack = atoi(split_str[3]);
 	subtype = atoi(split_str[4]);
 	payload = split_str[5];
-
-	debug_puts("Got node_id: %d, sensor: %d, message_type: %d, ack: %d, subtype: %d, payload: %s\r\n", g_assigned_node_id, child_sensor_id, message_type, ack, subtype, payload);
+	
+	switch (message_type) {
+		case SET_VARIABLE:
+			sensor->ops->set(sensor, subtype, payload);
+		break;
+		case REQUEST_VARIABLE:
+			sensor->ops->req(sensor, subtype, payload);
+		break;
+	};
+	
+	if (ack) {
+		debug_puts("Ack requested\r\n");
+	}
 
 	return 1;
 }
@@ -197,19 +230,19 @@ mysensor_send_message_int(uint16_t node_id, uint8_t child_sensor_id, uint16_t me
 	return hal_serial_puts(msg);
 }
 
-int
+__unused__ static int
 mysensor_update_value_float(mysensor_sensor_t *s, mysensor_datatype_t dt, float value)
 {
 	return mysensor_send_message_float(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
 }
 
-int
+static int
 mysensor_update_value_int(mysensor_sensor_t *s, mysensor_datatype_t dt, int value)
 {
 	return mysensor_send_message_int(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
 }
 
-int
+__unused__ static int
 mysensor_update_value_str(mysensor_sensor_t *s, mysensor_datatype_t dt, char *str)
 {
 	return mysensor_send_message_str(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, str);
@@ -230,6 +263,7 @@ mysensor_create_sensor(mysensor_sensortype_t type, const char *name, unsigned ch
 	strncpy(s->name, name, MYSENSOR_MAX_NAME_LENGTH);
 	s->id = id;
 	s->type = type;
+	s->ops = g_sensor_ops[type];
 	mysensor_send_message_str(g_assigned_node_id, s->id, PRESENTATION, REQUEST, s->type, s->name);
 	g_sensors[id] = s;
 
@@ -273,8 +307,8 @@ mysensor_json_parse_sensor(json_value* sensor)
         }
 
 	/* TODO: Check parameters */
-
 	s = mysensor_create_sensor(s_type, s_name, s_id);
+	/* TODO: per type parser */
 	s->_.s_light.io = hal_gpio_setup(s_gpio_name, s_reverse, s_gpio_dir);
 
 	return 0;
@@ -334,7 +368,30 @@ mysensor_json_parse(json_value* value)
         return -1;
 }
 
-static void mysensor_light_handler(mysensor_sensor_t * sensor)
+
+
+static void
+mysensor_main_loop()
+{
+	unsigned int i;
+
+	mysensor_handle_serial();
+
+	for (i = 0; i < g_max_sensor_id; i++) {
+		if (g_sensors[i] == NULL)
+			continue;
+
+		mysensor_sensor_t *sensor = g_sensors[i];
+		if (sensor->ops->poll)
+			sensor->ops->poll(sensor);
+	}
+}
+
+/**
+ *  Light
+ */
+static void
+s_light_poll(mysensor_sensor_t * sensor)
 {
 	mysensor_s_light_t  *light = &sensor->_.s_light;
 	int state = hal_gpio_read(light->io);
@@ -345,12 +402,30 @@ static void mysensor_light_handler(mysensor_sensor_t * sensor)
 	}
 }
 
+static void
+s_light_set(mysensor_sensor_t * sensor, __unused__ int subtype, const char *payload)
+{
+	mysensor_s_light_t  *light = &sensor->_.s_light;
+	int state;
+	if (hal_gpio_get_dir(light->io) != GPIO_DIR_OUTPUT)
+		return;
+	
+	state = atoi(payload);
+	hal_gpio_write(light->io, state);
+}
 
-static void (* sensor_handlers[])(mysensor_sensor_t *) = {
+mysensor_sensor_ops_t s_light_ops =
+{
+	.poll = s_light_poll,
+	.set = s_light_set,
+	.req = NULL,
+};
+
+static const mysensor_sensor_ops_t* g_sensor_ops[] = {
     [S_DOOR] = NULL,
     [S_MOTION] = NULL,
     [S_SMOKE] = NULL,
-    [S_LIGHT] = mysensor_light_handler,
+    [S_LIGHT] = &s_light_ops,
     [S_DIMMER] = NULL,
     [S_COVER] = NULL,
     [S_TEMP] = NULL,
@@ -375,22 +450,6 @@ static void (* sensor_handlers[])(mysensor_sensor_t *) = {
     [S_SCENE_CONTROLLER] = NULL,
 };
 
-static void mysensor_main_loop()
-{
-	unsigned int i;
-
-	mysensor_handle_serial();
-
-	for (i = 0; i < g_max_sensor_id; i++) {
-		if (g_sensors[i] == NULL)
-			continue;
-
-		mysensor_sensor_t *sensor = g_sensors[i];
-		if (sensor_handlers[sensor->type]) {
-			sensor_handlers[sensor->type](sensor);
-		}
-	}
-}
 
 const module_t mysensor_module = {
 	.name = "mysensor",

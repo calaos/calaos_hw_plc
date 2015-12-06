@@ -44,3 +44,16 @@ hal_serial_getc(char *c)
 
 	return 0;
 }
+
+DigitalOut led(LED1);
+
+extern "C" void
+hal_panic(void)
+{
+	while(1) {
+		led = 1;
+		wait(0.2);
+		led = 0;
+		wait(0.2);
+	}
+}

@@ -33,4 +33,10 @@ hal_serial_getc(char *c);
 int
 hal_debug_puts(const char *str);
 
+/**
+ * Panic the system
+ */
+void
+hal_panic(void);
+
 #endif /* _HAL_H */
