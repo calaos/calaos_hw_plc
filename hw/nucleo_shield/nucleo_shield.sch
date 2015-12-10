@@ -1,0 +1,226 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:F411RE
+LIBS:nucleo_shield-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Nucleo-F411RE-CN10 CN101
+U 1 1 56658743
+P 5650 1950
+F 0 "CN101" H 5650 2950 60  0000 C CNN
+F 1 "Nucleo-F411RE-CN10" H 5750 900 60  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x19" H 5650 50  60  0001 C CNN
+F 3 "" H 5650 50  60  0000 C CNN
+	1    5650 1950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Nucleo-F411RE-CN7 CN71
+U 1 1 56658787
+P 2950 1900
+F 0 "CN71" H 2950 2900 60  0000 C CNN
+F 1 "Nucleo-F411RE-CN7" H 2750 800 60  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_2x19" H 3200 1850 60  0001 C CNN
+F 3 "" H 3200 1850 60  0000 C CNN
+	1    2950 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L 74HC595 U1
+U 1 1 566589DD
+P 9700 4000
+F 0 "U1" H 9850 4600 70  0000 C CNN
+F 1 "74HC595" H 9700 3400 70  0000 C CNN
+F 2 "Housings_DIP:DIP-16__300" H 9700 4000 60  0001 C CNN
+F 3 "" H 9700 4000 60  0000 C CNN
+	1    9700 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L 74HC595 U2
+U 1 1 56658CF9
+P 9700 5600
+F 0 "U2" H 9850 6200 70  0000 C CNN
+F 1 "74HC595" H 9700 5000 70  0000 C CNN
+F 2 "Housings_DIP:DIP-16__300" H 9700 5600 60  0001 C CNN
+F 3 "" H 9700 5600 60  0000 C CNN
+	1    9700 5600
+	1    0    0    -1  
+$EndComp
+Text GLabel 5000 2150 0    60   Input ~ 0
+SRLatch
+Text GLabel 8300 4050 0    60   Input ~ 0
+SRLatch
+Text GLabel 6400 2050 2    60   Input ~ 0
+SRCLK
+$Comp
+L GND #PWR01
+U 1 1 56697602
+P 9000 4400
+F 0 "#PWR01" H 9000 4150 50  0001 C CNN
+F 1 "GND" H 9000 4250 50  0000 C CNN
+F 2 "" H 9000 4400 60  0000 C CNN
+F 3 "" H 9000 4400 60  0000 C CNN
+	1    9000 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR02
+U 1 1 56697632
+P 9000 6000
+F 0 "#PWR02" H 9000 5750 50  0001 C CNN
+F 1 "GND" H 9000 5850 50  0000 C CNN
+F 2 "" H 9000 6000 60  0000 C CNN
+F 3 "" H 9000 6000 60  0000 C CNN
+	1    9000 6000
+	1    0    0    -1  
+$EndComp
+Text GLabel 8250 3750 0    60   Input ~ 0
+SRCLK
+$Comp
+L GND #PWR03
+U 1 1 56699180
+P 6900 2050
+F 0 "#PWR03" H 6900 1800 50  0001 C CNN
+F 1 "GND" H 6900 1900 50  0000 C CNN
+F 2 "" H 6900 2050 60  0000 C CNN
+F 3 "" H 6900 2050 60  0000 C CNN
+	1    6900 2050
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR04
+U 1 1 566991C8
+P 4700 1600
+F 0 "#PWR04" H 4700 1350 50  0001 C CNN
+F 1 "GND" H 4700 1450 50  0000 C CNN
+F 2 "" H 4700 1600 60  0000 C CNN
+F 3 "" H 4700 1600 60  0000 C CNN
+	1    4700 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR05
+U 1 1 5669922E
+P 3600 2050
+F 0 "#PWR05" H 3600 1800 50  0001 C CNN
+F 1 "GND" H 3600 1900 50  0000 C CNN
+F 2 "" H 3600 2050 60  0000 C CNN
+F 3 "" H 3600 2050 60  0000 C CNN
+	1    3600 2050
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR06
+U 1 1 5669924A
+P 1800 2000
+F 0 "#PWR06" H 1800 1750 50  0001 C CNN
+F 1 "GND" H 1800 1850 50  0000 C CNN
+F 2 "" H 1800 2000 60  0000 C CNN
+F 3 "" H 1800 2000 60  0000 C CNN
+	1    1800 2000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10400 4450 10400 4800
+Wire Wire Line
+	10400 4800 8950 4800
+Wire Wire Line
+	8950 4800 8950 5150
+Wire Wire Line
+	8950 5150 9000 5150
+Wire Wire Line
+	9000 4150 9000 4400
+Wire Wire Line
+	9000 5750 9000 6000
+Wire Wire Line
+	8300 4050 9000 4050
+Connection ~ 8550 4050
+Wire Wire Line
+	8550 4050 8550 5650
+Wire Wire Line
+	8550 5650 9000 5650
+Wire Wire Line
+	8250 3750 9000 3750
+Connection ~ 8700 3750
+Wire Wire Line
+	8700 3750 8700 5350
+Wire Wire Line
+	8700 5350 9000 5350
+Wire Wire Line
+	6400 2050 6150 2050
+Wire Wire Line
+	5000 2150 5200 2150
+Wire Wire Line
+	3250 1300 3600 1300
+Wire Wire Line
+	3600 1300 3600 2050
+Connection ~ 3600 1900
+Wire Wire Line
+	3250 2000 3600 2000
+Connection ~ 3600 2000
+Wire Wire Line
+	3250 1900 3600 1900
+Wire Wire Line
+	2250 1900 1800 1900
+Wire Wire Line
+	1800 1900 1800 2000
+Wire Wire Line
+	5200 1450 4700 1450
+Wire Wire Line
+	4700 1450 4700 1600
+Wire Wire Line
+	6150 1950 6900 1950
+Wire Wire Line
+	6900 1950 6900 2050
+Text GLabel 6450 1250 2    60   Input ~ 0
+SRDATA
+Text GLabel 8300 3550 0    60   Input ~ 0
+SRDATA
+Wire Wire Line
+	8300 3550 9000 3550
+Wire Wire Line
+	6150 1250 6450 1250
+$EndSCHEMATC

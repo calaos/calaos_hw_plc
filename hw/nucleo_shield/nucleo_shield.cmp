@@ -1,0 +1,31 @@
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Thu 10 Dec 2015 02:21:51 PM CET
+
+BeginCmp
+TimeStamp = /56658787;
+Reference = CN71;
+ValeurCmp = Nucleo-F411RE-CN7;
+IdModule  = Pin_Headers:Pin_Header_Straight_2x19;
+EndCmp
+
+BeginCmp
+TimeStamp = /56658743;
+Reference = CN101;
+ValeurCmp = Nucleo-F411RE-CN10;
+IdModule  = Pin_Headers:Pin_Header_Straight_2x19;
+EndCmp
+
+BeginCmp
+TimeStamp = /566589DD;
+Reference = U1;
+ValeurCmp = 74HC595;
+IdModule  = Housings_DIP:DIP-16__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /56658CF9;
+Reference = U2;
+ValeurCmp = 74HC595;
+IdModule  = Housings_DIP:DIP-16__300;
+EndCmp
+
+EndListe
