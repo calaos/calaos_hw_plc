@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/poll.h>
+#include <sys/time.h>
 
 void
 hal_system_init()
@@ -47,8 +48,17 @@ hal_serial_getc(char *c)
 void
 hal_panic(void)
 {
-	fprintf(stderr, "PANIC PANIC PANIC !!!!!\n");
 	while (1) {
 		sleep(1);
 	};
 }
+
+unsigned long long
+hal_get_micro(void)
+{
+	struct timeval tv;
+	gettimeofday(&tv,NULL);
+
+	return 1000000 * tv.tv_sec + tv.tv_usec;
+}
+

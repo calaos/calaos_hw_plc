@@ -2,22 +2,22 @@
 #include <mbed.h>
 
 extern "C" {
-#include "gpio.h"
+#include "HAL.h"
 #include "debug.h"
 }
 
-struct gpio {
+struct hal_gpio {
 	PinName gpio_name;
 	DigitalInOut *io;
 	int reverse;
-	hal_gpio_dir_t dir;
+	gpio_dir_t dir;
 };
 
 extern "C"  hal_gpio_t *
-hal_gpio_setup(const char *gpio_name, int reverse, hal_gpio_dir_t direction)
+hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 {
 	int port_num, gpio_num;
-	hal_gpio_t *gpio = (hal_gpio_t *) calloc(1, sizeof(struct gpio));
+	hal_gpio_t *gpio = (hal_gpio_t *) calloc(1, sizeof(struct hal_gpio));
 	if (!gpio)
 		return NULL;
 
@@ -58,7 +58,7 @@ hal_gpio_read(hal_gpio_t *gpio)
 	return gpio->io->read() ^ gpio->reverse;
 }
 
-extern "C" hal_gpio_dir_t
+extern "C" gpio_dir_t
 hal_gpio_get_dir(hal_gpio_t *gpio)
 {
 	return gpio->dir;

@@ -2,18 +2,18 @@
 #include <stdio.h>
 
 #include "debug.h"
-#include "gpio.h"
+#include "HAL.h"
 
-struct gpio {
+struct hal_gpio {
 	int gpio_num;
 	int reverse;
-	hal_gpio_dir_t direction;
+	gpio_dir_t direction;
 };
 
 hal_gpio_t *
-hal_gpio_setup(const char *gpio_name, int reverse, hal_gpio_dir_t direction)
+hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 {
-	hal_gpio_t *gpio = calloc(1, sizeof(struct gpio));
+	hal_gpio_t *gpio = calloc(1, sizeof(struct hal_gpio));
 	if (!gpio)
 		return NULL;
 
@@ -41,7 +41,7 @@ hal_gpio_read(hal_gpio_t *gpio)
 	return 0;
 }
 
-hal_gpio_dir_t
+gpio_dir_t
 hal_gpio_get_dir(hal_gpio_t *gpio)
 {
 	return gpio->direction;

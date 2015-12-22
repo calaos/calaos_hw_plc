@@ -7,11 +7,13 @@ extern "C" {
 
 Serial pc_serial(USBTX, USBRX);
 Serial debug_serial(PA_9, PA_10);
+Timer t;
 
 
 extern "C" void
 hal_system_init()
 {
+	t.start();
 	pc_serial.baud(115200);
 }
 
@@ -56,4 +58,10 @@ hal_panic(void)
 		led = 0;
 		wait(0.2);
 	}
+}
+
+extern "C" unsigned long long
+hal_get_micro(void)
+{
+	return t.read_us();
 }
