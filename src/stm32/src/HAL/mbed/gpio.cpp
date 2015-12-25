@@ -45,11 +45,10 @@ hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 	return gpio;
 }
 
-extern "C" int
+extern "C" void
 hal_gpio_write(hal_gpio_t *gpio, int state)
 {
 	gpio->io->write(state ^ gpio->reverse);
-	return 0;
 }
 
 extern "C" int

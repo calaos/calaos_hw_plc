@@ -2,7 +2,7 @@
 #define _MYSENSOR
 
 
-#define MYSENSOR_MAX_NAME_LENGTH	332
+#define MYSENSOR_MAX_NAME_LENGTH	32
 #define MYSENSOR_MAX_MSG_LENGTH		64
 
 typedef enum

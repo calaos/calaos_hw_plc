@@ -22,16 +22,14 @@ hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 	gpio->reverse = reverse;
 	gpio->direction = direction;
 
-
 	return gpio;
 
 }
 
-int
+void
 hal_gpio_write(hal_gpio_t *gpio, int state)
 {
 	debug_puts("[PIN] gpio %d set to %d\n", gpio->gpio_num, state);
-	return 0;
 }
 
 int

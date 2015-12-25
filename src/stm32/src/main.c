@@ -10,6 +10,7 @@ main()
 	hal_system_init();
 	
 	mysensor_init();
+	en_gpio_init();
 
 	config_init();
 	

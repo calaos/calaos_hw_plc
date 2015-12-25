@@ -29,7 +29,7 @@ typedef struct mysensor_sensor_ops {
  * S_LIGHT specific data
  */
 typedef struct mysensor_s_light{
-	hal_gpio_t *io;
+	en_gpio_t *io;
 	int last_state;
 } mysensor_s_light_t;
 
@@ -282,6 +282,7 @@ mysensor_json_parse_sensor(json_value* sensor)
 	char s_name[MYSENSOR_MAX_NAME_LENGTH], s_gpio_name[MYSENSOR_MAX_NAME_LENGTH];
 	unsigned char s_id = 0;
 	int s_gpio_dir = GPIO_DIR_OUTPUT, s_reverse = 0, s_type = -1;
+	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_ENABLE;
 	json_value *value;
 	mysensor_sensor_t *s;
 	
@@ -303,13 +304,15 @@ mysensor_json_parse_sensor(json_value* sensor)
 			s_reverse = value->u.boolean;
 		} else if (strcmp(name, "id") == 0) {
 			s_id = value->u.integer;
+		} else if (strcmp(name, "debounce") == 0) {
+			s_debounce = value->u.boolean;
 		}
         }
 
 	/* TODO: Check parameters */
 	s = mysensor_create_sensor(s_type, s_name, s_id);
 	/* TODO: per type parser */
-	s->_.s_light.io = hal_gpio_setup(s_gpio_name, s_reverse, s_gpio_dir);
+	s->_.s_light.io = en_gpio_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
 
 	return 0;
 }
@@ -394,7 +397,7 @@ static void
 s_light_poll(mysensor_sensor_t * sensor)
 {
 	mysensor_s_light_t  *light = &sensor->_.s_light;
-	int state = hal_gpio_read(light->io);
+	int state = en_gpio_read(light->io);
 
 	if (state != light->last_state) {
 		light->last_state = state;
@@ -407,11 +410,11 @@ s_light_set(mysensor_sensor_t * sensor, __unused__ int subtype, const char *payl
 {
 	mysensor_s_light_t  *light = &sensor->_.s_light;
 	int state;
-	if (hal_gpio_get_dir(light->io) != GPIO_DIR_OUTPUT)
+	if (en_gpio_get_dir(light->io) != GPIO_DIR_OUTPUT)
 		return;
 	
 	state = atoi(payload);
-	hal_gpio_write(light->io, state);
+	en_gpio_write(light->io, state);
 }
 
 mysensor_sensor_ops_t s_light_ops =
@@ -461,6 +464,4 @@ void
 mysensor_init()
 {
 	module_register(&mysensor_module);
-
-
 }
