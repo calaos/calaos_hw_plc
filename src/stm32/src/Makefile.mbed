@@ -1,6 +1,7 @@
 PROJECT         := CalaosPLC
 DEVICES         := NUCLEO_F411RE NUCLEO_L053R8
 GCC4MBED_DIR    := ../gcc4mbed/
+GCC4MBED_TYPE	:= Debug
 GCFLAGS 	:= -Werror
 CONFIG		:= configs/mbed_config.json
 GAFLAGS 	:= -DCONFIG_PATH='"$(CONFIG)"'
