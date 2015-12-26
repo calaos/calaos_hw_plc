@@ -7,7 +7,6 @@
 struct hal_gpio {
 	int gpio_num;
 	int reverse;
-	gpio_dir_t direction;
 };
 
 hal_gpio_t *
@@ -20,7 +19,6 @@ hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 	debug_puts("Creating gpio %s, reverse: %d, direction: %d\n", gpio_name, reverse, direction);
 	gpio->gpio_num = atoi(gpio_name);
 	gpio->reverse = reverse;
-	gpio->direction = direction;
 
 	return gpio;
 
@@ -37,10 +35,4 @@ hal_gpio_read(hal_gpio_t *gpio)
 {
 	gpio = gpio;
 	return 0;
-}
-
-gpio_dir_t
-hal_gpio_get_dir(hal_gpio_t *gpio)
-{
-	return gpio->direction;
 }
