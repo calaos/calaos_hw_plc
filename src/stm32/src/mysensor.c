@@ -203,49 +203,43 @@ static int mysensor_handle_serial()
 /**
  * FIXME: generate these functions
  */
-static int
+static void
 mysensor_send_message_str(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
 				uint8_t ack, uint16_t sub_type, char *payload)
 {
-	char msg[MYSENSOR_MAX_MSG_LENGTH];
-	sprintf(msg, "%d;%d;%d;%d;%d;%s\n", node_id, child_sensor_id, message_type, ack, sub_type, payload);
-	return hal_serial_puts(msg);
+	serial_puts("%d;%d;%d;%d;%d;%s\n", node_id, child_sensor_id, message_type, ack, sub_type, payload);
 }
 
-static int
+static void
 mysensor_send_message_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
 				uint8_t ack, uint16_t sub_type, float value)
 {
-	char msg[MYSENSOR_MAX_MSG_LENGTH];
-	sprintf(msg, "%d;%d;%d;%d;%d;%f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
-	return hal_serial_puts(msg);
+	serial_puts("%d;%d;%d;%d;%d;%f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
 }
 
-static int
+static void
 mysensor_send_message_int(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
 				uint8_t ack, uint16_t sub_type, int value)
 {
-	char msg[MYSENSOR_MAX_MSG_LENGTH];
-	sprintf(msg, "%d;%d;%d;%d;%d;%d\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
-	return hal_serial_puts(msg);
+	serial_puts("%d;%d;%d;%d;%d;%d\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
 }
 
-__unused__ static int
+__unused__ static void
 mysensor_update_value_float(mysensor_sensor_t *s, mysensor_datatype_t dt, float value)
 {
-	return mysensor_send_message_float(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
+	mysensor_send_message_float(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
 }
 
-static int
+static void
 mysensor_update_value_int(mysensor_sensor_t *s, mysensor_datatype_t dt, int value)
 {
-	return mysensor_send_message_int(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
+	mysensor_send_message_int(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
 }
 
-__unused__ static int
+__unused__ static void
 mysensor_update_value_str(mysensor_sensor_t *s, mysensor_datatype_t dt, char *str)
 {
-	return mysensor_send_message_str(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, str);
+	mysensor_send_message_str(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, str);
 }
 
 static mysensor_sensor_t *
