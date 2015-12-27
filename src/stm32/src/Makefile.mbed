@@ -8,7 +8,7 @@ GAFLAGS 	:= -DCONFIG_PATH='"$(CONFIG)"'
 EXCLUDE		:= HAL/linux
 NO_FLOAT_SCANF	:= 1
 
-NUCLEO_F411RE/incconfig.o: $(CONFIG)
-NUCLEO_L053R8/incconfig.o: $(CONFIG)
+NUCLEO_F411RE/core/incconfig.o: $(CONFIG)
+NUCLEO_L053R8/core/incconfig.o: $(CONFIG)
 
 include $(GCC4MBED_DIR)/build/gcc4mbed.mk

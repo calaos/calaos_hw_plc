@@ -1,19 +1,30 @@
-SRC_FILES	:= $(wildcard *.c *.S HAL/linux/*.c)
-OBJ_FILES	:= $(patsubst %.c,%.o,$(patsubst %.S,%.o,$(SRC_FILES)))
-HDR_FILES	:= $(wildcard *.h HAL/linux/*.h HAL/*.h)
+BUILD_DIR	:= LINUX
+
+C_SRC_FILES	:= $(wildcard core/*.c HAL/linux/*.c)
+S_SRC_FILES	:= $(wildcard core/*.S)
+OBJ_C_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.c,%.o,$(C_SRC_FILES)))
+OBJ_S_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.S,%.o,$(S_SRC_FILES)))
+OBJS		:= $(OBJ_S_FILES) $(OBJ_C_FILES)
+HDR_FILES	:= $(wildcard core/*.h HAL/linux/*.h HAL/*.h)
 CONFIG 		:= configs/linux_config.json
-CFLAGS		:= -I. -IHAL -Wall -Wextra -Werror
+CFLAGS		:= -I. -Icore -IHAL -Wall -Wextra -Werror
 ASFLAGS 	:= -DCONFIG_PATH='"$(CONFIG)"'
 LFLAGS		:= -lm
 
 all: hw_plc
 
-incconfig.o: $(CONFIG)
+core/incconfig.o: $(CONFIG)
 
-$(OBJ_FILES): $(firstword $(MAKEFILE_LIST))
+$(BUILD_DIR)/%.o: %.c $(firstword $(MAKEFILE_LIST)) $(HDR_FILES)
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-hw_plc: $(OBJ_FILES) $(HDR_FILES)
-	gcc $(OBJ_FILES) $(LFLAGS) $(INCLUDES) -o $@
+$(BUILD_DIR)/%.o: %.S $(firstword $(MAKEFILE_LIST))
+	mkdir -p $(dir $@)
+	$(CC) $(ASFLAGS) -c -o $@ $<
+
+hw_plc: $(OBJS)
+	$(CC) $(OBJS) $(LFLAGS) $(INCLUDES) -o $@
 
 clean:
-	rm -f hw_plc $(OBJ_FILES)
+	rm -f hw_plc $(BUILD_DIR)
