@@ -27,4 +27,4 @@ hw_plc: $(OBJS)
 	$(CC) $(OBJS) $(LFLAGS) $(INCLUDES) -o $@
 
 clean:
-	rm -f hw_plc $(BUILD_DIR)
+	rm -rf hw_plc $(BUILD_DIR)

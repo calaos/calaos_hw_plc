@@ -2,14 +2,16 @@
 #include "debug.h"
 #include "config.h"
 #include "module.h"
-#include "mysensor.h"
+#include "mysensors.h"
+#include "sensors.h"
 
 int
 main()
 {
 	hal_system_init();
-	
-	mysensor_init();
+
+	sensors_init();
+	mysensors_init();
 	en_gpio_init();
 
 	config_init();

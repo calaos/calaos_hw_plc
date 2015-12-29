@@ -1,8 +1,6 @@
 #ifndef _MYSENSOR
 #define _MYSENSOR
 
-
-#define MYSENSOR_MAX_NAME_LENGTH	32
 #define MYSENSOR_MAX_MSG_LENGTH		64
 
 typedef enum
@@ -10,7 +8,7 @@ typedef enum
     REQUEST = 0,
     RESPONSE = 1,
 
-} mysensor_acktype_t;
+} mysensors_acktype_t;
 
 typedef enum
 {
@@ -19,7 +17,7 @@ typedef enum
     REQUEST_VARIABLE = 2,       // Requests a variable value (usually from an actuator destined for controller).
     INTERNAL = 3,               // This is a special internal message. See table below for the details
     STREAM = 4,                 // Used for OTA firmware updates
-} mysensor_messagetype_t;
+} mysensors_messagetype_t;
 
 typedef enum
 {
@@ -49,7 +47,7 @@ typedef enum
     S_CUSTOM = 23,              // Use this for custom sensors where no other fits.
     S_DUST = 24,                // Dust level sensor
     S_SCENE_CONTROLLER = 25,    // Scene controller device
-} mysensor_sensortype_t;
+} mysensors_sensortype_t;
 
 typedef enum
 {
@@ -97,7 +95,7 @@ typedef enum
     V_CALAOS = 0xCA,            //Special type for calaos, it let node query/set value directly to calaos IOs
 
     V_ERROR = 0xBAD,
-} mysensor_datatype_t;
+} mysensors_datatype_t;
 
 typedef enum
 {
@@ -116,15 +114,25 @@ typedef enum
     I_SKETCH_VERSION = 12,      // Optional sketch version that can be reported to keep track of the version of sensor in the Controller GUI.
     I_REBOOT = 13,              // Used by OTA firmware updates. Request for node to reboot.
     I_GATEWAY_READY = 14,       // Send by gateway to controller when startup is complete.
-} mysensor_internaltype_t;
-
-typedef struct mysensor_sensor mysensor_sensor_t;
+} mysensors_internaltype_t;
 
 /**
- * Initialize mysensor lib
+ * Initialize mysensors module
  */
 void
-mysensor_init();
+mysensors_init();
+
+
+typedef struct mysensors_sensor mysensors_sensor_t;
+
+void
+mysensors_update_value_float(mysensors_sensor_t *s, mysensors_datatype_t dt, float value);
+
+void
+mysensors_update_value_int(mysensors_sensor_t *s, mysensors_datatype_t dt, int value);
+
+void
+mysensors_update_value_str(mysensors_sensor_t *s, mysensors_datatype_t dt, char *str);
 
 
 #endif

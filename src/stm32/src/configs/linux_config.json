@@ -4,20 +4,20 @@
 		"debug": true
 	},
 	"mysensors": {
-		"node_id": 42,
-		"sensors": [{
-			"name": "input1",
-			"type": "S_LIGHT",
-			"gpio": "0",
-			"direction": "input",
-			"reverse": true,
-			"id": 0
-		}, {
-			"name": "output1",
-			"type": "S_LIGHT",
-			"direction": "output",
-			"gpio": "1",
-			"id": 1
-		}]
-	}
+		"node_id": 42
+	},
+	"sensors": [{
+		"name": "input1",
+		"type": "switch",
+		"gpio": "0",
+		"direction": "input",
+		"reverse": true,
+		"id": 0
+	}, {
+		"name": "output1",
+		"type": "switch",
+		"direction": "output",
+		"gpio": "1",
+		"id": 1
+	}]
 }

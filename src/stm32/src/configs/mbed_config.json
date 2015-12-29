@@ -4,20 +4,20 @@
 		"debug": true
 	},
 	"mysensors": {
-		"node_id": 42,
-		"sensors": [{
-			"name": "input1",
-			"type": "S_LIGHT",
-			"gpio": "PC_13",
-			"direction": "input",
-			"reverse": true,
-			"id": 0
-		}, {
-			"name": "output1",
-			"type": "S_LIGHT",
-			"direction": "output",
-			"gpio": "PC_12",
-			"id": 1
-		}]
-	}
+		"node_id": 42
+	},
+	"sensors": [{
+		"name": "input1",
+		"type": "switch",
+		"gpio": "PC_13",
+		"direction": "input",
+		"reverse": true,
+		"id": 0
+	}, {
+		"name": "output1",
+		"type": "switch",
+		"direction": "output",
+		"gpio": "PC_12",
+		"id": 1
+	}]
 }
