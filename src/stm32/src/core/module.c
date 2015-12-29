@@ -46,3 +46,16 @@ int module_json_parse(json_value* value)
 
 	return 0;
 }
+
+int module_sensor_created(sensor_t* s)
+{
+	unsigned int i;
+
+	for( i = 0; i < module_count; i++) {
+		if (modules[i]->sensor_created) {
+			modules[i]->sensor_created(s);
+		}
+	}
+
+	return 0;
+}

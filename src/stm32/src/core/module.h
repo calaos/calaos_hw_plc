@@ -2,6 +2,7 @@
 #define _MODULE_H
 
 #include "json.h"
+#include "sensors.h"
 
 /**
  *  Module struct
@@ -10,6 +11,9 @@ typedef struct module {
 	const char * name;
 	void (*main_loop)(void);
 	int (*json_parse)(json_value* value);
+	/* Sensor related function for modules to listen on sensor events */
+	void (*sensor_created)(sensor_t *s);
+	void (*sensor_updated)(sensor_t *s, sensor_value_t new_value);
 } module_t;
 
 /**
@@ -26,7 +30,6 @@ module_register(const module_t * mod);
 void
 module_main_loop();
 
-
 /**
  * Call the module json parsing function
  * @param value The json tree
@@ -34,5 +37,8 @@ module_main_loop();
  */
 int
 module_json_parse(json_value* value);
+
+int
+module_sensor_created(sensor_t* s);
 
 #endif

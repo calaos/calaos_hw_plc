@@ -72,6 +72,23 @@ sensors_typestr_to_type(const char *name)
 	return -1;
 }
 
+sensors_type_t
+sensor_get_type(sensor_t *s)
+{
+	return s->type;
+}
+
+char *
+sensor_get_name(sensor_t *s)
+{
+	return s->name;
+}
+
+int
+sensor_get_id(sensor_t *s)
+{
+	return s->id;
+}
 
 sensor_t *
 sensors_get_by_id(int id)
@@ -98,8 +115,9 @@ sensor_create_sensor(sensors_type_t type, const char *name, unsigned char id)
 	s->id = id;
 	s->type = type;
 	s->ops = g_sensor_ops[type];
-	//~ mysensors_send_message_str(g_assigned_node_id, s->id, PRESENTATION, REQUEST, s->type, s->name);
 	g_sensors[id] = s;
+
+	module_sensor_created(s);
 
 	if (id > g_max_sensor_id)
 		g_max_sensor_id = id;
@@ -231,10 +249,15 @@ static const sensors_ops_t* g_sensor_ops[] = {
     [SENSORS_TYPE_SWITCH] = &switch_ops,
 };
 
+/**
+ * Module
+ */
 const module_t sensors_module = {
 	.name = "sensors",
 	.main_loop = sensors_main_loop,
 	.json_parse = sensors_json_parse,
+	.sensor_created = NULL,
+	.sensor_updated = NULL,
 };
 
 void

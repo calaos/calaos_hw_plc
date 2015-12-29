@@ -19,10 +19,6 @@ static unsigned char g_assigned_node_id = 0;
 static char g_mysensors_str[MYSENSOR_MAX_MSG_LENGTH];
 static unsigned char g_str_cur_index = 0;
 
-struct mysensors_sensor {
-	int id;
-};
-
 static int mysensors_serial_get_message(char *str)
 {
 	int ret;
@@ -124,37 +120,37 @@ mysensors_send_message_str(uint16_t node_id, uint8_t child_sensor_id, uint16_t m
 	serial_puts("%d;%d;%d;%d;%d;%s\n", node_id, child_sensor_id, message_type, ack, sub_type, payload);
 }
 
-static void
+void
 mysensors_send_message_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
 				uint8_t ack, uint16_t sub_type, float value)
 {
 	serial_puts("%d;%d;%d;%d;%d;%f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
 }
 
-static void
+void
 mysensors_send_message_int(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
 				uint8_t ack, uint16_t sub_type, int value)
 {
 	serial_puts("%d;%d;%d;%d;%d;%d\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
 }
 
-void
-mysensors_update_value_float(mysensors_sensor_t *s, mysensors_datatype_t dt, float value)
-{
-	mysensors_send_message_float(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
-}
-
-void
-mysensors_update_value_int(mysensors_sensor_t *s, mysensors_datatype_t dt, int value)
-{
-	mysensors_send_message_int(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
-}
-
-void
-mysensors_update_value_str(mysensors_sensor_t *s, mysensors_datatype_t dt, char *str)
-{
-	mysensors_send_message_str(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, str);
-}
+//~ void
+//~ mysensors_update_value_float(sensor_t *s, mysensors_datatype_t dt, float value)
+//~ {
+	//~ mysensors_send_message_float(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
+//~ }
+//~ 
+//~ void
+//~ mysensors_update_value_int(sensor_t *s, mysensors_datatype_t dt, int value)
+//~ {
+	//~ mysensors_send_message_int(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
+//~ }
+//~ 
+//~ void
+//~ mysensors_update_value_str(sensor_t *s, mysensors_datatype_t dt, char *str)
+//~ {
+	//~ mysensors_send_message_str(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, str);
+//~ }
 
 static int
 mysensors_json_parse_section(json_value* section)
@@ -194,14 +190,27 @@ mysensors_json_parse(json_value* value)
         }
 
 	if (g_assigned_node_id == 0) {
-		mysensors_send_message_str(0, 0, INTERNAL, REQUEST, 0, "1.0");
-		/* Wait message */
+		mysensors_send_message_str(0, 0, INTERNAL, REQUEST, I_ID_REQUEST, "1.0");
+		/* FIXME: Wait message */
 		g_assigned_node_id = 1;
 	}
 
         return -1;
 }
 
+
+static void
+mysensor_sensor_created(sensor_t *s)
+{
+	mysensors_sensortype_t type;
+	switch (sensor_get_type(s)) {
+		case SENSORS_TYPE_SWITCH:
+			type = S_LIGHT; break;
+		default:
+			return;
+	};
+	mysensors_send_message_str(g_assigned_node_id, sensor_get_id(s), PRESENTATION, REQUEST, type, sensor_get_name(s));
+}
 
 
 static void
@@ -214,6 +223,8 @@ const module_t mysensors_module = {
 	.name = "mysensors",
 	.main_loop = mysensors_main_loop,
 	.json_parse = mysensors_json_parse,
+	.sensor_created = mysensor_sensor_created,
+	.sensor_updated = NULL,
 };
 
 void

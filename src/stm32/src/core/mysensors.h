@@ -122,17 +122,4 @@ typedef enum
 void
 mysensors_init();
 
-
-typedef struct mysensors_sensor mysensors_sensor_t;
-
-void
-mysensors_update_value_float(mysensors_sensor_t *s, mysensors_datatype_t dt, float value);
-
-void
-mysensors_update_value_int(mysensors_sensor_t *s, mysensors_datatype_t dt, int value);
-
-void
-mysensors_update_value_str(mysensors_sensor_t *s, mysensors_datatype_t dt, char *str);
-
-
 #endif
