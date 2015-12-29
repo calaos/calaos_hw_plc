@@ -59,3 +59,17 @@ int module_sensor_created(sensor_t* s)
 
 	return 0;
 }
+
+int
+module_sensor_updated(sensor_t* s, sensor_value_t new_value)
+{
+	unsigned int i;
+
+	for( i = 0; i < module_count; i++) {
+		if (modules[i]->sensor_updated) {
+			modules[i]->sensor_updated(s, new_value);
+		}
+	}
+
+	return 0;
+}

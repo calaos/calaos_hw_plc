@@ -218,11 +218,13 @@ static void
 switch_poll(sensor_t * sensor)
 {
 	sensor_switch_t *sw = &sensor->_.sw;
+	sensor_value_t value;
 	int state = en_gpio_read(sw->io);
 
 	if (state != sw->last_state) {
 		sw->last_state = state;
-		//~ mysensors_update_value_int(sensor, V_STATUS, state);
+		value.val_i = state;
+		module_sensor_updated(sensor, value);
 	}
 }
 

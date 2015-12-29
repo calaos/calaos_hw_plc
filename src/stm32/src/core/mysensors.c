@@ -120,37 +120,18 @@ mysensors_send_message_str(uint16_t node_id, uint8_t child_sensor_id, uint16_t m
 	serial_puts("%d;%d;%d;%d;%d;%s\n", node_id, child_sensor_id, message_type, ack, sub_type, payload);
 }
 
-void
-mysensors_send_message_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
-				uint8_t ack, uint16_t sub_type, float value)
-{
-	serial_puts("%d;%d;%d;%d;%d;%f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
-}
-
-void
+static void
 mysensors_send_message_int(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
 				uint8_t ack, uint16_t sub_type, int value)
 {
 	serial_puts("%d;%d;%d;%d;%d;%d\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
 }
 
-//~ void
-//~ mysensors_update_value_float(sensor_t *s, mysensors_datatype_t dt, float value)
-//~ {
-	//~ mysensors_send_message_float(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
-//~ }
-//~ 
-//~ void
-//~ mysensors_update_value_int(sensor_t *s, mysensors_datatype_t dt, int value)
-//~ {
-	//~ mysensors_send_message_int(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, value);
-//~ }
-//~ 
-//~ void
-//~ mysensors_update_value_str(sensor_t *s, mysensors_datatype_t dt, char *str)
-//~ {
-	//~ mysensors_send_message_str(g_assigned_node_id, s->id, SET_VARIABLE, REQUEST, dt, str);
-//~ }
+static void
+mysensors_update_value_int(sensor_t *s, mysensors_datatype_t dt, int value)
+{
+	mysensors_send_message_int(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, dt, value);
+}
 
 static int
 mysensors_json_parse_section(json_value* section)
@@ -198,7 +179,6 @@ mysensors_json_parse(json_value* value)
         return -1;
 }
 
-
 static void
 mysensor_sensor_created(sensor_t *s)
 {
@@ -210,6 +190,12 @@ mysensor_sensor_created(sensor_t *s)
 			return;
 	};
 	mysensors_send_message_str(g_assigned_node_id, sensor_get_id(s), PRESENTATION, REQUEST, type, sensor_get_name(s));
+}
+
+static void
+mysensor_sensor_updated(sensor_t *s, sensor_value_t value)
+{
+	mysensors_update_value_int(s, V_STATUS, value.val_i);
 }
 
 
@@ -224,7 +210,7 @@ const module_t mysensors_module = {
 	.main_loop = mysensors_main_loop,
 	.json_parse = mysensors_json_parse,
 	.sensor_created = mysensor_sensor_created,
-	.sensor_updated = NULL,
+	.sensor_updated = mysensor_sensor_updated,
 };
 
 void

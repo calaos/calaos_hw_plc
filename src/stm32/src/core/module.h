@@ -41,4 +41,7 @@ module_json_parse(json_value* value);
 int
 module_sensor_created(sensor_t* s);
 
+int
+module_sensor_updated(sensor_t* s, sensor_value_t new_value);
+
 #endif

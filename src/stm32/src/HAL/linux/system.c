@@ -38,7 +38,6 @@ hal_serial_getc(char *c)
 	ret = poll(&fds, 1, 0);
         if(ret == 1) {
 		read(0, &c, 1);
-		printf("Got char\n");
 		return 1;
         } else {
 		return 0;
