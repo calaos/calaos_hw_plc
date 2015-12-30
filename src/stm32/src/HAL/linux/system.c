@@ -61,3 +61,10 @@ hal_get_micro(void)
 	return 1000000 * tv.tv_sec + tv.tv_usec;
 }
 
+
+
+const char *
+hal_get_filesystem_prefix()
+{
+	return "./";
+}

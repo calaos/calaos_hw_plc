@@ -1,14 +1,15 @@
 #include "mbed.h"
+#include "SDFileSystem.h"
 
 extern "C" {
 #include "config.h"
 }
 
+SDFileSystem sd(SPI_MOSI, SPI_MISO, SPI_SCK, SPI_CS, "sd");
 
 Serial pc_serial(USBTX, USBRX);
 Serial debug_serial(PA_9, PA_10);
 Timer t;
-
 
 extern "C" void
 hal_system_init()
@@ -64,4 +65,10 @@ extern "C" unsigned long long
 hal_get_micro(void)
 {
 	return t.read_us();
+}
+
+extern "C" const char *
+hal_get_filesystem_prefix()
+{
+	return "/sd/";
 }

@@ -78,4 +78,10 @@ hal_gpio_write(hal_gpio_t *gpio, int state);
 int
 hal_gpio_read(hal_gpio_t *gpio);
 
+/**
+ * Get filesystem prefix
+ */
+const char *
+hal_get_filesystem_prefix();
+
 #endif /* _HAL_H */
