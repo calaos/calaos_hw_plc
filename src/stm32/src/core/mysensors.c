@@ -66,6 +66,15 @@ static int mysensors_split_message(char *str, char *split_str[6])
 	return 0;
 }
 
+static void mysensors_set_sensor(sensor_t *s, __unused__ int subtype, char *payload)
+{
+	sensor_value_t value;
+	if (sensor_get_type(s) == SENSORS_TYPE_SWITCH) {
+		value.val_i = atoi(payload);
+		sensor_set_value(s, value);
+	}
+}
+
 static int mysensors_handle_serial()
 {
 	char query[MYSENSOR_MAX_MSG_LENGTH];
@@ -94,14 +103,13 @@ static int mysensors_handle_serial()
 	subtype = atoi(split_str[4]);
 	payload = split_str[5];
 
-	//~ switch (message_type) {
-		//~ case SET_VARIABLE:
-			//~ sensor->ops->set(sensor, subtype, payload);
-		//~ break;
-		//~ case REQUEST_VARIABLE:
-			//~ sensor->ops->req(sensor, subtype, payload);
-		//~ break;
-	//~ };
+	switch (message_type) {
+		case SET_VARIABLE:
+			mysensors_set_sensor(sensor, subtype, payload);
+		break;
+		case REQUEST_VARIABLE:
+		break;
+	};
 
 	if (ack) {
 		debug_puts("Ack requested\r\n");

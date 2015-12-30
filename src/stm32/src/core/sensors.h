@@ -17,7 +17,6 @@ typedef enum sensors_type {
  */
 typedef union sensor_value {
 	int val_i;
-	float val_f;
 } sensor_value_t;
 
 typedef struct sensor sensor_t;
@@ -60,5 +59,12 @@ sensor_get_name(sensor_t *s);
  */
 int
 sensor_get_id(sensor_t *s);
+
+
+void
+sensor_set_value(sensor_t *s, sensor_value_t value);
+
+void
+sensor_get_value(sensor_t *s, sensor_value_t *value);
 
 #endif

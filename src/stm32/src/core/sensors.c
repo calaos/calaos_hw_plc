@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define SENSOR_MAX_NAME_LENGTH	32
-#define MAX_SENSOR_COUNT	255
+#define MAX_SENSOR_COUNT	32
 
 typedef struct sensors_ops {
 	/**
@@ -16,11 +16,11 @@ typedef struct sensors_ops {
 	/**
 	 * Function call when set is received from controller
 	 */
-	void (* set)(sensor_t *, int subtype, const char *payload);
+	void (* set)(sensor_t *, sensor_value_t value);
 	/**
 	 * Function call when request is received from controller
 	 */
-	void (* req)(sensor_t *, int subtype, const char *payload);
+	void (* req)(sensor_t *, sensor_value_t *value);
 } sensors_ops_t;
 
 
@@ -39,7 +39,6 @@ typedef struct sensor {
 	char name[SENSOR_MAX_NAME_LENGTH];
 	unsigned int id;
         sensors_type_t type;
-	const sensors_ops_t *ops;
         union {
 		sensor_switch_t sw;
 	} _;
@@ -114,7 +113,6 @@ sensor_create_sensor(sensors_type_t type, const char *name, unsigned char id)
 	strncpy(s->name, name, SENSOR_MAX_NAME_LENGTH);
 	s->id = id;
 	s->type = type;
-	s->ops = g_sensor_ops[type];
 	g_sensors[id] = s;
 
 	module_sensor_created(s);
@@ -204,10 +202,25 @@ static void sensors_main_loop()
 		if (g_sensors[i] == NULL)
 			continue;
 
-		sensor_t *sensor = g_sensors[i];
-		if (sensor->ops->poll)
-			sensor->ops->poll(sensor);
+		sensor_t *s = g_sensors[i];
+		if (g_sensor_ops[s->type]->poll)
+			g_sensor_ops[s->type]->poll(s);
 	}
+}
+
+
+void
+sensor_set_value(sensor_t *s, sensor_value_t value)
+{
+	if (g_sensor_ops[s->type]->set)
+		g_sensor_ops[s->type]->set(s, value);
+}
+
+void
+sensor_get_value(sensor_t *s, sensor_value_t *value)
+{
+	if (g_sensor_ops[s->type]->req)
+		g_sensor_ops[s->type]->req(s, value);
 }
 
 
@@ -229,14 +242,14 @@ switch_poll(sensor_t * sensor)
 }
 
 static void
-switch_set(sensor_t * sensor, __unused__ int subtype, const char *payload)
+switch_set(sensor_t * sensor, sensor_value_t value)
 {
 	sensor_switch_t *sw = &sensor->_.sw;
 	int state;
 	if (en_gpio_get_dir(sw->io) != GPIO_DIR_OUTPUT)
 		return;
 	
-	state = atoi(payload);
+	state = value.val_i;
 	en_gpio_write(sw->io, state);
 }
 
