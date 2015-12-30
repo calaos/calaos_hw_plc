@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define MAX_BUF_SIZE	2048
+#define MAX_BUF_SIZE	128
 
 static char g_io_buffer[MAX_BUF_SIZE];
 
