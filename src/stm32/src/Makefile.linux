@@ -11,7 +11,7 @@ CFLAGS		:= -I. -Icore -IHAL -Wall -Wextra -Werror
 ASFLAGS 	:= -DCONFIG_PATH='"$(CONFIG)"'
 LFLAGS		:= -lm
 
-all: hw_plc
+all: $(BUILD_DIR)/hw_plc
 
 core/incconfig.o: $(CONFIG)
 
@@ -23,8 +23,8 @@ $(BUILD_DIR)/%.o: %.S $(firstword $(MAKEFILE_LIST))
 	mkdir -p $(dir $@)
 	$(CC) $(ASFLAGS) -c -o $@ $<
 
-hw_plc: $(OBJS)
+$(BUILD_DIR)/hw_plc: $(OBJS)
 	$(CC) $(OBJS) $(LFLAGS) $(INCLUDES) -o $@
 
 clean:
-	rm -rf hw_plc $(BUILD_DIR)
+	rm -rf $(BUILD_DIR)
