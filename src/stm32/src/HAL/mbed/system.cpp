@@ -48,11 +48,11 @@ hal_serial_getc(char *c)
 	return 0;
 }
 
-DigitalOut led(LED1);
 
 extern "C" void
 hal_panic(void)
 {
+	DigitalOut led(LED1);
 	while(1) {
 		led = 1;
 		wait(0.2);
