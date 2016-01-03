@@ -10,7 +10,7 @@
  */
 #define DEBOUNCE_TIME		2
 
-#define DEBOUNCE_SAMPLES_COUNT	8 
+#define DEBOUNCE_SAMPLES_COUNT	8
 
 #define MAX_OPENED_GPIOS	64
 
@@ -85,7 +85,7 @@ en_gpio_main_loop()
 	unsigned int i;
 	en_gpio_t *gpio;
 	
-	if ((time - g_gpio_last_read_time) * 1000 < DEBOUNCE_TIME)
+	if ((time - g_gpio_last_read_time) < (DEBOUNCE_TIME * 1000))
 		return;
 
 	g_gpio_last_read_time = time;
