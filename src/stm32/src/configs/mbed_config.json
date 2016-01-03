@@ -17,7 +17,57 @@
 		"name": "output1",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "PC_12",
+		"gpio": "PA_8",
+		"reverse": true,
 		"id": 1
+	}, {
+		"name": "output2",
+		"type": "switch",
+		"direction": "output",
+		"gpio": "PB_10",
+		"reverse": true,
+		"id": 2
+	}, {
+		"name": "output3",
+		"type": "switch",
+		"direction": "output",
+		"gpio": "PB_4",
+		"reverse": true,
+		"id": 3
+	}, {
+		"name": "output4",
+		"type": "switch",
+		"direction": "output",
+		"gpio": "PB_5",
+		"reverse": true,
+		"id": 4
+	}, {
+		"name": "output5",
+		"type": "switch",
+		"direction": "output",
+		"gpio": "PB_13",
+		"reverse": true,
+		"id": 5
+	}, {
+		"name": "output6",
+		"type": "switch",
+		"direction": "output",
+		"gpio": "PB_14",
+		"reverse": true,
+		"id": 6
+	}, {
+		"name": "output7",
+		"type": "switch",
+		"direction": "output",
+		"gpio": "PB_15",
+		"reverse": true,
+		"id": 7
+	}, {
+		"name": "output8",
+		"type": "switch",
+		"direction": "output",
+		"gpio": "PB_1",
+		"reverse": true,
+		"id": 8
 	}]
 }
