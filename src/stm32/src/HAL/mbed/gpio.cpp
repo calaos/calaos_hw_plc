@@ -35,10 +35,12 @@ hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 	gpio->io = new DigitalInOut(gpio->gpio_name);
 	gpio->reverse = reverse;
 	
-	if (direction == GPIO_DIR_OUTPUT)
+	if (direction == GPIO_DIR_OUTPUT) {
 		gpio->io->output();
-	else
+		hal_gpio_write(gpio, 0);
+	} else {
 		gpio->io->input();
+	}
 
 	return gpio;
 }
