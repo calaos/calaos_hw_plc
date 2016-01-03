@@ -37,7 +37,7 @@ hal_serial_getc(char *c)
 	fds.revents = 0;
 	ret = poll(&fds, 1, 0);
         if(ret == 1) {
-		read(0, &c, 1);
+		read(0, c, 1);
 		return 1;
         } else {
 		return 0;
