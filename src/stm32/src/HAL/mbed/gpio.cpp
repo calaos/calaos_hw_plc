@@ -32,14 +32,12 @@ hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 	debug_puts("Opening port %d, gpio %d\n", port_num, gpio_num);
 
 	gpio->gpio_name = (PinName) ((port_num << 4) | gpio_num);
-	gpio->io = new DigitalInOut(gpio->gpio_name);
 	gpio->reverse = reverse;
 	
 	if (direction == GPIO_DIR_OUTPUT) {
-		gpio->io->output();
-		hal_gpio_write(gpio, 0);
+		gpio->io = new DigitalInOut(gpio->gpio_name, PIN_OUTPUT, PullNone, 0 ^ reverse);
 	} else {
-		gpio->io->input();
+		gpio->io = new DigitalInOut(gpio->gpio_name, PIN_INPUT, PullNone, 0);
 	}
 
 	return gpio;

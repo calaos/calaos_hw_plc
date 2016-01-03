@@ -92,7 +92,7 @@ sensor_get_id(sensor_t *s)
 sensor_t *
 sensors_get_by_id(int id)
 {
-	if (id >= g_max_sensor_id)
+	if (id > g_max_sensor_id)
 		return NULL;
 
 	return g_sensors[id];	
@@ -135,6 +135,7 @@ sensors_json_parse_sensor(json_value* sensor)
 	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_ENABLE;
 	json_value *value;
 	sensor_t *s;
+	en_gpio_t *gpio;
 	
         length = sensor->u.object.length;
         for (i = 0; i < length; i++) {
@@ -158,11 +159,11 @@ sensors_json_parse_sensor(json_value* sensor)
 			s_debounce = value->u.boolean;
 		}
         }
-
+	gpio = en_gpio_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
 	/* TODO: Check parameters */
 	s = sensor_create_sensor(s_type, s_name, s_id);
 	/* TODO: per type parser */
-	s->_.sw.io = en_gpio_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
+	s->_.sw.io = gpio;
 
 	return 0;
 }
@@ -232,7 +233,12 @@ switch_poll(sensor_t * sensor)
 {
 	sensor_switch_t *sw = &sensor->_.sw;
 	sensor_value_t value;
-	int state = en_gpio_read(sw->io);
+	int state;
+
+	if (en_gpio_get_dir(sw->io) != GPIO_DIR_INPUT)
+		return;
+
+	state = en_gpio_read(sw->io);
 
 	if (state != sw->last_state) {
 		sw->last_state = state;
