@@ -6,6 +6,13 @@
 	"mysensors": {
 		"node_id": 42
 	},
+	"shift_registers": [{
+		"name": "sr1",
+		"data": "2",
+		"latch": "3",
+		"clock": "4",
+		"count": "8",
+	}],
 	"sensors": [{
 		"name": "input1",
 		"type": "switch",

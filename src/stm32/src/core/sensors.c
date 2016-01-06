@@ -129,7 +129,7 @@ sensors_json_parse_sensor(json_value* sensor)
 {
 	int length, i;
 	const char *name;
-	char s_name[SENSOR_MAX_NAME_LENGTH], s_gpio_name[SENSOR_MAX_NAME_LENGTH];
+	char s_name[SENSOR_MAX_NAME_LENGTH], s_gpio_name[GPIO_MAX_NAME_LENGTH];
 	unsigned char s_id = 0;
 	int s_gpio_dir = GPIO_DIR_OUTPUT, s_reverse = 0, s_type = -1;
 	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_ENABLE;
@@ -273,7 +273,7 @@ static const sensors_ops_t* g_sensor_ops[] = {
 /**
  * Module
  */
-const module_t sensors_module = {
+static const module_t sensors_module = {
 	.name = "sensors",
 	.main_loop = sensors_main_loop,
 	.json_parse = sensors_json_parse,

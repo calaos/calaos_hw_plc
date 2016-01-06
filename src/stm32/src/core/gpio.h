@@ -1,6 +1,8 @@
 #ifndef _GPIO_H
 #define _GPIO_H
 
+#define GPIO_MAX_NAME_LENGTH 16
+
 typedef struct en_gpio en_gpio_t;
 
 /**
