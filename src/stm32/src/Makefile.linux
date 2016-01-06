@@ -13,7 +13,7 @@ LFLAGS		:= -lm
 
 all: $(BUILD_DIR)/hw_plc
 
-core/incconfig.o: $(CONFIG)
+$(BUILD_DIR)/core/incconfig.o: $(CONFIG)
 
 $(BUILD_DIR)/%.o: %.c $(firstword $(MAKEFILE_LIST)) $(HDR_FILES)
 	mkdir -p $(dir $@)
