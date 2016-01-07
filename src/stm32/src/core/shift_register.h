@@ -1,7 +1,5 @@
-#ifndef _SHIFT_REGISTER_H_
-#define _SHIFT_REGISTER_H_
-
-typedef struct shift_register shift_register_t;
+#ifndef _SHIFT_REGISTER_H
+#define _SHIFT_REGISTER_H
 
 /**
  * Init shift register module

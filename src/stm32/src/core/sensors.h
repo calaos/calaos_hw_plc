@@ -1,5 +1,5 @@
-#ifndef _SENSORS_H_
-#define _SENSORS_H_
+#ifndef _SENSORS_H
+#define _SENSORS_H
 
 #include "gpio.h"
 

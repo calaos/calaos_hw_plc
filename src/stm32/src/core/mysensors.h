@@ -1,5 +1,5 @@
-#ifndef _MYSENSOR
-#define _MYSENSOR
+#ifndef _MYSENSOR_H
+#define _MYSENSOR_H
 
 #define MYSENSOR_MAX_MSG_LENGTH		64
 
