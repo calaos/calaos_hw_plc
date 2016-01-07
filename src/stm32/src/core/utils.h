@@ -2,6 +2,7 @@
 #define _UTILS_H
 
 #include "debug.h"
+#include "HAL.h"
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
