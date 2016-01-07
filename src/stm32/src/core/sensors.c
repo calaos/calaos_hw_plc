@@ -28,7 +28,7 @@ typedef struct sensors_ops {
  * switch specific data
  */
 typedef struct sensor_switch {
-	en_gpio_t *io;
+	gen_io_t *io;
 	int last_state;
 } sensor_switch_t;
 
@@ -135,7 +135,7 @@ sensors_json_parse_sensor(json_value* sensor)
 	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_ENABLE;
 	json_value *value;
 	sensor_t *s;
-	en_gpio_t *gpio;
+	gen_io_t *gpio;
 	
         length = sensor->u.object.length;
         for (i = 0; i < length; i++) {
@@ -159,7 +159,7 @@ sensors_json_parse_sensor(json_value* sensor)
 			s_debounce = value->u.boolean;
 		}
         }
-	gpio = en_gpio_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
+	gpio = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
 	/* TODO: Check parameters */
 	s = sensor_create_sensor(s_type, s_name, s_id);
 	/* TODO: per type parser */
@@ -235,10 +235,10 @@ switch_poll(sensor_t * sensor)
 	sensor_value_t value;
 	int state;
 
-	if (en_gpio_get_dir(sw->io) != GPIO_DIR_INPUT)
+	if (gen_io_get_dir(sw->io) != GPIO_DIR_INPUT)
 		return;
 
-	state = en_gpio_read(sw->io);
+	state = gen_io_read(sw->io);
 
 	if (state != sw->last_state) {
 		sw->last_state = state;
@@ -252,11 +252,11 @@ switch_set(sensor_t * sensor, sensor_value_t value)
 {
 	sensor_switch_t *sw = &sensor->_.sw;
 	int state;
-	if (en_gpio_get_dir(sw->io) != GPIO_DIR_OUTPUT)
+	if (gen_io_get_dir(sw->io) != GPIO_DIR_OUTPUT)
 		return;
 	
 	state = value.val_i;
-	en_gpio_write(sw->io, state);
+	gen_io_write(sw->io, state);
 }
 
 sensors_ops_t switch_ops =

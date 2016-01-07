@@ -16,10 +16,11 @@
 
 struct en_gpio {
 	hal_gpio_t *hal_gpio;
-	gpio_dir_t dir;
 	gpio_debounce_t debounce;
 	char debounced_value, samples;
 };
+
+typedef struct en_gpio en_gpio_t;
 
 /**
  * Currently opened GPIOs
@@ -27,7 +28,7 @@ struct en_gpio {
 static struct en_gpio *g_debounce_gpios[MAX_OPENED_GPIOS];
 static unsigned int g_gpio_count = 0;
 
-en_gpio_t *
+void *
 en_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
 {
 	en_gpio_t *gpio = calloc(1, sizeof(struct en_gpio));
@@ -37,7 +38,6 @@ en_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_deb
 	debug_puts("Setup gpio %s, reverse: %d, dir: %d, debounce: %d\r\n",
 			gpio_name, reverse, direction, debounce);
 	
-	gpio->dir = direction;
 	gpio->debounce = debounce;
 	gpio->debounced_value = 0;
 	gpio->hal_gpio = hal_gpio_setup(gpio_name, reverse, direction);
@@ -50,30 +50,22 @@ en_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_deb
 }
 
 void
-en_gpio_write(en_gpio_t *gpio, int state)
+en_gpio_write(void *io, gpio_state_t state)
 {
-	if (gpio->dir != GPIO_DIR_OUTPUT)
-		PANIC("Calling gpio write on input gpio");
+	en_gpio_t *gpio = io;
 
 	hal_gpio_write(gpio->hal_gpio, state);
 }
 
-int
-en_gpio_read(en_gpio_t *gpio)
+gpio_state_t
+en_gpio_read(void *io)
 {
-	if (gpio->dir != GPIO_DIR_INPUT)
-		PANIC("Calling gpio read on output gpio");
+	en_gpio_t *gpio = io;
 
 	if (gpio->debounce)
 		return gpio->debounced_value;
 	else
 		return hal_gpio_read(gpio->hal_gpio);
-}
-
-gpio_dir_t
-en_gpio_get_dir(en_gpio_t *gpio)
-{
-	return gpio->dir;
 }
 
 static unsigned long long g_gpio_last_read_time = 0;
@@ -107,7 +99,7 @@ en_gpio_main_loop()
 	
 }
 
-const module_t en_gpio_module = {
+static const module_t en_gpio_module = {
 	.name = "en_gpio",
 	.main_loop = en_gpio_main_loop,
 	.json_parse = NULL,
@@ -115,9 +107,18 @@ const module_t en_gpio_module = {
 	.sensor_updated = NULL,
 };
 
+static const gen_io_ops_t gpio_ops = {
+	.io_write = en_gpio_write,
+	.io_read = en_gpio_read,
+	.io_setup = en_gpio_setup,
+	.prefix = "gpio",
+};
+
 void
 en_gpio_init()
 {
 	g_gpio_last_read_time = hal_get_micro();
+
+	gen_io_ops_register(&gpio_ops);
 	module_register(&en_gpio_module);
 }
