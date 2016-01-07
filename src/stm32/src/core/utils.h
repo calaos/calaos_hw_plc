@@ -10,6 +10,8 @@
 
 #define PANIC(format, ...) do { debug_puts("PANIC: " format, ##__VA_ARGS__); hal_panic(); } while(0);
 
+#define PANIC_ON(test, format, ...) do { if (test) {PANIC(format, ##__VA_ARGS__);} } while(0);
+
 void
 serial_puts(const char *format, ...);
 

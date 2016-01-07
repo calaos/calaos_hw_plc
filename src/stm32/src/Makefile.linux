@@ -7,9 +7,8 @@ OBJ_S_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.S,%.o,$(S_SRC_FILES)))
 OBJS		:= $(OBJ_S_FILES) $(OBJ_C_FILES)
 HDR_FILES	:= $(wildcard core/*.h HAL/linux/*.h HAL/*.h)
 CONFIG 		:= configs/linux_config.json
-CFLAGS		:= -I. -Icore -IHAL -Wall -Wextra -Werror
+CFLAGS		:= -I. -Icore -IHAL -Wall -Wextra -Werror -g
 ASFLAGS 	:= -DCONFIG_PATH='"$(CONFIG)"'
-LFLAGS		:= -lm
 
 all: $(BUILD_DIR)/hw_plc
 

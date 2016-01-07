@@ -11,10 +11,10 @@ main()
 {
 	hal_system_init();
 
+	en_gpio_init();
 	shift_register_init();
 	mysensors_init();
 	sensors_init();
-	en_gpio_init();
 
 	config_init();
 	

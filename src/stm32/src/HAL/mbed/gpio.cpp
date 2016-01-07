@@ -9,7 +9,6 @@ extern "C" {
 struct hal_gpio {
 	PinName gpio_name;
 	DigitalInOut *io;
-	int reverse;
 };
 
 extern "C"  hal_gpio_t *
@@ -32,7 +31,6 @@ hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 	debug_puts("Opening port %d, gpio %d\n", port_num, gpio_num);
 
 	gpio->gpio_name = (PinName) ((port_num << 4) | gpio_num);
-	gpio->reverse = reverse;
 	
 	if (direction == GPIO_DIR_OUTPUT) {
 		gpio->io = new DigitalInOut(gpio->gpio_name, PIN_OUTPUT, PullNone, 0 ^ reverse);
@@ -46,11 +44,11 @@ hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 extern "C" void
 hal_gpio_write(hal_gpio_t *gpio, int state)
 {
-	gpio->io->write(state ^ gpio->reverse);
+	gpio->io->write(state);
 }
 
 extern "C" int
 hal_gpio_read(hal_gpio_t *gpio)
 {
-	return gpio->io->read() ^ gpio->reverse;
+	return gpio->io->read();
 }

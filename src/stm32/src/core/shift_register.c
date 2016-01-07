@@ -29,6 +29,19 @@ typedef struct shift_register_io shift_register_io_t;
 static int g_max_shift_register_id = 0;
 static struct shift_register *g_shift_registers[MAX_SHIFT_REGISTERS];
 
+shift_register_t *
+shift_register_get_by_name(const char *name) 
+{
+	int i;
+
+	for (i = 0; i < g_max_shift_register_id; i++) {
+		if (strncmp(name, g_shift_registers[i]->name, strlen(name)) == 0)
+			return g_shift_registers[i];
+	}
+	
+	return NULL;
+}
+
 static int
 sensors_json_parse_sensor(json_value* sensor)
 {
@@ -92,7 +105,8 @@ shift_register_json_parse(json_value* value)
 }
 
 
-static void shift_register_set_state(shift_register_t *sr, uint64_t value)
+static void
+shift_register_set_state(shift_register_t *sr, uint64_t value)
 {
 	int i;
 
@@ -107,9 +121,11 @@ static void shift_register_set_state(shift_register_t *sr, uint64_t value)
 	gen_io_write(sr->latch, 0);
 }
 
-int
+static int
 shift_register_set_output(shift_register_t *sr, int output, gpio_state_t state)
 {
+	debug_puts("Setting shift register ouput %d to value %d\r\n", output, state);
+
 	if (state == 0)
 		sr->current_value &= ~(1 << output);
 	else
@@ -118,6 +134,27 @@ shift_register_set_output(shift_register_t *sr, int output, gpio_state_t state)
 	shift_register_set_state(sr, sr->current_value);
 	
 	return 0;
+}
+
+void *
+shift_register_io_setup(const char *srio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
+{
+	char name_cpy[GEN_IO_MAX_NAME_SIZE];
+	char *sep;
+
+	shift_register_io_t *srio = calloc(1, sizeof(shift_register_io_t));
+	if (!srio)
+		return NULL;
+	strcpy(name_cpy, srio_name);
+	debug_puts("Setup shift register io %s, reverse: %d, dir: %d, debounce: %d\r\n",
+			srio_name, reverse, direction, debounce);
+	/* FIXME: better error handling */
+	sep = strchr(srio_name, '@');
+	sep[0] = '\0';
+	srio->output = atoi(sep + 1);
+	srio->sr = shift_register_get_by_name(name_cpy);
+
+	return srio;
 }
 
 void shift_register_io_write(void *io, gpio_state_t state)
@@ -140,10 +177,9 @@ static const module_t shift_register_module = {
 static const gen_io_ops_t shift_register_io_ops = {
 	.io_write = shift_register_io_write,
 	.io_read = NULL,
-	.io_setup = NULL /* shift_register_io_setup */,
+	.io_setup = shift_register_io_setup,
 	.prefix = "sr",
 };
-
 
 void
 shift_register_init()

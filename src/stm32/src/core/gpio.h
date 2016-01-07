@@ -3,9 +3,6 @@
 
 #include "generic_io.h"
 
-#define GPIO_MAX_NAME_LENGTH 16
-
-
 /**
  * Init GPIO subsystem
  */

@@ -35,21 +35,20 @@ config_init()
 		buffer = (json_char *) &__config_start;
 		length = &__config_end - &__config_start;
 	} else {
+		debug_puts("Loading configuration from filesystem\r\n");
 		fseek(config, 0, SEEK_END);
 
 		length = ftell(config);
 		rewind(config);
 		buffer = malloc(length);
-		if (!buffer)
-			PANIC("Can not allocate enough memory\r\n");
+		PANIC_ON(!buffer, "Can not allocate enough memory\r\n");
 
 		fread(buffer, 1, length, config);
 	}
 
 	value = json_parse(buffer, length);
 
-        if (value == NULL)
-                PANIC("Unable to parse data\r\n");
+	PANIC_ON(value == NULL, "Unable to parse data\r\n");
 
 	if (config != NULL) {
 		free(buffer);

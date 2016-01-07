@@ -3,6 +3,8 @@
 
 #include "gpio.h"
 
+#define GEN_IO_MAX_NAME_SIZE	16
+
 /**
  * Pin state
  */

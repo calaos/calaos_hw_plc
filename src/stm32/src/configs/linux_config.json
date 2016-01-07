@@ -8,15 +8,15 @@
 	},
 	"shift_registers": [{
 		"name": "sr1",
-		"data": "2",
-		"latch": "3",
-		"clock": "4",
+		"data": "gpio@2",
+		"latch": "gpio@3",
+		"clock": "gpio@4",
 		"count": "8",
 	}],
 	"sensors": [{
 		"name": "input1",
 		"type": "switch",
-		"gpio": "0",
+		"io": "gpio@0",
 		"direction": "input",
 		"reverse": true,
 		"id": 0
@@ -24,7 +24,7 @@
 		"name": "output1",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "1",
+		"io": "sr1@0",
 		"id": 1
 	}]
 }

@@ -6,10 +6,17 @@
 	"mysensors": {
 		"node_id": 42
 	},
+	"shift_registers": [{
+		"name": "sr1",
+		"data": "gpio@PC_10",
+		"latch": "gpio@PC_11",
+		"clock": "gpio@4PC_12
+		"count": "8",
+	}],
 	"sensors": [{
 		"name": "input1",
 		"type": "switch",
-		"gpio": "PC_13",
+		"io": "sr1@PC_13",
 		"direction": "input",
 		"reverse": true,
 		"id": 0
@@ -17,56 +24,56 @@
 		"name": "output1",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "PA_8",
+		"io": "sr1@0",
 		"reverse": true,
 		"id": 1
 	}, {
 		"name": "output2",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "PB_10",
+		"io": "sr1@1",
 		"reverse": true,
 		"id": 2
 	}, {
 		"name": "output3",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "PB_4",
+		"io": "sr1@2",
 		"reverse": true,
 		"id": 3
 	}, {
 		"name": "output4",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "PB_5",
+		"io": "sr1@3",
 		"reverse": true,
 		"id": 4
 	}, {
 		"name": "output5",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "PB_13",
+		"io": "sr1@4",
 		"reverse": true,
 		"id": 5
 	}, {
 		"name": "output6",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "PB_14",
+		"io": "sr1@05",
 		"reverse": true,
 		"id": 6
 	}, {
 		"name": "output7",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "PB_15",
+		"io": "sr1@6",
 		"reverse": true,
 		"id": 7
 	}, {
 		"name": "output8",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "PB_1",
+		"gpio": "gpio@PB_1",
 		"reverse": true,
 		"id": 8
 	}]

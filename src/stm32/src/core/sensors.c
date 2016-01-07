@@ -129,7 +129,7 @@ sensors_json_parse_sensor(json_value* sensor)
 {
 	int length, i;
 	const char *name;
-	char s_name[SENSOR_MAX_NAME_LENGTH], s_gpio_name[GPIO_MAX_NAME_LENGTH];
+	const char *s_name = NULL, *s_gpio_name = NULL;
 	unsigned char s_id = 0;
 	int s_gpio_dir = GPIO_DIR_OUTPUT, s_reverse = 0, s_type = -1;
 	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_ENABLE;
@@ -143,9 +143,9 @@ sensors_json_parse_sensor(json_value* sensor)
 		name = sensor->u.object.values[i].name;
 
 		if (strcmp(name, "name") == 0) {
-			strcpy(s_name, value->u.string.ptr);
-		} else if (strcmp(name, "gpio") == 0) {
-			strcpy(s_gpio_name, value->u.string.ptr);
+			s_name = value->u.string.ptr;
+		} else if (strcmp(name, "io") == 0) {
+			s_gpio_name = value->u.string.ptr;
 		} else if (strcmp(name, "direction") == 0) {
 			if (strcmp(value->u.string.ptr, "input") == 0)
 				s_gpio_dir = GPIO_DIR_INPUT;
@@ -159,6 +159,8 @@ sensors_json_parse_sensor(json_value* sensor)
 			s_debounce = value->u.boolean;
 		}
         }
+        PANIC_ON(s_name == NULL || s_gpio_name == NULL,
+			"Incomplete sensor description");
 	gpio = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
 	/* TODO: Check parameters */
 	s = sensor_create_sensor(s_type, s_name, s_id);
@@ -183,6 +185,7 @@ sensors_json_parse(json_value* value)
         for (i = 0; i < length; i++) {
 		/* We only care about sensor section*/
 		if (strcmp(value->u.object.values[i].name, "sensors") == 0) {
+			debug_puts("Found sensors section\r\n");
 			entry = value->u.object.values[i].value;
 			for (j = 0; j < entry->u.array.length; j++) {
 				sensors_json_parse_sensor(entry->u.array.values[j]);
@@ -195,7 +198,8 @@ sensors_json_parse(json_value* value)
         return -1;
 }
 
-static void sensors_main_loop()
+static void
+sensors_main_loop()
 {
 	unsigned int i;
 
