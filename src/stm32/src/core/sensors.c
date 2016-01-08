@@ -38,10 +38,10 @@ typedef struct sensor_switch {
 typedef struct sensor {
 	char name[SENSOR_MAX_NAME_LENGTH];
 	unsigned int id;
-        sensors_type_t type;
         union {
 		sensor_switch_t sw;
 	} _;
+        sensors_type_t type;
 } sensor_t;
 
 

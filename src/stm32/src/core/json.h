@@ -91,9 +91,9 @@ extern const struct _json_value json_value_none;
 typedef struct _json_object_entry
 {
     json_char * name;
-    unsigned int name_length;
     
     struct _json_value * value;
+    unsigned int name_length;
     
 } json_object_entry;
 

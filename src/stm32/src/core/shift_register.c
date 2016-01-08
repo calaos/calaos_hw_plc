@@ -11,11 +11,11 @@
 
 struct shift_register {
 	char *name;		/* Shift register name */
-	char count;		/* Count of output for this shift register */
 	gen_io_t *data;
 	gen_io_t *latch;
 	gen_io_t *clock;
-	uint64_t current_value;
+	uint32_t current_value;
+	uint8_t count;		/* Count of output for this shift register */
 };
 
 struct shift_register_io {
