@@ -11,7 +11,7 @@
 		"data": "gpio@PC_10",
 		"latch": "gpio@PC_11",
 		"clock": "gpio@4PC_12
-		"count": "8",
+		"count": 8,
 	}],
 	"sensors": [{
 		"name": "input1",

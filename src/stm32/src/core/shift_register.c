@@ -4,6 +4,7 @@
 #include "debug.h"
 #include "generic_io.h"
 #include "json.h"
+#include "utils.h"
 
 #include <string.h>
 
@@ -70,7 +71,7 @@ sensors_json_parse_sensor(json_value* sensor)
 		}
         }
 
-	debug_puts("Adding shift register %s\r\n", sr->name);
+	debug_puts("Adding shift register %s with %d output\r\n", sr->name, sr->count);
 	g_shift_registers[g_max_shift_register_id++] = sr;
 
 	return 0;
@@ -106,12 +107,12 @@ shift_register_json_parse(json_value* value)
 
 
 static void
-shift_register_set_state(shift_register_t *sr, uint64_t value)
+shift_register_update(shift_register_t *sr)
 {
 	int i;
 
 	for (i = 0; i < sr->count; i++) {
-		gen_io_write(sr->data, value & (1 << i));
+		gen_io_write(sr->data, (sr->current_value & (1 << i))? GPIO_STATE_HIGH : GPIO_STATE_LOW);
 		gen_io_write(sr->clock, 1);
 		gen_io_write(sr->clock, 0);
 	}
@@ -131,7 +132,7 @@ shift_register_set_output(shift_register_t *sr, int output, gpio_state_t state)
 	else
 		sr->current_value |= (1 << output);
 
-	shift_register_set_state(sr, sr->current_value);
+	shift_register_update(sr);
 	
 	return 0;
 }
@@ -149,10 +150,13 @@ shift_register_io_setup(const char *srio_name, int reverse, gpio_dir_t direction
 	debug_puts("Setup shift register io %s, reverse: %d, dir: %d, debounce: %d\r\n",
 			srio_name, reverse, direction, debounce);
 	/* FIXME: better error handling */
-	sep = strchr(srio_name, '@');
+	sep = strchr(name_cpy, '@');
+	PANIC_ON(sep == NULL, "Could not find @ separator in io name\n");
+
 	sep[0] = '\0';
 	srio->output = atoi(sep + 1);
 	srio->sr = shift_register_get_by_name(name_cpy);
+	PANIC_ON(srio->sr == NULL, "Failed to get shift register %s\n", name_cpy);
 
 	return srio;
 }
