@@ -174,26 +174,17 @@ sensors_json_parse_sensor(json_value* sensor)
 static int
 sensors_json_parse(json_value* value)
 {
-        unsigned int length, i, j;
-	json_value *entry;
+        unsigned int i;
+	json_value *section;
 
-	if (value == NULL || value->type != json_object) {
-                return -1;
-        }
-     
-        length = value->u.object.length;
-        for (i = 0; i < length; i++) {
-		/* We only care about sensor section*/
-		if (strcmp(value->u.object.values[i].name, "sensors") == 0) {
-			debug_puts("Found sensors section\r\n");
-			entry = value->u.object.values[i].value;
-			for (j = 0; j < entry->u.array.length; j++) {
-				sensors_json_parse_sensor(entry->u.array.values[j]);
-			}
-
-			return 0;
+	section = config_get_section(value, "sensors");
+	if (section) {
+		for (i = 0; i < section->u.array.length; i++) {
+			sensors_json_parse_sensor(section->u.array.values[i]);
 		}
-        }
+
+		return 0;
+	}
 
         return -1;
 }

@@ -61,3 +61,19 @@ config_init()
 
 	return;
 }
+
+json_value *
+config_get_section(json_value *json, const char *section_name)
+{
+	int length, i;
+
+        length = json->u.object.length;
+        for (i = 0; i < length; i++) {
+		if (strcmp(json->u.object.values[i].name, section_name) == 0) {
+			debug_puts("Found section %s\n", section_name);
+			return json->u.object.values[i].value;
+		}
+        }
+
+        return NULL;
+}

@@ -3,6 +3,7 @@
 
 #include "json.h"
 #include "sensors.h"
+#include "config.h"
 
 /**
  *  Module struct

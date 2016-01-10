@@ -163,20 +163,11 @@ mysensors_json_parse_section(json_value* section)
 static int
 mysensors_json_parse(json_value* value)
 {
-        int length, i;
-	if (value == NULL || value->type != json_object) {
-                return -1;
-        }
-     
-        length = value->u.object.length;
-        for (i = 0; i < length; i++) {
-		/* We only care about sensor section*/
-		if (strcmp(value->u.object.values[i].name, "mysensors") != 0)
-			continue;
-
-		mysensors_json_parse_section(value->u.object.values[i].value);
-		
-        }
+        json_value *section;
+        
+        section = config_get_section(value, "mysensors");
+	if (section)
+		mysensors_json_parse_section(section);
 
 	if (g_assigned_node_id == 0) {
 		mysensors_send_message_str(0, 0, INTERNAL, REQUEST, I_ID_REQUEST, "1.0");
@@ -184,7 +175,7 @@ mysensors_json_parse(json_value* value)
 		g_assigned_node_id = 1;
 	}
 
-        return -1;
+        return 0;
 }
 
 static void
@@ -214,7 +205,7 @@ mysensors_main_loop()
 }
 
 const module_t mysensors_module = {
-	.name = "mysensors",
+	.name = "display",
 	.main_loop = mysensors_main_loop,
 	.json_parse = mysensors_json_parse,
 	.sensor_created = mysensor_sensor_created,
