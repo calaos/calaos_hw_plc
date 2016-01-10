@@ -2,6 +2,7 @@
 #define _HAL_H
 
 #include <stdarg.h>
+#include <inttypes.h>
 #include "gpio.h"
 
 /**
@@ -83,5 +84,38 @@ hal_gpio_read(hal_gpio_t *gpio);
  */
 const char *
 hal_get_filesystem_prefix();
+
+/**
+ * I2C
+ */
+
+typedef struct hal_i2c_bus hal_i2c_bus_t;
+
+hal_i2c_bus_t *
+hal_i2c_init(const char *name);
+
+/**
+ * Write 
+ */
+void
+hal_i2c_write(hal_i2c_bus_t *i2c_bus, uint8_t addr, uint8_t *data, unsigned int length);
+
+/**
+ * Read 
+ */
+void
+hal_i2c_read(hal_i2c_bus_t *i2c_bus, uint8_t addr, uint8_t *data, unsigned int length);
+
+/**
+ * Start condition 
+ */
+void
+hal_i2c_start(hal_i2c_bus_t *i2c_bus);
+
+/**
+ * Start condition 
+ */
+void
+hal_i2c_end(hal_i2c_bus_t *i2c_bus);
 
 #endif /* _HAL_H */
