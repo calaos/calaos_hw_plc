@@ -91,31 +91,44 @@ hal_get_filesystem_prefix();
 
 typedef struct hal_i2c_bus hal_i2c_bus_t;
 
+/**
+ * Initialize I2C bus from string
+ */
 hal_i2c_bus_t *
 hal_i2c_init(const char *name);
 
 /**
- * Write 
+ * Write data to I2C bus
+ * @param i2c_bus I2C bus to send data
+ * @param addr Address of device on i2c bus
+ * @param data Data to send
+ * @param length Length of data
  */
 void
-hal_i2c_write(hal_i2c_bus_t *i2c_bus, uint8_t addr, uint8_t *data, unsigned int length);
+hal_i2c_write(hal_i2c_bus_t *i2c_bus, uint8_t addr, const uint8_t *data, unsigned int length);
 
 /**
- * Read 
+ * Read data from I2C bus
+ * @param i2c_bus I2C bus to send data
+ * @param addr Address of device on i2c bus
+ * @param data Data read
+ * @param length Length of data
  */
 void
 hal_i2c_read(hal_i2c_bus_t *i2c_bus, uint8_t addr, uint8_t *data, unsigned int length);
 
 /**
- * Start condition 
+ * Send a start condition on I2C bus
+ * @param i2c_bus I2C bus to send data
  */
 void
 hal_i2c_start(hal_i2c_bus_t *i2c_bus);
 
 /**
- * Start condition 
+ * Send a stop condition on I2C bus
+ * @param i2c_bus I2C bus to send data
  */
 void
-hal_i2c_end(hal_i2c_bus_t *i2c_bus);
+hal_i2c_stop(hal_i2c_bus_t *i2c_bus);
 
 #endif /* _HAL_H */
