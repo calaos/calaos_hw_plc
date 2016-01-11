@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "config.h"
 #include "module.h"
+#include "display.h"
 #include "sensors.h"
 #include "mysensors.h"
 #include "shift_register.h"
@@ -14,6 +15,7 @@ main()
 	en_gpio_init();
 	shift_register_init();
 	mysensors_init();
+	display_init();
 	sensors_init();
 
 	config_init();

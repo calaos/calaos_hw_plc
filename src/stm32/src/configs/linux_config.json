@@ -6,6 +6,11 @@
 	"mysensors": {
 		"node_id": 42
 	},
+	"display": {
+		"type": "ssd1306",
+		"width": 128,
+		"height": 64
+	},
 	"shift_registers": [{
 		"name": "sr1",
 		"data": "gpio@2",
