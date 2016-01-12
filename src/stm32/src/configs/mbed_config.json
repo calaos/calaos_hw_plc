@@ -10,13 +10,13 @@
 		"name": "sr1",
 		"data": "gpio@PC_10",
 		"latch": "gpio@PC_11",
-		"clock": "gpio@4PC_12
+		"clock": "gpio@PC_12",
 		"count": 8,
 	}],
 	"sensors": [{
 		"name": "input1",
 		"type": "switch",
-		"io": "sr1@PC_13",
+		"io": "gpio@PC_13",
 		"direction": "input",
 		"reverse": true,
 		"id": 0
@@ -59,7 +59,7 @@
 		"name": "output6",
 		"type": "switch",
 		"direction": "output",
-		"io": "sr1@05",
+		"io": "sr1@5",
 		"reverse": true,
 		"id": 6
 	}, {
@@ -73,7 +73,7 @@
 		"name": "output8",
 		"type": "switch",
 		"direction": "output",
-		"gpio": "gpio@PB_1",
+		"io": "sr1@7",
 		"reverse": true,
 		"id": 8
 	}]
