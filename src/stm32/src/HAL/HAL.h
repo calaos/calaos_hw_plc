@@ -95,7 +95,7 @@ typedef struct hal_i2c_bus hal_i2c_bus_t;
  * Initialize I2C bus from string
  */
 hal_i2c_bus_t *
-hal_i2c_init(const char *name);
+hal_i2c_init(const char *scl, const char *sda, uint32_t frequency);
 
 /**
  * Write data to I2C bus

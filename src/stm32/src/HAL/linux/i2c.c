@@ -5,8 +5,9 @@
  * Initialize I2C bus from string
  */
 hal_i2c_bus_t *
-hal_i2c_init(__unused__ const char *name)
+hal_i2c_init(const char *scl, const char *sda, uint32_t frequency)
 {
+	debug_puts("Opening I2C scl %s, sda %s, freq %d\n", scl, sda, frequency);
 	return (void *) 1;
 }
 

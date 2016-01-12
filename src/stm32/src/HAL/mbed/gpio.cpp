@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <mbed.h>
+#include "mbed_util.h"
 
 extern "C" {
 #include "HAL.h"
@@ -14,23 +15,13 @@ struct hal_gpio {
 extern "C"  hal_gpio_t *
 hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 {
-	int port_num, gpio_num;
 	hal_gpio_t *gpio = (hal_gpio_t *) calloc(1, sizeof(struct hal_gpio));
 	if (!gpio)
 		return NULL;
 
-	if (gpio_name[0] != 'P')
+	gpio->gpio_name = mbed_pinname_from_str(gpio_name);
+	if(gpio->gpio_name == NC)
 		return NULL;
-
-	if (gpio_name[2] != '_')
-		return NULL;
-
-	port_num = gpio_name[1] - 'A';
-	gpio_num = atoi(&gpio_name[3]);
-
-	debug_puts("Opening port %d, gpio %d\n", port_num, gpio_num);
-
-	gpio->gpio_name = (PinName) ((port_num << 4) | gpio_num);
 	
 	if (direction == GPIO_DIR_OUTPUT) {
 		gpio->io = new DigitalInOut(gpio->gpio_name, PIN_OUTPUT, PullNone, 0 ^ reverse);
