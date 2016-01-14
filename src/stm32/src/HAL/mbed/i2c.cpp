@@ -26,7 +26,7 @@ extern "C" void
 hal_i2c_write(uint8_t addr,
 	const uint8_t *data, unsigned int length)
 {
-	i2c.write(addr, (const char *) data, length);
+	i2c.write(addr << 1, (const char *) data, length);
 }
 
 /**
@@ -40,6 +40,6 @@ extern "C" void
 hal_i2c_read(uint8_t addr, 
 	uint8_t *data, unsigned int length)
 {
-	i2c.read(addr, (char *) data, length);
+	i2c.read(addr << 1, (char *) data, length);
 }
 
