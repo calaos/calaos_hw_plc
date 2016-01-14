@@ -1,23 +1,31 @@
+#include "display.h"
+#include "ssd1306.h"
 #include "module.h"
 #include "utils.h"
 
 #include <string.h>
 
+static display_ops_t const *g_display_ops[] = {
+	&ssd1306_display_ops,
+};
 
 typedef struct display {
-	int width, height;
-	int color;
-	uint8_t *framebuffer;
+	int width;
+	int height;
 } display_t;
 
 static display_t g_display;
+
+static display_ops_t const *g_current_display_ops;
 
 static int
 display_json_parse(json_value* value)
 {
         unsigned int i, length;
 	json_value *section;
+	display_ops_t const *disp_ops;
 	char *name;
+	const char *type = NULL;
 
 	section = config_get_section(value, "display");
 	if (section) {
@@ -27,20 +35,25 @@ display_json_parse(json_value* value)
 			name = section->u.object.values[i].name;
 
 			if (strcmp(name, "type") == 0) {
-				/* FIXME */
+				type = value->u.string.ptr;
 			} else if (strcmp(name, "width") == 0) {
 				g_display.width = value->u.integer;
 			} else if (strcmp(name, "height") == 0) {
 				g_display.height = value->u.integer;
 			}
 		}
-
-		/* Framebuffer as a bitfield*/
-		g_display.framebuffer = malloc(g_display.width * g_display.height / 8);
-		PANIC_ON(!g_display.framebuffer, "Failed to allocate framebuffer");
-
 		debug_puts("Setup display w %d, h %d\r\n", g_display.width, g_display.height);
-		return 0;
+
+		for (i = 0; i < ARRAY_SIZE(g_display_ops); i++) {
+			disp_ops = g_display_ops[i];
+			if (strncmp(disp_ops->name, type, strlen(disp_ops->name)) == 0) {
+				g_current_display_ops = disp_ops;
+				disp_ops->init(type, g_display.width, g_display.height);
+				return 0;
+			}
+				
+		}
+		PANIC("Failed to find display matching configuration\r\n");
 	}
 
 	return -1;

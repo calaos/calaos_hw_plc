@@ -1,6 +1,8 @@
 #ifndef __SSD1306_H
 #define __SSD1306_H
 
+#include "display.h"
+
 #define SSD1306_DEFAULT_ADDRESS 0x78
 #define SSD1306_SETCONTRAST 0x81
 #define SSD1306_DISPLAYALLON_RESUME 0xA4
@@ -27,5 +29,7 @@
 #define SSD1306_CHARGEPUMP 0x8D
 #define SSD1306_SWITCHCAPVCC 0x2
 #define SSD1306_NOP 0xE3
+
+extern display_ops_t ssd1306_display_ops;
 
 #endif

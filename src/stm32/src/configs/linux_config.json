@@ -7,7 +7,7 @@
 		"node_id": 42
 	},
 	"display": {
-		"type": "ssd1306",
+		"type": "ssd1306@0x3C",
 		"width": 128,
 		"height": 64
 	},

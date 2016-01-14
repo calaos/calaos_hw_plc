@@ -1,19 +1,20 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include "ssd1306.h"
 #include "utils.h"
 #include "HAL.h"
 
 static uint8_t g_ssd1306_address;
+static uint8_t *g_ssd1306_buffer;
+static uint32_t g_ssd1306_width, g_ssd1306_height;
 
 void
 ssd1306_send_command(uint8_t command)
 {
 	uint8_t cmd[2] = {0x00, command};
 
-	hal_i2c_start(NULL);
-	hal_i2c_write(NULL, g_ssd1306_address, cmd, 2);
-	hal_i2c_stop(NULL);
+	hal_i2c_write(g_ssd1306_address, cmd, 2);
 }
 
 static const uint8_t ssd1306_init_data[] = {
@@ -44,12 +45,18 @@ static const uint8_t ssd1306_init_data[] = {
 	SSD1306_DISPLAYON
 };
 
-void
-ssd1306_init(uint8_t address)
+static void
+ssd1306_init(const char *str, int width, int height)
 {
 	unsigned int i;
-	g_ssd1306_address = address;
-	//~ i2c.init(SSD1306_DEFAULT_ADDRESS);
+	const char *addr;
+
+	addr = strchr(str, '@');
+	g_ssd1306_address = strtol(addr + 1, NULL, 16);
+
+	g_ssd1306_width = width;
+	g_ssd1306_height = height;
+	g_ssd1306_buffer = calloc(1, width * height / 8);
 
 	for(i = 0; i < ARRAY_SIZE(ssd1306_init_data); i++) {
 		ssd1306_send_command(ssd1306_init_data[i]);
@@ -65,6 +72,19 @@ ssd1306_invert(uint8_t inverted) {
 	}
 }
 
+static void
+ssd1306_draw_pixel(int x, int y, uint8_t value)
+{
+	uint32_t x_offset = x * (g_ssd1306_height / 8);
+	uint32_t y_offset = y / (g_ssd1306_width / 8);
+	uint8_t shift = y % 8;
+
+	if (value) 
+		g_ssd1306_buffer[x_offset + y_offset] |= (1 << shift);
+	else
+		g_ssd1306_buffer[x_offset + y_offset] &= ~(1 << shift);
+}
+
 static const uint8_t ssd1306_pre_send_buffer_data[] = {
 	SSD1306_COLUMNADDR,
 	0x00,
@@ -74,10 +94,11 @@ static const uint8_t ssd1306_pre_send_buffer_data[] = {
 	0x07,
 };
 
-void ssd1306_sendFramebuffer(uint8_t *buffer)
+void
+ssd1306_display()
 {
 	uint8_t packet;
-	const uint8_t pre_byte_val = 0x40;	
+	uint8_t send_val[17] = {0x40};	
 	unsigned int i;
 
 	for(i = 0; i < ARRAY_SIZE(ssd1306_pre_send_buffer_data); i++) {
@@ -88,9 +109,15 @@ void ssd1306_sendFramebuffer(uint8_t *buffer)
 	// Our buffer is 1024 bytes long, 1024/16 = 64
 	// We have to send 64 packets
 	for (packet = 0; packet < 64; packet++) {
-		hal_i2c_start(NULL);
-		hal_i2c_write(NULL, g_ssd1306_address, &pre_byte_val, 1);
-		hal_i2c_write(NULL, g_ssd1306_address, &buffer[packet*16], 16);
-		hal_i2c_stop(NULL);
+		memcpy(&send_val[1], &g_ssd1306_buffer[packet*16], 16);
+		hal_i2c_write(g_ssd1306_address, send_val, 17);
 	}
 }
+
+display_ops_t ssd1306_display_ops = {
+	.name = "ssd1306",
+	.init = ssd1306_init,
+	.draw_pixel = ssd1306_draw_pixel,
+	.disp = ssd1306_display,
+};
+
