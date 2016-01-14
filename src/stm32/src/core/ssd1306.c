@@ -75,14 +75,12 @@ ssd1306_invert(uint8_t inverted) {
 static void
 ssd1306_draw_pixel(int x, int y, uint8_t value)
 {
-	uint32_t x_offset = x * (g_ssd1306_height / 8);
-	uint32_t y_offset = y / (g_ssd1306_width / 8);
 	uint8_t shift = y % 8;
 
-	if (value) 
-		g_ssd1306_buffer[x_offset + y_offset] |= (1 << shift);
+	if (value)
+		g_ssd1306_buffer[x + (y / 8) * g_ssd1306_width] |= (1 << shift);
 	else
-		g_ssd1306_buffer[x_offset + y_offset] &= ~(1 << shift);
+		g_ssd1306_buffer[x + (y / 8) * g_ssd1306_width] &= ~(1 << shift);
 }
 
 static const uint8_t ssd1306_pre_send_buffer_data[] = {
