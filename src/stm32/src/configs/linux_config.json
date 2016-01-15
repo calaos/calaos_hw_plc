@@ -26,7 +26,7 @@
 		"type": "switch",
 		"io": "gpio@0",
 		"direction": "input",
-		"reverse": true,
+		"active_low": true,
 		"id": 0
 	}, {
 		"name": "output1",

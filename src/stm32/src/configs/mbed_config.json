@@ -26,63 +26,63 @@
 		"type": "switch",
 		"io": "gpio@PC_13",
 		"direction": "input",
-		"reverse": true,
+		"active_low": true,
 		"id": 0
 	}, {
 		"name": "output1",
 		"type": "switch",
 		"direction": "output",
 		"io": "sr1@0",
-		"reverse": true,
+		"active_low": true,
 		"id": 1
 	}, {
 		"name": "output2",
 		"type": "switch",
 		"direction": "output",
 		"io": "sr1@1",
-		"reverse": true,
+		"active_low": true,
 		"id": 2
 	}, {
 		"name": "output3",
 		"type": "switch",
 		"direction": "output",
 		"io": "sr1@2",
-		"reverse": true,
+		"active_low": true,
 		"id": 3
 	}, {
 		"name": "output4",
 		"type": "switch",
 		"direction": "output",
 		"io": "sr1@3",
-		"reverse": true,
+		"active_low": true,
 		"id": 4
 	}, {
 		"name": "output5",
 		"type": "switch",
 		"direction": "output",
 		"io": "sr1@4",
-		"reverse": true,
+		"active_low": true,
 		"id": 5
 	}, {
 		"name": "output6",
 		"type": "switch",
 		"direction": "output",
 		"io": "sr1@5",
-		"reverse": true,
+		"active_low": true,
 		"id": 6
 	}, {
 		"name": "output7",
 		"type": "switch",
 		"direction": "output",
 		"io": "sr1@6",
-		"reverse": true,
+		"active_low": true,
 		"id": 7
 	}, {
 		"name": "output8",
 		"type": "switch",
 		"direction": "output",
 		"io": "sr1@7",
-		"reverse": true,
+		"active_low": true,
 		"id": 8
 	}]
 }

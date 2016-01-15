@@ -151,7 +151,7 @@ sensors_json_parse_sensor(json_value* sensor)
 				s_gpio_dir = GPIO_DIR_INPUT;
 		} else if (strcmp(name, "type") == 0) {
 			s_type = sensors_typestr_to_type(value->u.string.ptr);
-		} else if (strcmp(name, "reverse") == 0) {
+		} else if (strcmp(name, "active_low") == 0) {
 			s_reverse = value->u.boolean;
 		} else if (strcmp(name, "id") == 0) {
 			s_id = value->u.integer;
