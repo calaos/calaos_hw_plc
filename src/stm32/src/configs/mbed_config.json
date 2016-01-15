@@ -7,9 +7,12 @@
 		"node_id": 42
 	},
 	"display": {
-		"type": "ssd1306@0x3C",
+		"type": "ssd1306",
 		"width": 128,
-		"height": 64
+		"height": 64,
+		"disp_data": {
+			"address": "0x3C"
+		}
 	},
 	"shift_registers": [{
 		"name": "sr1",

@@ -16,13 +16,13 @@ typedef struct display {
 
 static display_t g_display;
 
-static display_ops_t const *g_current_display_ops;
+static display_ops_t const *g_current_display_ops = NULL;
 
 static int
 display_json_parse(json_value* value)
 {
         unsigned int i, length;
-	json_value *section;
+	json_value *section, *disp_data = NULL;
 	display_ops_t const *disp_ops;
 	char *name;
 	const char *type = NULL;
@@ -36,6 +36,8 @@ display_json_parse(json_value* value)
 
 			if (strcmp(name, "type") == 0) {
 				type = value->u.string.ptr;
+			} else if (strcmp(name, "disp_data") == 0) {
+				disp_data = value;
 			} else if (strcmp(name, "width") == 0) {
 				g_display.width = value->u.integer;
 			} else if (strcmp(name, "height") == 0) {
@@ -48,12 +50,14 @@ display_json_parse(json_value* value)
 			disp_ops = g_display_ops[i];
 			if (strncmp(disp_ops->name, type, strlen(disp_ops->name)) == 0) {
 				g_current_display_ops = disp_ops;
-				disp_ops->init(type, g_display.width, g_display.height);
-				return 0;
+				break;
 			}
-				
+
 		}
-		PANIC("Failed to find display matching configuration\r\n");
+		PANIC_ON(!g_current_display_ops, "Failed to find display matching configuration\r\n");
+
+		g_current_display_ops->parse_json(disp_data);
+		g_current_display_ops->init(g_display.width, g_display.height);
 	}
 
 	return -1;

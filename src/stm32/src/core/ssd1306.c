@@ -46,13 +46,9 @@ static const uint8_t ssd1306_init_data[] = {
 };
 
 static void
-ssd1306_init(const char *str, int width, int height)
+ssd1306_init(int width, int height)
 {
 	unsigned int i;
-	const char *addr;
-
-	addr = strchr(str, '@');
-	g_ssd1306_address = strtol(addr + 1, NULL, 16);
 
 	g_ssd1306_width = width;
 	g_ssd1306_height = height;
@@ -92,7 +88,7 @@ static const uint8_t ssd1306_pre_send_buffer_data[] = {
 	0x07,
 };
 
-void
+static void
 ssd1306_display()
 {
 	uint8_t packet;
@@ -112,10 +108,29 @@ ssd1306_display()
 	}
 }
 
+static void
+ssd1306_parse_json(json_value *disp_data)
+{
+        unsigned int i, length;
+	json_value *value;
+	const char *name;
+
+	length = disp_data->u.object.length;
+	for (i = 0; i < length; i++) {
+		value = disp_data->u.object.values[i].value;
+		name = disp_data->u.object.values[i].name;
+
+		if (strcmp(name, "address") == 0) {
+			g_ssd1306_address = strtol(value->u.string.ptr, NULL, 16);
+		}
+	}
+}
+
 display_ops_t ssd1306_display_ops = {
 	.name = "ssd1306",
 	.init = ssd1306_init,
 	.draw_pixel = ssd1306_draw_pixel,
 	.disp = ssd1306_display,
+	.parse_json = ssd1306_parse_json,
 };
 
