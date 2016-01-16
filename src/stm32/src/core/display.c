@@ -52,12 +52,12 @@ display_json_parse(json_value* value)
 				g_current_display_ops = disp_ops;
 				break;
 			}
-
 		}
 		PANIC_ON(!g_current_display_ops, "Failed to find display matching configuration\r\n");
 
 		g_current_display_ops->parse_json(disp_data);
 		g_current_display_ops->init(g_display.width, g_display.height);
+		return 0;
 	}
 
 	return -1;
