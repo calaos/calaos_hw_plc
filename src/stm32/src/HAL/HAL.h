@@ -113,5 +113,23 @@ hal_i2c_write(uint8_t addr, const uint8_t *data, unsigned int length);
 void
 hal_i2c_read(uint8_t addr, uint8_t *data, unsigned int length);
 
+/**
+ * SPI
+ */
+
+/**
+ * SPI init
+ * @frequency Set the SPI to the desired frequency
+ */
+void
+hal_spi_init(uint32_t frequency);
+
+/**
+ * Send a value through SPI
+ * @value Value to send through SPI
+ */
+int
+hal_spi_write(uint8_t value);
+
 
 #endif /* _HAL_H */
