@@ -153,7 +153,7 @@ mysensors_json_parse_section(json_value* section)
 		entry = section->u.object.values[i].value;
 		if (strcmp(section->u.object.values[i].name, "node_id") == 0) {
 			g_assigned_node_id = entry->u.integer;
-			debug_puts("Node id: %d\n", g_assigned_node_id);
+			debug_puts("Node id: %d\r\n", g_assigned_node_id);
 		}
         }
 

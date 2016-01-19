@@ -18,6 +18,38 @@ static display_t g_display;
 
 static display_ops_t const *g_current_display_ops = NULL;
 
+
+static void
+display_print_char(int x, int y, char c)
+{
+	uint8_t i, j, line;
+
+	for(i = 0; i < 6; i++ ) {
+		if(i < 5)
+			line = g_display_font[(c * 5) + i];
+		else
+			line = 0x0;
+		
+		for(j = 0; j < 8; j++, line >>= 1) {
+			if(line & 0x1) {
+				g_current_display_ops->draw_pixel(x + i, y + j, 1);
+			} else {
+				g_current_display_ops->draw_pixel(x + i, y + j, 0);
+			}
+		}
+	}
+}
+
+static void
+display_print(int x, int y, const char *str)
+{
+	while (*str) {
+		x += 6;
+		display_print_char(x, y, *str);
+		str++;
+	}
+}
+
 static int
 display_json_parse(json_value* value)
 {
@@ -57,10 +89,19 @@ display_json_parse(json_value* value)
 
 		g_current_display_ops->parse_json(disp_data);
 		g_current_display_ops->init(g_display.width, g_display.height);
+		display_print(0, 0, "Calaos PLC");
+		display_print(0, 16, "Up & running !");
+		g_current_display_ops->disp();
 		return 0;
 	}
 
 	return -1;
+}
+
+
+static void
+display_sensor_updated(__unused__ sensor_t *s, __unused__ sensor_value_t new_value)
+{
 }
 
 /**
@@ -71,7 +112,7 @@ const module_t display_module = {
 	.main_loop = NULL,
 	.json_parse = display_json_parse,
 	.sensor_created = NULL,
-	.sensor_updated = NULL,
+	.sensor_updated = display_sensor_updated,
 };
 
 void

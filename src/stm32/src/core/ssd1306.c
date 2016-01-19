@@ -5,7 +5,7 @@
 #include "utils.h"
 #include "HAL.h"
 
-static uint8_t g_ssd1306_address;
+static uint8_t g_ssd1306_address = 0;
 static uint8_t *g_ssd1306_buffer;
 static uint32_t g_ssd1306_width, g_ssd1306_height;
 
@@ -69,11 +69,11 @@ ssd1306_invert(uint8_t inverted) {
 }
 
 static void
-ssd1306_draw_pixel(int x, int y, uint8_t value)
+ssd1306_draw_pixel(int x, int y, uint16_t color)
 {
 	uint8_t shift = y % 8;
 
-	if (value)
+	if (color)
 		g_ssd1306_buffer[x + (y / 8) * g_ssd1306_width] |= (1 << shift);
 	else
 		g_ssd1306_buffer[x + (y / 8) * g_ssd1306_width] &= ~(1 << shift);
@@ -124,6 +124,7 @@ ssd1306_parse_json(json_value *disp_data)
 			g_ssd1306_address = strtol(value->u.string.ptr, NULL, 16);
 		}
 	}
+	PANIC_ON(g_ssd1306_address == 0, "Missing address for screen\r\n");
 }
 
 display_ops_t ssd1306_display_ops = {
