@@ -20,7 +20,7 @@ static display_ops_t const *g_current_display_ops = NULL;
 
 
 static void
-display_print_char(int x, int y, char c)
+display_print_char(int x, int y, char c, uint16_t color, uint16_t bg_color)
 {
 	uint8_t i, j, line;
 
@@ -32,9 +32,9 @@ display_print_char(int x, int y, char c)
 		
 		for(j = 0; j < 8; j++, line >>= 1) {
 			if(line & 0x1) {
-				g_current_display_ops->draw_pixel(x + i, y + j, 1);
+				g_current_display_ops->draw_pixel(x + i, y + j, color);
 			} else {
-				g_current_display_ops->draw_pixel(x + i, y + j, 0);
+				g_current_display_ops->draw_pixel(x + i, y + j, bg_color);
 			}
 		}
 	}
@@ -45,7 +45,7 @@ display_print(int x, int y, const char *str)
 {
 	while (*str) {
 		x += 6;
-		display_print_char(x, y, *str);
+		display_print_char(x, y, *str, 1, 0);
 		str++;
 	}
 }
