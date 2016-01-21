@@ -6,12 +6,22 @@
 	"mysensors": {
 		"node_id": 42
 	},
-	"display": {
+	"display_backup": {
 		"type": "ssd1306",
 		"width": 128,
 		"height": 64,
 		"disp_data": {
 			"address": "0x3C"
+		}
+	},
+	"display": {
+		"type": "ili9341",
+		"width": 240,
+		"height": 320,
+		"disp_data": {
+			"rst": "gpio@PC_0",
+			"cs": "gpio@PC_3",
+			"dc": "gpio@PC_1",
 		}
 	},
 	"shift_registers": [{

@@ -9,7 +9,9 @@ typedef struct display_ops {
 	const char *name;
 	void (*init)(int width, int height);
 	void (*draw_pixel)(int x, int y, uint16_t value);
+	void (*fill_rect)(int x, int y, int w, int h, uint16_t color);
 	void (*disp)(void);
+	uint16_t (*color_from_rgb)(uint8_t r, uint8_t g, uint8_t b);
 	void (*parse_json)(json_value *value);
 } display_ops_t;
 

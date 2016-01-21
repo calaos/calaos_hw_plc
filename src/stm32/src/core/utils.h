@@ -18,11 +18,11 @@ serial_puts(const char *format, ...);
 static inline void ms_delay(unsigned long long ms)
 {
 	ms *= 1000;
-	unsigned long long now, present = hal_get_micro();
+	volatile unsigned long long now, present = hal_get_micro();
 
 	do {
 		now = hal_get_micro();
-	} while ((present - now) < ms);
+	} while ((now - present) < ms);
 }
 
 #endif

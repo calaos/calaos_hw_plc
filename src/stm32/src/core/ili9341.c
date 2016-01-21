@@ -41,7 +41,7 @@ ili9341_send_reg_data(uint8_t reg, const uint8_t *value, uint8_t size)
 	gen_io_write(g_ili9341_cs, 0);
 
 	gen_io_write(g_ili9341_dc, ILI9341_REG);
-	ili9341_send_reg(reg);
+	hal_spi_write(reg);
 	
 	gen_io_write(g_ili9341_dc, ILI9341_DATA);    
 	for (i = 0; i < size; i++)
@@ -93,7 +93,10 @@ static const uint8_t ili9341_init_cmds[] =
 
 	0, ILI9341_SLPOUT,   //Exit Sleep 
 };
-	
+
+static void
+ili9341_fill_rect(int x, int y, int w, int h, uint16_t color);
+
 static void
 ili9341_init(int width, int height)
 {
@@ -102,6 +105,7 @@ ili9341_init(int width, int height)
 	unsigned int i = 0;
 
 	if (g_ili9341_rst != NULL) {
+		gen_io_write(g_ili9341_rst, 1);
 		ms_delay(5);
 		gen_io_write(g_ili9341_rst, 0);
 		ms_delay(20);
@@ -111,13 +115,13 @@ ili9341_init(int width, int height)
 
 	while (i < ARRAY_SIZE(ili9341_init_cmds)) {
 		ili9341_send_reg_data(ili9341_init_cmds[i + 1], &ili9341_init_cmds[i + 2], ili9341_init_cmds[i]);
-		i += ili9341_init_cmds[i] + 1;
+		i += ili9341_init_cmds[i] + 2;
 	}
 
 	ms_delay(120);
 
 	ili9341_send_reg(ILI9341_DISPON);   //Display on 
-	ili9341_send_reg(ILI9341_RAMWR);
+	ili9341_fill_rect(0, 0, width, height, ILI9341_BLACK);
 }
 
 static void
@@ -130,6 +134,21 @@ ili9341_set_addr_window(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 	ili9341_send_reg_data(ILI9341_PASET, y_cmd, 4);
 	ili9341_send_reg(ILI9341_RAMWR);
 }
+
+static void
+ili9341_fill_rect(int x, int y, int w, int h, uint16_t color)
+{
+	uint8_t data[2] = {color >> 8, color & 0xFF};
+
+	ili9341_set_addr_window(x, y, x + w - 1, y + h - 1);
+	
+	for(y = h; y > 0; y--) {
+		for(x = w; x > 0; x--) {
+			ili9341_send_data(data, 2);
+		}
+	}
+}
+
 
 static void
 ili9341_draw_pixel(int x, int y, uint16_t color)
@@ -157,6 +176,7 @@ ili9341_parse_json(json_value *disp_data)
         unsigned int i, length;
 	json_value *value;
 	const char *name;
+	int frequency = 1000000;
 
 	length = disp_data->u.object.length;
 	for (i = 0; i < length; i++) {
@@ -169,6 +189,8 @@ ili9341_parse_json(json_value *disp_data)
 			g_ili9341_dc = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
 		} else if (strcmp(name, "rst") == 0) {
 			g_ili9341_rst = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+		}else if (strcmp(name, "freq") == 0) {
+			frequency = value->u.integer;
 		}
 	}
 	PANIC_ON(g_ili9341_cs == NULL, "Missing io for screen cs\r\n");
@@ -179,13 +201,17 @@ ili9341_parse_json(json_value *disp_data)
 	/* Deassert reset */
 	if (g_ili9341_rst != NULL)
 		gen_io_write(g_ili9341_rst, 1);
+
+	hal_spi_init(frequency);
 }
 
 display_ops_t ili9341_display_ops = {
 	.name = "ili9341",
 	.init = ili9341_init,
 	.draw_pixel = ili9341_draw_pixel,
+	.fill_rect = ili9341_fill_rect,
 	.disp = ili9341_display,
+	.color_from_rgb = ili9341_color_from_rgb,
 	.parse_json = ili9341_parse_json,
 };
 

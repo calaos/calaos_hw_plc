@@ -31,7 +31,7 @@ display_print_char(int x, int y, char c, uint16_t color, uint16_t bg_color)
 			line = g_display_font[(c * 5) + i];
 		else
 			line = 0x0;
-		
+
 		for(j = 0; j < 8; j++, line >>= 1) {
 			if(line & 0x1) {
 				g_current_display_ops->draw_pixel(x + i, y + j, color);
@@ -43,11 +43,11 @@ display_print_char(int x, int y, char c, uint16_t color, uint16_t bg_color)
 }
 
 static void
-display_print(int x, int y, const char *str)
+display_print(int x, int y, const char *str, uint16_t color, uint16_t bg_color)
 {
 	while (*str) {
 		x += 6;
-		display_print_char(x, y, *str, 1, 0);
+		display_print_char(x, y, *str, color, bg_color);
 		str++;
 	}
 }
@@ -91,8 +91,8 @@ display_json_parse(json_value* value)
 
 		g_current_display_ops->parse_json(disp_data);
 		g_current_display_ops->init(g_display.width, g_display.height);
-		display_print(0, 0, "Calaos PLC");
-		display_print(0, 16, "Up & running !");
+		display_print(0, 0, "Calaos PLC", ILI9341_CYAN, ILI9341_BLACK);
+		display_print(0, 16, "Up & running !", ILI9341_CYAN, ILI9341_BLACK);
 		g_current_display_ops->disp();
 		return 0;
 	}
