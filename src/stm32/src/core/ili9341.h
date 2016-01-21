@@ -1,5 +1,5 @@
-#ifndef __SSD1306_H
-#define __SSD1306_H
+#ifndef __ILI9341_H
+#define __ILI9341_H
 
 #include "display.h"
 

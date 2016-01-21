@@ -1,5 +1,6 @@
 #include "display.h"
 #include "ssd1306.h"
+#include "ili9341.h"
 #include "module.h"
 #include "utils.h"
 
@@ -7,6 +8,7 @@
 
 static display_ops_t const *g_display_ops[] = {
 	&ssd1306_display_ops,
+	&ili9341_display_ops,
 };
 
 typedef struct display {
