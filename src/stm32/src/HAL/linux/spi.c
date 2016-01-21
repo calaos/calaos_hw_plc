@@ -13,8 +13,7 @@ hal_spi_init(uint32_t frequency)
  * @value Value to send through SPI
  */
 int
-hal_spi_write(uint8_t value)
+hal_spi_write(uint8_t __unused__ value)
 {
-	debug_puts("SPI: writing value %x\n", value);
 	return 0;
 }

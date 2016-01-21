@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "debug.h"
+#include "utils.h"
 #include "HAL.h"
 
 struct hal_gpio {
@@ -23,9 +24,8 @@ hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 }
 
 void
-hal_gpio_write(hal_gpio_t *gpio, int state)
+hal_gpio_write(__unused__ hal_gpio_t *gpio, __unused__ int state)
 {
-	debug_puts("[PIN] gpio %d set to %d\n", gpio->gpio_num, state);
 }
 
 int
