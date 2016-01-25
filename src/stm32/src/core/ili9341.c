@@ -160,7 +160,9 @@ ili9341_draw_pixel(int x, int y, uint16_t color)
 }
 
 // Pass 8-bit (each) R,G,B, get back 16-bit packed color
-uint16_t ili9341_color_from_rgb(uint8_t r, uint8_t g, uint8_t b) {
+static uint16_t
+ili9341_color_from_rgb(uint8_t r, uint8_t g, uint8_t b)
+{
 	return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
 }
 
@@ -210,8 +212,8 @@ display_ops_t ili9341_display_ops = {
 	.init = ili9341_init,
 	.draw_pixel = ili9341_draw_pixel,
 	.fill_rect = ili9341_fill_rect,
-	.disp = ili9341_display,
 	.color_from_rgb = ili9341_color_from_rgb,
+	.disp = ili9341_display,
 	.parse_json = ili9341_parse_json,
 };
 

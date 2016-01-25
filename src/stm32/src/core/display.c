@@ -18,7 +18,7 @@ typedef struct display {
 
 static display_t g_display;
 
-static display_ops_t const *g_current_display_ops = NULL;
+static display_ops_t const *g_cur_disp = NULL;
 
 
 static void
@@ -34,9 +34,9 @@ display_print_char(int x, int y, char c, uint16_t color, uint16_t bg_color)
 
 		for(j = 0; j < 8; j++, line >>= 1) {
 			if(line & 0x1) {
-				g_current_display_ops->draw_pixel(x + i, y + j, color);
+				g_cur_disp->draw_pixel(x + i, y + j, color);
 			} else {
-				g_current_display_ops->draw_pixel(x + i, y + j, bg_color);
+				g_cur_disp->draw_pixel(x + i, y + j, bg_color);
 			}
 		}
 	}
@@ -50,6 +50,20 @@ display_print(int x, int y, const char *str, uint16_t color, uint16_t bg_color)
 		display_print_char(x, y, *str, color, bg_color);
 		str++;
 	}
+}
+
+static int
+display_init_screen()
+{
+	uint16_t black = g_cur_disp->color_from_rgb(255, 255, 255);
+	uint16_t cyan = g_cur_disp->color_from_rgb(0, 255, 255);
+
+	g_cur_disp->init(g_display.width, g_display.height);
+	display_print(0, 0, "Calaos PLC", cyan, black);
+	display_print(0, 16, "Up & running !", cyan, black);
+	g_cur_disp->disp();
+
+	return 0;
 }
 
 static int
@@ -83,17 +97,14 @@ display_json_parse(json_value* value)
 		for (i = 0; i < ARRAY_SIZE(g_display_ops); i++) {
 			disp_ops = g_display_ops[i];
 			if (strncmp(disp_ops->name, type, strlen(disp_ops->name)) == 0) {
-				g_current_display_ops = disp_ops;
+				g_cur_disp = disp_ops;
 				break;
 			}
 		}
-		PANIC_ON(!g_current_display_ops, "Failed to find display matching configuration\r\n");
+		PANIC_ON(!g_cur_disp, "Failed to find display matching configuration\r\n");
 
-		g_current_display_ops->parse_json(disp_data);
-		g_current_display_ops->init(g_display.width, g_display.height);
-		display_print(0, 0, "Calaos PLC", ILI9341_CYAN, ILI9341_BLACK);
-		display_print(0, 16, "Up & running !", ILI9341_CYAN, ILI9341_BLACK);
-		g_current_display_ops->disp();
+		g_cur_disp->parse_json(disp_data);
+		display_init_screen();
 		return 0;
 	}
 

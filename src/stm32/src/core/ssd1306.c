@@ -88,6 +88,15 @@ static const uint8_t ssd1306_pre_send_buffer_data[] = {
 	0x07,
 };
 
+
+// Pass 8-bit (each) R,G,B, get back 16-bit packed color
+static uint16_t
+ssd1306_color_from_rgb(uint8_t r, uint8_t g, uint8_t b)
+{
+	return (r || g || b);
+}
+
+
 static void
 ssd1306_display()
 {
@@ -131,6 +140,8 @@ display_ops_t ssd1306_display_ops = {
 	.name = "ssd1306",
 	.init = ssd1306_init,
 	.draw_pixel = ssd1306_draw_pixel,
+	.fill_rect = NULL,
+	.color_from_rgb = ssd1306_color_from_rgb,
 	.disp = ssd1306_display,
 	.parse_json = ssd1306_parse_json,
 };
