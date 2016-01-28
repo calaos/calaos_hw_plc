@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Mon 25 Jan 2016 04:48:46 PM CET
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Wed 27 Jan 2016 02:48:07 PM CET
 
 BeginCmp
 TimeStamp = /56658787;
@@ -12,6 +12,27 @@ TimeStamp = /56658743;
 Reference = CN101;
 ValeurCmp = Nucleo-F411RE-CN10;
 IdModule  = Pin_Headers:Pin_Header_Straight_2x19;
+EndCmp
+
+BeginCmp
+TimeStamp = /56A91B4E;
+Reference = P1;
+ValeurCmp = CONN_01X10;
+IdModule  = w_conn_screw:mors_10p;
+EndCmp
+
+BeginCmp
+TimeStamp = /56A94EF4;
+Reference = P2;
+ValeurCmp = CONN_01X10;
+IdModule  = w_conn_screw:mors_10p;
+EndCmp
+
+BeginCmp
+TimeStamp = /56A94610;
+Reference = P3;
+ValeurCmp = CONN_01X10;
+IdModule  = w_conn_screw:mors_10p;
 EndCmp
 
 BeginCmp
