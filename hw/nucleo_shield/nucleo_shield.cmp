@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Wed 27 Jan 2016 02:48:07 PM CET
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Fri 29 Jan 2016 01:24:58 PM CET
 
 BeginCmp
 TimeStamp = /56658787;
@@ -33,6 +33,13 @@ TimeStamp = /56A94610;
 Reference = P3;
 ValeurCmp = CONN_01X10;
 IdModule  = w_conn_screw:mors_10p;
+EndCmp
+
+BeginCmp
+TimeStamp = /56AB61A1;
+Reference = P4;
+ValeurCmp = CONN_01X02;
+IdModule  = w_conn_screw:mors_2p;
 EndCmp
 
 BeginCmp
