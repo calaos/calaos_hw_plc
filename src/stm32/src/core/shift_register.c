@@ -127,7 +127,7 @@ shift_register_set_output(shift_register_t *sr, int output, gpio_state_t state)
 	return 0;
 }
 
-void *
+static void *
 shift_register_io_setup(const char *srio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
 {
 	char name_cpy[GEN_IO_MAX_NAME_SIZE];
@@ -151,7 +151,8 @@ shift_register_io_setup(const char *srio_name, int reverse, gpio_dir_t direction
 	return srio;
 }
 
-void shift_register_io_write(void *io, gpio_state_t state)
+static void
+shift_register_io_write(void *io, gpio_state_t state)
 {
 	shift_register_io_t *sr_io = io;
 	shift_register_set_output(sr_io->sr, sr_io->output, state);
