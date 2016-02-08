@@ -1,0 +1,91 @@
+{
+	"global": {
+		"baudrate": 115200,
+		"debug": true
+	},
+	"mysensors": {
+		"node_id": 42
+	},
+	"display_ili": {
+		"type": "ili9341",
+		"width": 240,
+		"height": 320,
+		"disp_data": {
+			"rst": "gpio@PC_0",
+			"cs": "gpio@PC_3",
+			"dc": "gpio@PC_1",
+			"freq": 50000000
+		}
+	},
+	"shift_registers": [{
+		"name": "sr1",
+		"data": "gpio@PB_15",
+		"latch": "gpio@PB_1",
+		"clock": "gpio@PB_2",
+		"count": 8,
+	}],
+	"sensors": [{
+		"name": "input1",
+		"type": "switch",
+		"io": "gpio@PC_13",
+		"direction": "input",
+		"active_low": true,
+		"id": 0
+	}, {
+		"name": "output1",
+		"type": "switch",
+		"direction": "output",
+		"io": "sr1@0",
+		"active_low": true,
+		"id": 1
+	}, {
+		"name": "output2",
+		"type": "switch",
+		"direction": "output",
+		"io": "sr1@1",
+		"active_low": true,
+		"id": 2
+	}, {
+		"name": "output3",
+		"type": "switch",
+		"direction": "output",
+		"io": "sr1@2",
+		"active_low": true,
+		"id": 3
+	}, {
+		"name": "output4",
+		"type": "switch",
+		"direction": "output",
+		"io": "sr1@3",
+		"active_low": true,
+		"id": 4
+	}, {
+		"name": "output5",
+		"type": "switch",
+		"direction": "output",
+		"io": "sr1@4",
+		"active_low": true,
+		"id": 5
+	}, {
+		"name": "output6",
+		"type": "switch",
+		"direction": "output",
+		"io": "sr1@5",
+		"active_low": true,
+		"id": 6
+	}, {
+		"name": "output7",
+		"type": "switch",
+		"direction": "output",
+		"io": "sr1@6",
+		"active_low": true,
+		"id": 7
+	}, {
+		"name": "output8",
+		"type": "switch",
+		"direction": "output",
+		"io": "sr1@7",
+		"active_low": true,
+		"id": 8
+	}]
+}
