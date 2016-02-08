@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Fri 29 Jan 2016 01:24:58 PM CET
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Fri 05 Feb 2016 12:51:43 PM CET
 
 BeginCmp
 TimeStamp = /56658787;
@@ -40,6 +40,13 @@ TimeStamp = /56AB61A1;
 Reference = P4;
 ValeurCmp = CONN_01X02;
 IdModule  = w_conn_screw:mors_2p;
+EndCmp
+
+BeginCmp
+TimeStamp = /56B4B484;
+Reference = P5;
+ValeurCmp = CONN_01X06;
+IdModule  = w_conn_screw:mors_6p;
 EndCmp
 
 BeginCmp
@@ -155,6 +162,62 @@ IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
+TimeStamp = /56B4AA95;
+Reference = R17;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56B4AA9B;
+Reference = R18;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56B4AAA1;
+Reference = R19;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56B4AAA7;
+Reference = R20;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56B4AA6D;
+Reference = R21;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56B4AA73;
+Reference = R22;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56B4AA79;
+Reference = R23;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /56B4AA7F;
+Reference = R24;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
 TimeStamp = /566589DD;
 Reference = U1;
 ValeurCmp = 74HC595;
@@ -178,6 +241,13 @@ EndCmp
 BeginCmp
 TimeStamp = /56A614C5;
 Reference = U4;
+ValeurCmp = LTV-847;
+IdModule  = Housings_DIP:DIP-16__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /56B4AA8D;
+Reference = U5;
 ValeurCmp = LTV-847;
 IdModule  = Housings_DIP:DIP-16__300;
 EndCmp
