@@ -101,11 +101,12 @@ shift_register_update(shift_register_t *sr)
 {
 	int i;
 
-	for (i = 0; i < sr->count; i++) {
-		gen_io_write(sr->data, (sr->current_value & (1 << i))? GPIO_STATE_HIGH : GPIO_STATE_LOW);
-		gen_io_write(sr->clock, 1);
+	for (i = sr->count; i >= 0; i--) {
 		gen_io_write(sr->clock, 0);
+		gen_io_write(sr->data, (sr->current_value >> i) & 0x1);
+		gen_io_write(sr->clock, 1);
 	}
+	gen_io_write(sr->clock, 0);
 
 	/* Unleash the beast ! */
 	gen_io_write(sr->latch, 1);
