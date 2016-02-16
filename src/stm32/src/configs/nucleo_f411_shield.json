@@ -20,72 +20,153 @@
 	"shift_registers": [{
 		"name": "sr1",
 		"data": "gpio@PB_15",
-		"latch": "gpio@PB_1",
 		"clock": "gpio@PB_2",
-		"count": 8,
+		"latch": "gpio@PB_1",
+		"count": 16
 	}],
+	
 	"sensors": [{
-		"name": "input1",
+		"name": "sw1",
 		"type": "switch",
 		"io": "gpio@PC_13",
-		"direction": "input",
+		"dir": "input",
 		"active_low": true,
 		"id": 0
 	}, {
-		"name": "output1",
+		"name": "out1",
 		"type": "switch",
-		"direction": "output",
+		"dir": "output",
 		"io": "sr1@0",
 		"active_low": true,
 		"id": 1
 	}, {
-		"name": "output2",
+		"name": "out2",
 		"type": "switch",
-		"direction": "output",
+		"dir": "output",
 		"io": "sr1@1",
 		"active_low": true,
 		"id": 2
 	}, {
-		"name": "output3",
+		"name": "out3",
 		"type": "switch",
-		"direction": "output",
+		"dir": "output",
 		"io": "sr1@2",
 		"active_low": true,
 		"id": 3
 	}, {
-		"name": "output4",
+		"name": "out4",
 		"type": "switch",
-		"direction": "output",
+		"dir": "output",
 		"io": "sr1@3",
 		"active_low": true,
 		"id": 4
 	}, {
-		"name": "output5",
+		"name": "out5",
 		"type": "switch",
-		"direction": "output",
+		"dir": "output",
 		"io": "sr1@4",
 		"active_low": true,
 		"id": 5
 	}, {
-		"name": "output6",
+		"name": "out6",
 		"type": "switch",
-		"direction": "output",
+		"dir": "output",
 		"io": "sr1@5",
 		"active_low": true,
 		"id": 6
 	}, {
-		"name": "output7",
+		"name": "out7",
 		"type": "switch",
-		"direction": "output",
+		"dir": "output",
 		"io": "sr1@6",
 		"active_low": true,
 		"id": 7
 	}, {
-		"name": "output8",
+		"name": "out8",
 		"type": "switch",
-		"direction": "output",
+		"dir": "output",
 		"io": "sr1@7",
 		"active_low": true,
 		"id": 8
+	}, {
+		"name": "out9",
+		"type": "switch",
+		"dir": "output",
+		"io": "sr1@8",
+		"active_low": true,
+		"id": 9
+	}, {
+		"name": "out10",
+		"type": "switch",
+		"dir": "output",
+		"io": "sr1@9",
+		"active_low": true,
+		"id": 10
+	}, {
+		"name": "out11",
+		"type": "switch",
+		"dir": "output",
+		"io": "sr1@10",
+		"active_low": true,
+		"id": 11
+	}, {
+		"name": "out12",
+		"type": "switch",
+		"dir": "output",
+		"io": "sr1@11",
+		"active_low": true,
+		"id": 12
+	}, {
+		"name": "out13",
+		"type": "switch",
+		"dir": "output",
+		"io": "sr1@12",
+		"active_low": true,
+		"id": 13
+	}, {
+		"name": "out114",
+		"type": "switch",
+		"dir": "output",
+		"io": "sr1@13",
+		"active_low": true,
+		"id": 14
+	}, {
+		"name": "out15",
+		"type": "switch",
+		"dir": "output",
+		"io": "sr1@14",
+		"active_low": true,
+		"id": 15
+	}, {
+		"name": "out16",
+		"type": "switch",
+		"dir": "output",
+		"io": "sr1@15",
+		"active_low": true,
+		"id": 16
+	}, {
+		"name": "24vin1",
+		"type": "switch",
+		"io": "gpio@PB_5",
+		"dir": "input",
+		"id": 17
+	}, {
+		"name": "24vin2",
+		"type": "switch",
+		"io": "gpio@PB_4",
+		"dir": "input",
+		"id": 18
+	}, {
+		"name": "24vin3",
+		"type": "switch",
+		"io": "gpio@PB_10",
+		"dir": "input",
+		"id": 19
+	}, {
+		"name": "24vin4",
+		"type": "switch",
+		"io": "gpio@PA_8",
+		"dir": "input",
+		"id": 20
 	}]
 }

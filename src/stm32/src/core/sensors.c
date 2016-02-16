@@ -146,7 +146,7 @@ sensors_json_parse_sensor(json_value* sensor)
 			s_name = value->u.string.ptr;
 		} else if (strcmp(name, "io") == 0) {
 			s_gpio_name = value->u.string.ptr;
-		} else if (strcmp(name, "direction") == 0) {
+		} else if (strcmp(name, "dir") == 0) {
 			if (strcmp(value->u.string.ptr, "input") == 0)
 				s_gpio_dir = GPIO_DIR_INPUT;
 		} else if (strcmp(name, "type") == 0) {
