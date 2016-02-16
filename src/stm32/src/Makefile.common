@@ -1,0 +1,4 @@
+
+%_reduced.json: %.json
+	cat $< | tr -d "[:space:]" > $@
+	

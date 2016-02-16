@@ -6,13 +6,15 @@ OBJ_C_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.c,%.o,$(C_SRC_FILES)))
 OBJ_S_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.S,%.o,$(S_SRC_FILES)))
 OBJS		:= $(OBJ_S_FILES) $(OBJ_C_FILES)
 HDR_FILES	:= $(wildcard core/*.h HAL/linux/*.h HAL/*.h)
-CONFIG 		?= configs/linux_config.json
+CONFIG 		?= linux_config
 CFLAGS		:= -I. -Icore -IHAL -Wall -Wextra -Werror -g
-ASFLAGS 	:= -DCONFIG_PATH='"$(CONFIG)"'
+ASFLAGS 	:= -DCONFIG_PATH='"configs/$(CONFIG)_reduced.json"'
 
 all: $(BUILD_DIR)/hw_plc
 
-$(BUILD_DIR)/core/incconfig.o: $(CONFIG)
+include Makefile.common	
+
+$(BUILD_DIR)/core/incconfig.o: configs/$(CONFIG)_reduced.json
 
 $(BUILD_DIR)/%.o: %.c $(firstword $(MAKEFILE_LIST)) $(HDR_FILES)
 	mkdir -p $(dir $@)
