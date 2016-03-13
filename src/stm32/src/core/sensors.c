@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define SENSOR_MAX_NAME_LENGTH	32
-#define MAX_SENSOR_COUNT	32
+#define MAX_SENSOR_COUNT	64
 
 typedef struct sensors_ops {
 	/**
