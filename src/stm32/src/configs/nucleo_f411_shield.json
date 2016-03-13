@@ -149,24 +149,72 @@
 		"type": "switch",
 		"io": "gpio@PB_5",
 		"dir": "input",
-		"id": 17
+		"id": 40
 	}, {
 		"name": "24vin2",
 		"type": "switch",
 		"io": "gpio@PB_4",
 		"dir": "input",
-		"id": 18
+		"id": 41
 	}, {
 		"name": "24vin3",
 		"type": "switch",
 		"io": "gpio@PB_10",
 		"dir": "input",
-		"id": 19
+		"id": 42
 	}, {
 		"name": "24vin4",
 		"type": "switch",
 		"io": "gpio@PA_8",
 		"dir": "input",
-		"id": 20
+		"id": 43
+	}, {
+		"name": "24vin5",
+		"type": "switch",
+		"io": "gpio@PA_0",
+		"dir": "input",
+		"id": 44
+	}, {
+		"name": "24vin6",
+		"type": "switch",
+		"io": "gpio@PA_1",
+		"dir": "input",
+		"id": 45
+	}, {
+		"name": "24vin7",
+		"type": "switch",
+		"io": "gpio@PA_4",
+		"dir": "input",
+		"id": 46
+	}, {
+		"name": "24vin8",
+		"type": "switch",
+		"io": "gpio@PB_0",
+		"dir": "input",
+		"id": 47
+	}, {
+		"name": "24vin9",
+		"type": "switch",
+		"io": "gpio@PC_11",
+		"dir": "input",
+		"id": 48
+	}, {
+		"name": "24vin10",
+		"type": "switch",
+		"io": "gpio@PC_10",
+		"dir": "input",
+		"id": 49
+	}, {
+		"name": "24vin11",
+		"type": "switch",
+		"io": "gpio@PD_2",
+		"dir": "input",
+		"id": 50
+	}, {
+		"name": "24vin12",
+		"type": "switch",
+		"io": "gpio@PC_12",
+		"dir": "input",
+		"id": 51
 	}]
 }
