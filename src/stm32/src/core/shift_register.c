@@ -1,3 +1,5 @@
+#define _GNU_SOURCE 1
+
 #include "shift_register.h"
 #include "sensors.h"
 #include "module.h"
@@ -7,6 +9,7 @@
 #include "utils.h"
 
 #include <string.h>
+#include <stdlib.h>
 
 #define MAX_SHIFT_REGISTERS	4	
 
