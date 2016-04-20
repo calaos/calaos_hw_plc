@@ -88,14 +88,13 @@ shift_register_json_parse(json_value* value)
 	json_value *section;
 
 	section = config_get_section(value, "shift_registers");
-	if (section) {
-		for (i = 0; i < section->u.array.length; i++) {
-			shift_register_json_parse_one(section->u.array.values[i]);
-		}
-		return 0;
-	}
+	if (!section)
+		return -1;
 
-	return -1;
+	for (i = 0; i < section->u.array.length; i++) {
+		shift_register_json_parse_one(section->u.array.values[i]);
+	}
+	return 0;
 }
 
 

@@ -76,39 +76,38 @@ display_json_parse(json_value* value)
 	const char *type = NULL;
 
 	section = config_get_section(value, "display");
-	if (section) {
-		length = section->u.object.length;
-		for (i = 0; i < length; i++) {
-			value = section->u.object.values[i].value;
-			name = section->u.object.values[i].name;
+	if (!section)
+		return -1;
 
-			if (strcmp(name, "type") == 0) {
-				type = value->u.string.ptr;
-			} else if (strcmp(name, "data") == 0) {
-				disp_data = value;
-			} else if (strcmp(name, "width") == 0) {
-				g_display.width = value->u.integer;
-			} else if (strcmp(name, "height") == 0) {
-				g_display.height = value->u.integer;
-			}
+	length = section->u.object.length;
+	for (i = 0; i < length; i++) {
+		value = section->u.object.values[i].value;
+		name = section->u.object.values[i].name;
+
+		if (strcmp(name, "type") == 0) {
+			type = value->u.string.ptr;
+		} else if (strcmp(name, "data") == 0) {
+			disp_data = value;
+		} else if (strcmp(name, "width") == 0) {
+			g_display.width = value->u.integer;
+		} else if (strcmp(name, "height") == 0) {
+			g_display.height = value->u.integer;
 		}
-		debug_puts("Setup display w %d, h %d\r\n", g_display.width, g_display.height);
-
-		for (i = 0; i < ARRAY_SIZE(g_display_ops); i++) {
-			disp_ops = g_display_ops[i];
-			if (strncmp(disp_ops->name, type, strlen(disp_ops->name)) == 0) {
-				g_cur_disp = disp_ops;
-				break;
-			}
-		}
-		PANIC_ON(!g_cur_disp, "Failed to find display matching configuration\r\n");
-
-		g_cur_disp->parse_json(disp_data);
-		display_init_screen();
-		return 0;
 	}
+	debug_puts("Setup display w %d, h %d\r\n", g_display.width, g_display.height);
 
-	return -1;
+	for (i = 0; i < ARRAY_SIZE(g_display_ops); i++) {
+		disp_ops = g_display_ops[i];
+		if (strncmp(disp_ops->name, type, strlen(disp_ops->name)) == 0) {
+			g_cur_disp = disp_ops;
+			break;
+		}
+	}
+	PANIC_ON(!g_cur_disp, "Failed to find display matching configuration\r\n");
+
+	g_cur_disp->parse_json(disp_data);
+	display_init_screen();
+	return 0;
 }
 
 

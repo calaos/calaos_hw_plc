@@ -178,15 +178,14 @@ sensors_json_parse(json_value* value)
 	json_value *section;
 
 	section = config_get_section(value, "sensors");
-	if (section) {
-		for (i = 0; i < section->u.array.length; i++) {
-			sensors_json_parse_sensor(section->u.array.values[i]);
-		}
-
-		return 0;
+	if (!section)
+		return -1;
+	
+	for (i = 0; i < section->u.array.length; i++) {
+		sensors_json_parse_sensor(section->u.array.values[i]);
 	}
 
-        return -1;
+	return 0;
 }
 
 static void
