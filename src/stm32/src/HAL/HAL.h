@@ -38,14 +38,23 @@ hal_debug_puts(const char *str);
 /**
  * Panic the system
  */
+__attribute__((noreturn))
 void
 hal_panic(void);
 
 /**
  * Get microseconds elapsed since start of program
+ * @return Elapsed time in microseconds
  */
 unsigned long long
 hal_get_micro(void);
+
+/**
+ * Get milliseconds elapsed since start of program
+ * @return Elapsed time in microseconds
+ */
+unsigned long long
+hal_get_milli(void);
 
 /**
  * GPIO
@@ -127,6 +136,7 @@ hal_spi_init(uint32_t frequency);
 /**
  * Send a value through SPI
  * @value Value to send through SPI
+ * @return Value read through SPI
  */
 int
 hal_spi_write(uint8_t value);

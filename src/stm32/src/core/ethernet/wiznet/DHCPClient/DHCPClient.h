@@ -45,7 +45,6 @@ private:
     Endpoint m_server;
     uint8_t xid[4];
     bool exit_flag;
-    Timer m_interval;
     int m_retry;
     uint8_t m_buf[DHCP_MAX_PACKET_SIZE];
     int m_pos;

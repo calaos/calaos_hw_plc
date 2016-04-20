@@ -19,9 +19,6 @@
 
 #pragma once
 
-#include "mbed.h"
-#include "mbed_debug.h"
-
 //#define USE_W5500
 //#define USE_W5200
 #define USE_W5100

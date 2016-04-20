@@ -47,7 +47,7 @@ void
 gen_io_ops_register(const gen_io_ops_t * ops);
 
 void
-gen_io_write(gen_io_t *io, gpio_state_t state);
+gen_io_write(gen_io_t *io, int state);
 
 gpio_state_t
 gen_io_read(gen_io_t *io);

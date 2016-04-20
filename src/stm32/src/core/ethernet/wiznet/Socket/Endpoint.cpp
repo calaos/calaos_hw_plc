@@ -18,6 +18,8 @@
 #include "Socket.h"
 #include "Endpoint.h"
 
+#include <stdio.h>
+
 Endpoint::Endpoint()  {
     reset_address();
 }
@@ -32,8 +34,7 @@ int Endpoint::set_address(const char* host, const int port) {
     //Resolve DNS address or populate hard-coded IP address
     WIZnet_Chip* eth = WIZnet_Chip::getInstance();
     if (eth == NULL) {
-        error("Endpoint constructor error: no WIZnet chip instance available!\r\n");
-        return -1;
+        hal_panic();
     }
     uint32_t addr;
     if (!eth->gethostbyname(host, &addr)) {

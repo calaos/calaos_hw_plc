@@ -18,15 +18,12 @@
 
 #include "WIZnetInterface.h"
 #include "DHCPClient.h"
+#include "HAL.h"
 
-WIZnetInterface::WIZnetInterface(PinName mosi, PinName miso, PinName sclk, PinName cs, PinName reset) :
-		WIZnet_Chip(mosi, miso, sclk, cs, reset)
-{
-    ip_set = false;
-}
+#include <stdio.h>
 
-WIZnetInterface::WIZnetInterface(SPI* spi, PinName cs, PinName reset) :
-		WIZnet_Chip(spi, cs, reset)
+WIZnetInterface::WIZnetInterface(gen_io_t *cs, gen_io_t *reset) :
+		WIZnet_Chip(cs, reset)
 {
     ip_set = false;
 }
@@ -35,7 +32,7 @@ int WIZnetInterface::init(uint8_t * mac)
 {
     dhcp = true;
     //
-    for (int i =0; i < 6; i++) this->mac[i] = mac[i];
+    for (int i = 0; i < 6; i++) this->mac[i] = mac[i];
     //
     reset();
     return 0;

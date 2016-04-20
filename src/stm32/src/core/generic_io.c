@@ -55,11 +55,11 @@ gen_io_ops_register(const gen_io_ops_t * ops)
 }
 
 void
-gen_io_write(gen_io_t *io, gpio_state_t state)
+gen_io_write(gen_io_t *io, int state)
 {
 	PANIC_ON(io->dir == GPIO_DIR_INPUT, "Write called on input GPIO");
 
-	io->ops->io_write(io->io, state  ^ io->reverse);
+	io->ops->io_write(io->io, (state & 0x1) ^ io->reverse);
 }
 
 gpio_state_t

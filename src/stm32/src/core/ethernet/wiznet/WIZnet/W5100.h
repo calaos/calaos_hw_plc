@@ -19,8 +19,10 @@
 
 #pragma once
 
-#include "mbed.h"
-#include "mbed_debug.h"
+#include "HAL.h"
+
+#include <stdlib.h>
+#include <string.h>
 
 #define TEST_ASSERT(A) while(!(A)){debug("\n\n%s@%d %s ASSERT!\n\n",__PRETTY_FUNCTION__,__LINE__,#A);exit(1);};
 
@@ -94,8 +96,7 @@ public:
     * @param cs cs of the W5200
     * @param reset reset pin of the W5200
     */
-	WIZnet_Chip(PinName mosi, PinName miso, PinName sclk, PinName cs, PinName reset);
-	WIZnet_Chip(SPI* spi, PinName cs, PinName reset);
+	WIZnet_Chip(gen_io_t *_cs, gen_io_t *_reset);
 
     /*
     * Connect the W5200 module to the ssid contained in the constructor.
@@ -258,9 +259,8 @@ protected:
 
     void spi_write(uint16_t addr, const uint8_t *buf, uint16_t len);
     void spi_read(uint16_t addr, uint8_t *buf, uint16_t len);
-    SPI* spi;
-    DigitalOut cs;
-    DigitalOut reset_pin;
+    gen_io_t *cs;
+    gen_io_t *reset_pin;
 };
 
 extern uint32_t str_to_ip(const char* str);

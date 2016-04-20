@@ -44,7 +44,7 @@ hal_serial_puts(const char *str)
 extern "C" int
 hal_debug_puts(const char *str)
 {
-	debug_serial.puts(str);
+	pc_serial.puts(str);
 
 	return 0;
 }
@@ -79,6 +79,13 @@ extern "C" unsigned long long
 hal_get_micro(void)
 {
 	return t.read_us();
+}
+
+
+extern "C" unsigned long long
+hal_get_milli(void)
+{
+	return t.read_ms();
 }
 
 extern "C" const char *

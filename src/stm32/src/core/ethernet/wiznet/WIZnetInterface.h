@@ -34,8 +34,7 @@ public:
     * \param cs chip select of the WIZnet_Chip
     * \param reset reset pin of the WIZnet_Chip
     */
-	WIZnetInterface(PinName mosi, PinName miso, PinName sclk, PinName cs, PinName reset);
-	WIZnetInterface(SPI* spi, PinName cs, PinName reset);
+	WIZnetInterface(gen_io_t *_cs, gen_io_t *_reset);
 
   /** Initialize the interface with DHCP.
   * Initialize the interface and configure it to use DHCP (no connection at this point).

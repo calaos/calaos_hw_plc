@@ -17,6 +17,7 @@
  */
 
 #include "UDPSocket.h"
+#include <stdio.h>
 
 static int udp_local_port;
 

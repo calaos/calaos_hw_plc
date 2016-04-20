@@ -25,4 +25,13 @@ static inline void ms_delay(unsigned long long ms)
 	} while ((now - present) < ms);
 }
 
+static inline void us_delay(unsigned long long us)
+{
+	volatile unsigned long long now, present = hal_get_micro();
+
+	do {
+		now = hal_get_micro();
+	} while ((now - present) < us);
+}
+
 #endif

@@ -16,10 +16,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "mbed.h"
-#include "mbed_debug.h"
 #include "wiznet.h"
+#include "W5100.h"
 #include "DNSClient.h"
+#include "utils.h"
+
+#include <stdio.h>
 
 #ifdef USE_W5100
 
@@ -45,29 +47,13 @@
 
 WIZnet_Chip* WIZnet_Chip::inst;
 
-WIZnet_Chip::WIZnet_Chip(PinName mosi, PinName miso, PinName sclk, PinName _cs, PinName _reset):
+WIZnet_Chip::WIZnet_Chip(gen_io_t *_cs, gen_io_t *_reset):
     cs(_cs), reset_pin(_reset)
 {
-    spi = new SPI(mosi, miso, sclk);
-    
-    spi->format(8,0);
-    spi->frequency(2000000);
-    
-    cs = 1;
-    reset_pin = 1;
-    inst = this;
-}
 
-WIZnet_Chip::WIZnet_Chip(SPI* spi, PinName _cs, PinName _reset):
-    cs(_cs), reset_pin(_reset)
-{
-    this->spi = spi;
-    
-    this->spi->format(8,0);
-    this->spi->frequency(2000000);
+    gen_io_write(cs, GPIO_STATE_HIGH);
+    gen_io_write(reset_pin, GPIO_STATE_HIGH);
 
-    cs = 1;
-    reset_pin = 1;
     inst = this;
 }
 
@@ -99,11 +85,9 @@ bool WIZnet_Chip::connect(int socket, const char * host, int port, int timeout_m
     sreg<uint16_t>(socket, Sn_DPORT, port);
     sreg<uint16_t>(socket, Sn_PORT, new_port());
     scmd(socket, CONNECT);
-    Timer t;
-    t.reset();
-    t.start();
+    unsigned long long timer_start = hal_get_milli();
     while(!is_connected(socket)) {
-        if (t.read_ms() > timeout_ms) {
+        if ((hal_get_milli() - timer_start) > (unsigned int) timeout_ms) {
             return false;
         }
     }
@@ -154,11 +138,12 @@ bool WIZnet_Chip::is_fin_received(int socket)
 
 void WIZnet_Chip::reset()
 {
-    reset_pin = 1;
-    reset_pin = 0;
-    wait_us(2); // 2us
-    reset_pin = 1;
-    wait_ms(150); // 150ms
+    gen_io_write(reset_pin, 1);
+    gen_io_write(reset_pin, 0);
+ 
+    us_delay(2); // 2us
+    gen_io_write(reset_pin, 1);
+    ms_delay(150); // 150ms
     
     reg_wr<uint8_t>(MR, 1<<7);
     
@@ -298,13 +283,13 @@ void WIZnet_Chip::scmd(int socket, Command cmd)
 void WIZnet_Chip::spi_write(uint16_t addr, const uint8_t *buf, uint16_t len)
 {
     for(int i = 0; i < len; i++) {
-		cs = 0;
+	cs = 0;
     	spi->write(0xf0);
     	spi->write(addr >> 8);
     	spi->write(addr & 0xff);
         addr++;
     	spi->write(buf[i]);
-		cs = 1;
+	cs = 1;
     }
 #if DBG_SPI
     debug("[SPI]W %04x(%d)", addr, len);

@@ -61,6 +61,12 @@ hal_get_micro(void)
 	return 1000000 * tv.tv_sec + tv.tv_usec;
 }
 
+unsigned long long
+hal_get_milli(void)
+{
+	return hal_get_micro() / 1000;
+}
+
 
 
 const char *

@@ -1,8 +1,9 @@
 // DHCPClient.cpp 2013/4/10
-#include "mbed.h"
-#include "mbed_debug.h"
+
 #include "UDPSocket.h"
 #include "DHCPClient.h"
+
+#include <time.h>
 
 #define DBG_DHCP 0
 
@@ -158,6 +159,7 @@ void  DHCPClient::add_option(uint8_t code, uint8_t* buf, int len)
 int DHCPClient::setup(int timeout_ms)
 {
     eth = WIZnet_Chip::getInstance();
+    unsigned long long interval_start = 0;
     if (eth == NULL) {
         return -1;
     }    
@@ -185,13 +187,12 @@ int DHCPClient::setup(int timeout_ms)
             case 1:
                 send_size = discover();
                 m_udp->sendTo(m_server, (char*)m_buf, send_size);
-                m_interval.reset();
-                m_interval.start();
+		interval_start = hal_get_milli();
                 seq++;
                 break;
             case 2:
                 callback();
-                if (m_interval.read_ms() > interval_ms) {
+                if ((hal_get_milli() - interval_start) > (unsigned int) interval_ms) {
                     DBG("m_retry: %d\n", m_retry);
                     if (++m_retry >= (timeout_ms/interval_ms)) {
                         err = -1;
@@ -202,7 +203,7 @@ int DHCPClient::setup(int timeout_ms)
                 break;
         }
     }
-    DBG("m_retry: %d, m_interval: %d\n", m_retry, m_interval.read_ms());
+    DBG("m_retry: %d, m_interval: %d\n", m_retry, hal_get_milli() - interval_start);
     delete m_udp;
     return err;
 }

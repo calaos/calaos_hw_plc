@@ -84,7 +84,7 @@ display_json_parse(json_value* value)
 
 			if (strcmp(name, "type") == 0) {
 				type = value->u.string.ptr;
-			} else if (strcmp(name, "disp_data") == 0) {
+			} else if (strcmp(name, "data") == 0) {
 				disp_data = value;
 			} else if (strcmp(name, "width") == 0) {
 				g_display.width = value->u.integer;
@@ -120,7 +120,7 @@ display_sensor_updated(__unused__ sensor_t *s, __unused__ sensor_value_t new_val
 /**
  * Module
  */
-const module_t display_module = {
+static const module_t display_module = {
 	.name = "display",
 	.main_loop = NULL,
 	.json_parse = display_json_parse,

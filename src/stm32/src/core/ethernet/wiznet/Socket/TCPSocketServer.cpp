@@ -17,6 +17,9 @@
  */
 
 #include "TCPSocketServer.h"
+#include "utils.h"
+
+#include <stdio.h>
 
 TCPSocketServer::TCPSocketServer() {}
 
@@ -59,11 +62,9 @@ int TCPSocketServer::accept(TCPSocketConnection& connection)
     if (_sock_fd < 0) {
         return -1;
     }
-    Timer t;
-    t.reset();
-    t.start();
+    unsigned long long timer_start = hal_get_milli();
     while(1) {
-        if (t.read_ms() > _timeout && _blocking == false) {
+        if ((hal_get_milli() - timer_start) > (unsigned int) _timeout && _blocking == false) {
             return -1;
         }
         if (eth->sreg<uint8_t>(_sock_fd, Sn_SR) == SOCK_ESTABLISHED) {
@@ -83,13 +84,13 @@ int TCPSocketServer::accept(TCPSocketConnection& connection)
     _sock_fd = -1; // want to assign new available _sock_fd.
     if(bind(listen_port) < 0) {
         // modified by Patrick Pollet
-        error("No more socket for listening, bind error");
+        PANIC("No more socket for listening, bind error");
         return -1;
     } else {
         //return -1;
         if(listen(1) < 0) {
             // modified by Patrick Pollet
-            error("No more socket for listening, listen error");
+            PANIC("No more socket for listening, listen error");
             return -1;
         }
     }
