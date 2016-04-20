@@ -170,9 +170,8 @@ int WIZnet_Chip::wait_readable(int socket, int wait_time_ms, int req_size)
     if (socket < 0) {
         return -1;
     }
-    Timer t;
-    t.reset();
-    t.start();
+    unsigned long long timer_start = hal_get_milli();
+
     while(1) {
         int size = 0; int size1 = 0;
 		do {
@@ -183,7 +182,8 @@ int WIZnet_Chip::wait_readable(int socket, int wait_time_ms, int req_size)
         if (size > req_size) {
             return size;
         }
-        if (wait_time_ms != (-1) && t.read_ms() > wait_time_ms) {
+
+        if (wait_time_ms != (-1) && (hal_get_milli() - timer_start) > (unsigned int) wait_time_ms) {
             break;
         }
     }
@@ -195,9 +195,8 @@ int WIZnet_Chip::wait_writeable(int socket, int wait_time_ms, int req_size)
     if (socket < 0) {
         return -1;
     }
-    Timer t;
-    t.reset();
-    t.start();
+    unsigned long long timer_start = hal_get_milli();
+
     while(1) {
         //int size = sreg<uint16_t>(socket, Sn_TX_FSR);
         // during the reading Sn_TX_FSR, it has the possible change of this register.
@@ -210,7 +209,7 @@ int WIZnet_Chip::wait_writeable(int socket, int wait_time_ms, int req_size)
         if (size > req_size) {
             return size;
         }
-        if (wait_time_ms != (-1) && t.read_ms() > wait_time_ms) {
+        if (wait_time_ms != (-1) && (hal_get_milli() - timer_start) > (unsigned int) wait_time_ms) {
             break;
         }
     }
@@ -283,13 +282,14 @@ void WIZnet_Chip::scmd(int socket, Command cmd)
 void WIZnet_Chip::spi_write(uint16_t addr, const uint8_t *buf, uint16_t len)
 {
     for(int i = 0; i < len; i++) {
-	cs = 0;
-    	spi->write(0xf0);
-    	spi->write(addr >> 8);
-    	spi->write(addr & 0xff);
+            /* TODO: check if it can be moved outside the loop */
+            gen_io_write(cs, 0);
+    	hal_spi_write(0xf0);
+    	hal_spi_write(addr >> 8);
+    	hal_spi_write(addr & 0xff);
         addr++;
-    	spi->write(buf[i]);
-	cs = 1;
+    	hal_spi_write(buf[i]);
+            gen_io_write(cs, 1);
     }
 #if DBG_SPI
     debug("[SPI]W %04x(%d)", addr, len);
@@ -307,13 +307,14 @@ void WIZnet_Chip::spi_write(uint16_t addr, const uint8_t *buf, uint16_t len)
 void WIZnet_Chip::spi_read(uint16_t addr, uint8_t *buf, uint16_t len)
 {
     for(int i = 0; i < len; i++) {
-        cs = 0;
-        spi->write(0x0f);
-        spi->write(addr >> 8);
-        spi->write(addr & 0xff);
+            /* TODO: check if it can be moved outside the loop */
+            gen_io_write(cs, 0);
+        hal_spi_write(0x0f);
+        hal_spi_write(addr >> 8);
+        hal_spi_write(addr & 0xff);
         addr++;
-        buf[i] = spi->write(0);
-        cs = 1;
+        buf[i] = hal_spi_write(0);
+            gen_io_write(cs, 1);
     }
 #if DBG_SPI
     debug("[SPI]R %04x(%d)", addr, len);
@@ -326,7 +327,7 @@ void WIZnet_Chip::spi_read(uint16_t addr, uint8_t *buf, uint16_t len)
     }
     debug("\r\n");
     if ((addr&0xf0ff)==0x4026 || (addr&0xf0ff)==0x4003) {
-        wait_ms(200);
+        ms_delay(200);
     }
 #endif    
 }
@@ -345,43 +346,6 @@ uint32_t str_to_ip(const char* str)
         p++;
     }
     return ip;
-}
-
-void printfBytes(char* str, uint8_t* buf, int len)
-{
-    printf("%s %d:", str, len);
-    for(int i = 0; i < len; i++) {
-        printf(" %02x", buf[i]);
-    }
-    printf("\n");  
-}
-
-void printHex(uint8_t* buf, int len)
-{
-    for(int i = 0; i < len; i++) {
-        if ((i%16) == 0) {
-            printf("%p", buf+i);
-        }
-        printf(" %02x", buf[i]);
-        if ((i%16) == 15) {
-            printf("\n");
-        }
-    }
-    printf("\n");
-}
-
-void debug_hex(uint8_t* buf, int len)
-{
-    for(int i = 0; i < len; i++) {
-        if ((i%16) == 0) {
-            debug("%p", buf+i);
-        }
-        debug(" %02x", buf[i]);
-        if ((i%16) == 15) {
-            debug("\n");
-        }
-    }
-    debug("\n");
 }
 
 #endif

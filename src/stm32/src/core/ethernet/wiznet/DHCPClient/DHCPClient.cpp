@@ -193,6 +193,7 @@ int DHCPClient::setup(int timeout_ms)
             case 2:
                 callback();
                 if ((hal_get_milli() - interval_start) > (unsigned int) interval_ms) {
+                    interval_start = hal_get_milli();
                     DBG("m_retry: %d\n", m_retry);
                     if (++m_retry >= (timeout_ms/interval_ms)) {
                         err = -1;

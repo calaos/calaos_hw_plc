@@ -145,6 +145,7 @@ void DNSClient::poll() {
             break;
     }
     if ((hal_get_milli() - m_interval_start) > 1000) {
+        m_interval_start = hal_get_milli(); 
         DBG2("timeout m_retry=%d\n", m_retry);
         if (++m_retry >= 2) {
             m_state = MYNETDNS_ERROR;
