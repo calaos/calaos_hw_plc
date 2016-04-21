@@ -4,7 +4,7 @@
 #include "module.h"
 #include "display.h"
 #include "sensors.h"
-#include "ethernet.h"
+#include "network.h"
 #include "mysensors.h"
 #include "shift_register.h"
 
@@ -17,7 +17,7 @@ main()
 	shift_register_init();
 	mysensors_init();
 	display_init();
-	net_init();
+	network_init();
 	sensors_init();
 
 	config_init();
