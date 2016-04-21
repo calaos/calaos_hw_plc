@@ -17,9 +17,9 @@
  */
 
 #include "TCPSocketServer.h"
-#include "utils.h"
 
 #include <stdio.h>
+#include <inttypes.h>
 
 TCPSocketServer::TCPSocketServer() {}
 
@@ -73,7 +73,7 @@ int TCPSocketServer::accept(TCPSocketConnection& connection)
     }
     uint32_t ip = eth->sreg<uint32_t>(_sock_fd, Sn_DIPR);
     char host[16];
-    snprintf(host, sizeof(host), "%ld.%ld.%ld.%ld", (ip>>24)&0xff, (ip>>16)&0xff, (ip>>8)&0xff, ip&0xff);
+    snprintf(host, sizeof(host), "%" PRIu32 ".%" PRIu32 ".%" PRIu32 ".%" PRIu32 "", (ip>>24)&0xff, (ip>>16)&0xff, (ip>>8)&0xff, ip&0xff);
     uint16_t port = eth->sreg<uint16_t>(_sock_fd, Sn_DPORT);
     // change this server socket to connection socket.
     connection._sock_fd = _sock_fd;
@@ -84,13 +84,13 @@ int TCPSocketServer::accept(TCPSocketConnection& connection)
     _sock_fd = -1; // want to assign new available _sock_fd.
     if(bind(listen_port) < 0) {
         // modified by Patrick Pollet
-        PANIC("No more socket for listening, bind error");
+        hal_panic();
         return -1;
     } else {
         //return -1;
         if(listen(1) < 0) {
             // modified by Patrick Pollet
-            PANIC("No more socket for listening, listen error");
+            hal_panic();
             return -1;
         }
     }

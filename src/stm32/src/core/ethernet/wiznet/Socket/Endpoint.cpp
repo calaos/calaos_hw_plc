@@ -19,6 +19,7 @@
 #include "Endpoint.h"
 
 #include <stdio.h>
+#include <inttypes.h>
 
 Endpoint::Endpoint()  {
     reset_address();
@@ -40,7 +41,7 @@ int Endpoint::set_address(const char* host, const int port) {
     if (!eth->gethostbyname(host, &addr)) {
         return -1;
     }
-    snprintf(_ipAddress, sizeof(_ipAddress), "%ld.%ld.%ld.%ld", (addr>>24)&0xff, (addr>>16)&0xff, (addr>>8)&0xff, addr&0xff);
+    snprintf(_ipAddress, sizeof(_ipAddress), "%" PRIu32 ".%" PRIu32 ".%" PRIu32 ".%" PRIu32 "", (addr>>24)&0xff, (addr>>16)&0xff, (addr>>8)&0xff, addr&0xff);
     _port = port;
     return 0;
 }

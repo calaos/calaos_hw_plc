@@ -22,6 +22,7 @@
 #include "utils.h"
 
 #include <stdio.h>
+#include <inttypes.h>
 
 #ifdef USE_W5100
 
@@ -98,7 +99,7 @@ bool WIZnet_Chip::gethostbyname(const char* host, uint32_t* ip)
 {
     uint32_t addr = str_to_ip(host);
     char buf[17];
-    snprintf(buf, sizeof(buf), "%ld.%ld.%ld.%ld", (addr>>24)&0xff, (addr>>16)&0xff, (addr>>8)&0xff, addr&0xff);
+    snprintf(buf, sizeof(buf), "%" PRIu32 ".%" PRIu32 ".%" PRIu32 ".%" PRIu32 "", (addr>>24)&0xff, (addr>>16)&0xff, (addr>>8)&0xff, addr&0xff);
     if (strcmp(buf, host) == 0) {
         *ip = addr;
         return true;

@@ -21,6 +21,7 @@
 #include "HAL.h"
 
 #include <stdio.h>
+#include <inttypes.h>
 
 WIZnetInterface::WIZnetInterface(gen_io_t *cs, gen_io_t *reset) :
 		WIZnet_Chip(cs, reset)
@@ -77,21 +78,21 @@ int WIZnetInterface::disconnect()
 char* WIZnetInterface::getIPAddress()
 {
     uint32_t ip = reg_rd<uint32_t>(SIPR);
-    snprintf(ip_string, sizeof(ip_string), "%ld.%ld.%ld.%ld", (ip>>24)&0xff, (ip>>16)&0xff, (ip>>8)&0xff, ip&0xff);
+    snprintf(ip_string, sizeof(ip_string), "%" PRIu32 ".%" PRIu32 ".%" PRIu32 ".%" PRIu32 "", (ip>>24)&0xff, (ip>>16)&0xff, (ip>>8)&0xff, ip&0xff);
     return ip_string;
 }
 
 char* WIZnetInterface::getNetworkMask()
 {
     uint32_t ip = reg_rd<uint32_t>(SUBR);
-    snprintf(mask_string, sizeof(mask_string), "%ld.%ld.%ld.%ld", (ip>>24)&0xff, (ip>>16)&0xff, (ip>>8)&0xff, ip&0xff);
+    snprintf(mask_string, sizeof(mask_string), "%" PRIu32 ".%" PRIu32 ".%" PRIu32 ".%" PRIu32 "", (ip>>24)&0xff, (ip>>16)&0xff, (ip>>8)&0xff, ip&0xff);
     return mask_string;
 }
 
 char* WIZnetInterface::getGateway()
 {
     uint32_t ip = reg_rd<uint32_t>(GAR);
-    snprintf(gw_string, sizeof(gw_string), "%ld.%ld.%ld.%ld", (ip>>24)&0xff, (ip>>16)&0xff, (ip>>8)&0xff, ip&0xff);
+    snprintf(gw_string, sizeof(gw_string), "%" PRIu32 ".%" PRIu32 ".%" PRIu32 ".%" PRIu32 "", (ip>>24)&0xff, (ip>>16)&0xff, (ip>>8)&0xff, ip&0xff);
     return gw_string;
 }
 

@@ -3,6 +3,11 @@
 
 #include <stdarg.h>
 #include <inttypes.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "gpio.h"
 
 /**
@@ -141,5 +146,8 @@ hal_spi_init(uint32_t frequency);
 int
 hal_spi_write(uint8_t value);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _HAL_H */

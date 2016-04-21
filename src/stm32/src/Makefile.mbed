@@ -2,8 +2,8 @@ PROJECT         := CalaosPLC
 DEVICES         := NUCLEO_F411RE
 GCC4MBED_DIR    := ../gcc4mbed/
 GCC4MBED_TYPE	:= Release
-GCFLAGS 	:= -Wall -Werror -Wno-strict-aliasing
-GCPPFLAGS 	:= -Wall -Werror -Wno-strict-aliasing
+GCFLAGS 	:= -Wall -Wextra -Werror -Wno-strict-aliasing
+GPFLAGS 	:= -Wall -Wextra -Werror -Wno-strict-aliasing
 CONFIG		?= mbed_config
 GAFLAGS 	:= -DCONFIG_PATH='"configs/$(CONFIG)_reduced.json"'
 EXCLUDE		:= HAL/linux

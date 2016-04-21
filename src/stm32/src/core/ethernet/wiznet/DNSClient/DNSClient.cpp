@@ -16,7 +16,7 @@ DNSClient::DNSClient(const char* hostname) : m_state(MYNETDNS_START), m_udp(NULL
     m_hostname = hostname;
 }
 
-DNSClient::DNSClient(Endpoint* pHost) : m_state(MYNETDNS_START), m_udp(NULL) {
+DNSClient::DNSClient(__attribute__ ((unused)) Endpoint* pHost) : m_state(MYNETDNS_START), m_udp(NULL) {
 }
 
 DNSClient::~DNSClient() {
@@ -44,7 +44,7 @@ void DNSClient::callback()
     }
 }
 
-int DNSClient::response(uint8_t buf[], int size) {
+int DNSClient::response(uint8_t buf[], __attribute__((unused)) int size) {
     int rcode = buf[3] & 0x0f;
     if (rcode != 0) {
         return rcode;
@@ -86,7 +86,7 @@ int DNSClient::response(uint8_t buf[], int size) {
     return rcode;
 }
 
-int DNSClient::query(uint8_t buf[], int size, const char* hostname) {
+int DNSClient::query(uint8_t buf[], __attribute__((unused)) int size, const char* hostname) {
     const uint8_t header[] = {
         0x00,0x00,0x01,0x00, // id=0x0000 QR=0 rd=1 opcode=0 rcode=0
         0x00,0x01,0x00,0x00, // qdcount=1 ancount=0

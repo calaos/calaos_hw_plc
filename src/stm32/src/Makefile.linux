@@ -1,13 +1,17 @@
 BUILD_DIR	:= LINUX
 
 C_SRC_FILES	:= $(wildcard core/*.c HAL/linux/*.c)
+CPP_SRC_FILES	:= $(wildcard core/ethernet/*/*/*.cpp core/ethernet/*.cpp)
+CPP_SRC_FILES	+= $(wildcard core/ethernet/*/*.cpp)
 S_SRC_FILES	:= $(wildcard core/*.S)
+SRC_FILES	:= $(S_SRC_FILES) $(CPP_SRC_FILES) $(C_SRC_FILES)
 OBJ_C_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.c,%.o,$(C_SRC_FILES)))
+OBJ_CPP_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.cpp,%.o,$(CPP_SRC_FILES)))
 OBJ_S_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.S,%.o,$(S_SRC_FILES)))
-OBJS		:= $(OBJ_S_FILES) $(OBJ_C_FILES)
+OBJS		:= $(OBJ_S_FILES) $(OBJ_C_FILES) $(OBJ_CPP_FILES)
 HDR_FILES	:= $(wildcard core/*.h HAL/linux/*.h HAL/*.h)
 CONFIG 		?= linux_config
-CFLAGS		:= -I. -Icore -IHAL -Wall -Wextra -Werror -g
+CFLAGS		:= $(addprefix -I,$(sort $(dir $(SRC_FILES)))) -IHAL -Wall -Wextra -Werror -g
 ASFLAGS 	:= -DCONFIG_PATH='"configs/$(CONFIG)_reduced.json"'
 
 all: $(BUILD_DIR)/hw_plc
@@ -19,13 +23,17 @@ $(BUILD_DIR)/core/incconfig.o: configs/$(CONFIG)_reduced.json
 $(BUILD_DIR)/%.o: %.c $(firstword $(MAKEFILE_LIST)) $(HDR_FILES)
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $<
+	
+$(BUILD_DIR)/%.o: %.cpp $(firstword $(MAKEFILE_LIST)) $(HDR_FILES)
+	mkdir -p $(dir $@)
+	$(CXX) $(CFLAGS) -c -o $@ $<
 
 $(BUILD_DIR)/%.o: %.S $(firstword $(MAKEFILE_LIST))
 	mkdir -p $(dir $@)
 	$(CC) $(ASFLAGS) -c -o $@ $<
 
 $(BUILD_DIR)/hw_plc: $(OBJS)
-	$(CC) $(OBJS) $(LFLAGS) $(INCLUDES) -o $@
+	$(CXX) $(OBJS) $(LFLAGS) $(INCLUDES) -o $@
 
 clean:
 	rm -rf $(BUILD_DIR)
