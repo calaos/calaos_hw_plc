@@ -5,10 +5,63 @@
 
 #include <string.h>
 
+static wiznet_iface_t *g_net_iface;
+static uint8_t g_mac[6];
+
 static int
-network_init_interface()
+network_init_interface(gen_io_t *cs, gen_io_t *rst)
 {
+	g_net_iface = wiznet_iface_create(cs, rst);
+	
+	wiznet_iface_init_dhcp(g_net_iface, g_mac);
+
 	return 0;
+}
+
+static int
+network_set_mac(const char *mac)
+{
+	long int macc;
+	int i;
+
+	for (i = 0; i < 6; i++) {
+		macc = strtol(&mac[i * 3], NULL, 16);
+		g_mac[i] = macc;
+	}
+
+	debug_puts("Read mac %02X:%02X:%02X:%02X:%02X:%02X\r\n",
+		g_mac[0],g_mac[1],g_mac[2],g_mac[3],g_mac[4],g_mac[5]);
+		
+	return 0;
+}
+
+static int
+wiznet_parse_json(json_value* net_data)
+{
+        unsigned int i, length;
+	json_value *value;
+	const char *name;
+	int frequency = 1000000;
+	gen_io_t *cs = NULL, *rst = NULL;
+
+	length = net_data->u.object.length;
+	for (i = 0; i < length; i++) {
+		value = net_data->u.object.values[i].value;
+		name = net_data->u.object.values[i].name;
+
+		if (strcmp(name, "cs") == 0) {
+			cs = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+		} else if (strcmp(name, "rst") == 0) {
+			rst = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+		} else if (strcmp(name, "freq") == 0) {
+			frequency = value->u.integer;
+		}
+	}
+	PANIC_ON(cs == NULL, "Missing io for screen cs\r\n");
+	PANIC_ON(rst == NULL, "Missing io for screen rst\r\n");
+	hal_spi_init(frequency);
+
+	return network_init_interface(cs, rst);
 }
 
 static int
@@ -30,12 +83,14 @@ network_json_parse(json_value* value)
 
 		if (strcmp(name, "type") == 0) {
 			type = value->u.string.ptr;
-		} else if (strcmp(name, "data") == 0) {
+		} else if (strcmp(name, "mac") == 0) {
+			network_set_mac(value->u.string.ptr);
+		}else if (strcmp(name, "data") == 0) {
 			data = value;
 		}
 	}
 
-	return network_init_interface();
+	return wiznet_parse_json(data);
 }
 
 /**

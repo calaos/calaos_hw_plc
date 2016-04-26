@@ -18,10 +18,19 @@
 		"type": "ili9341",
 		"width": 240,
 		"height": 320,
-		"disp_data": {
+		"data": {
 			"rst": "gpio@PC_0",
 			"cs": "gpio@PC_3",
 			"dc": "gpio@PC_1",
+		}
+	},
+	"net": {
+		"type": "w5100",
+		"mac": "78:ac:c0:97:f2:67",
+		"data": {
+			"rst": "gpio@PD_0",
+			"cs": "gpio@PD_1",
+			"freq": 50000000
 		}
 	},
 	"shift_registers": [{

@@ -94,6 +94,7 @@ display_json_parse(json_value* value)
 			g_display.height = value->u.integer;
 		}
 	}
+	PANIC_ON(!disp_data, "Failed to find display data section\r\n");
 	debug_puts("Setup display w %d, h %d\r\n", g_display.width, g_display.height);
 
 	for (i = 0; i < ARRAY_SIZE(g_display_ops); i++) {
