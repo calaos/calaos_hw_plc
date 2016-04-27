@@ -5,9 +5,12 @@
 
 #include <string.h>
 
+#define DEFAULT_PORT	13489
+
 static wiznet_iface_t *g_net_iface;
 static wiznet_udp_t *g_udp_port;
 static uint8_t g_mac[6];
+static uint16_t g_port;
 
 static void
 network_main_loop(void)
@@ -25,7 +28,7 @@ network_init_interface(gen_io_t *cs, gen_io_t *rst)
 	
 	ret = wiznet_iface_init_dhcp(g_net_iface, g_mac);
 	PANIC_ON(ret, "Failed to init network\r\n");
-		
+
 	ret = wiznet_iface_connect(g_net_iface);
 	PANIC_ON(ret, "Failed to obtain ip through DHCP\r\n");
 	
@@ -35,8 +38,12 @@ network_init_interface(gen_io_t *cs, gen_io_t *rst)
 	ret = wiznet_udp_init(g_udp_port);
 	PANIC_ON(ret, "Failed init UDP interface\r\n");
 
-	ret = wiznet_udp_bind(g_udp_port, 14987);
+	ret = wiznet_udp_bind(g_udp_port, g_port);
 	PANIC_ON(ret, "Failed to listen to UDP interface\r\n");
+
+	debug_puts("Network initialized: ip %s, listening on udp port %d\r\n",
+		wiznet_iface_get_ip(g_net_iface),
+		g_port);
 
 	return 0;
 }
@@ -80,8 +87,8 @@ wiznet_parse_json(json_value* net_data)
 			frequency = value->u.integer;
 		}
 	}
-	PANIC_ON(cs == NULL, "Missing io for screen cs\r\n");
-	PANIC_ON(rst == NULL, "Missing io for screen rst\r\n");
+	PANIC_ON(cs == NULL, "Missing io for network cs\r\n");
+	PANIC_ON(rst == NULL, "Missing io for network rst\r\n");
 	hal_spi_init(frequency);
 
 	return network_init_interface(cs, rst);
@@ -94,6 +101,7 @@ network_json_parse(json_value* value)
 	json_value *section, __unused__ *data = NULL;
 	char *name;
 	__unused__ const char *type = NULL;
+	int port = DEFAULT_PORT;
 
 	section = config_get_section(value, "net");
 	if (!section)
@@ -108,10 +116,14 @@ network_json_parse(json_value* value)
 			type = value->u.string.ptr;
 		} else if (strcmp(name, "mac") == 0) {
 			network_set_mac(value->u.string.ptr);
-		}else if (strcmp(name, "data") == 0) {
+		} else if (strcmp(name, "data") == 0) {
 			data = value;
+		} else if (strcmp(name, "port") == 0) {
+			port = value->u.integer;
 		}
 	}
+
+	g_port = port;
 
 	return wiznet_parse_json(data);
 }
