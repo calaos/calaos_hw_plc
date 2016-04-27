@@ -8,6 +8,7 @@ SPI spi(SPI_MOSI, SPI_MISO, SPI_SCK);
 extern "C" void
 hal_spi_init(uint32_t frequency)
 {
+	spi.format(8,0);
 	spi.frequency(frequency);
 }
 
