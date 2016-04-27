@@ -6,7 +6,7 @@
 	"mysensors": {
 		"node_id": 42
 	},
-	"display": {
+	"sdisplay": {
 		"type": "ili9341",
 		"width": 240,
 		"height": 320,
@@ -14,16 +14,17 @@
 			"rst": "gpio@PC_0",
 			"cs": "gpio@PC_3",
 			"dc": "gpio@PC_1",
-			"freq": 50000000
+			"freq": 20000000
 		}
 	},
 	"net": {
 		"type": "w5100",
 		"mac": "78:ac:c0:97:f2:67",
+		"port": 14987,
 		"data": {
-			"rst": "gpio@PD_0",
-			"cs": "gpio@PD_1",
-			"freq": 50000000
+			"rst": "gpio@PB_3",
+			"cs": "gpio@PA_10",
+			"freq": 20000000
 		}
 	},
 	"shift_registers": [{
