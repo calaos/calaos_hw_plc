@@ -100,6 +100,11 @@ wiznet_udp_t *wiznet_udp_create()
 	return reinterpret_cast<wiznet_udp_t *>(new UDPSocket());
 }
 
+int wiznet_udp_init(wiznet_udp_t *udp)
+{
+	return reinterpret_cast<UDPSocket*>(udp)->init();
+}
+
 int wiznet_udp_bind(wiznet_udp_t *udp, int port)
 {
 	return reinterpret_cast<UDPSocket*>(udp)->bind(port);

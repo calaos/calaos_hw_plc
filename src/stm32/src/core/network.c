@@ -6,14 +6,37 @@
 #include <string.h>
 
 static wiznet_iface_t *g_net_iface;
+static wiznet_udp_t *g_udp_port;
 static uint8_t g_mac[6];
+
+static void
+network_main_loop(void)
+{
+	
+}
 
 static int
 network_init_interface(gen_io_t *cs, gen_io_t *rst)
 {
+	int ret;
+
 	g_net_iface = wiznet_iface_create(cs, rst);
+	PANIC_ON(!g_net_iface, "Failed create network interface\r\n");
 	
-	wiznet_iface_init_dhcp(g_net_iface, g_mac);
+	ret = wiznet_iface_init_dhcp(g_net_iface, g_mac);
+	PANIC_ON(ret, "Failed to init network\r\n");
+		
+	ret = wiznet_iface_connect(g_net_iface);
+	PANIC_ON(ret, "Failed to obtain ip through DHCP\r\n");
+	
+	g_udp_port = wiznet_udp_create();
+	PANIC_ON(!g_udp_port, "Failed create network interface\r\n");
+
+	ret = wiznet_udp_init(g_udp_port);
+	PANIC_ON(ret, "Failed init UDP interface\r\n");
+
+	ret = wiznet_udp_bind(g_udp_port, 14987);
+	PANIC_ON(ret, "Failed to listen to UDP interface\r\n");
 
 	return 0;
 }
@@ -93,12 +116,13 @@ network_json_parse(json_value* value)
 	return wiznet_parse_json(data);
 }
 
+
 /**
  * Module
  */
 static const module_t network_module = {
 	.name = "network",
-	.main_loop = NULL,
+	.main_loop = network_main_loop,
 	.json_parse = network_json_parse,
 	.sensor_created = NULL,
 	.sensor_updated = NULL,

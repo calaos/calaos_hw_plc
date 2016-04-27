@@ -58,6 +58,8 @@ typedef struct wiznet_udp wiznet_udp_t;
 
 wiznet_udp_t *wiznet_udp_create();
 
+int wiznet_udp_init(wiznet_udp_t *udp);
+
 int wiznet_udp_bind(wiznet_udp_t *udp, int port);
 
 int wiznet_udp_send_to(wiznet_udp_t *udp, wiznet_ep_t *ep, char *packet, int length);
