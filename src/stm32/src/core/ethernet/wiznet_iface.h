@@ -7,6 +7,7 @@ extern "C" {
 
 #include "generic_io.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 /**
  * WIZnetInterface wrapping
@@ -59,6 +60,8 @@ typedef struct wiznet_udp wiznet_udp_t;
 wiznet_udp_t *wiznet_udp_create();
 
 int wiznet_udp_init(wiznet_udp_t *udp);
+
+void wiznet_udp_set_blocking(wiznet_udp_t *udp, bool blocking, int timeout);
 
 int wiznet_udp_bind(wiznet_udp_t *udp, int port);
 

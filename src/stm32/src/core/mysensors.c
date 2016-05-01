@@ -16,36 +16,6 @@
  */
 static unsigned char g_assigned_node_id = 0;
 
-static char g_mysensors_str[MYSENSOR_MAX_MSG_LENGTH];
-static unsigned char g_str_cur_index = 0;
-
-static int mysensors_serial_get_message(char *str)
-{
-	int ret;
-	char c;
-
-	ret = hal_serial_getc(&c);
-	if (ret == 0)
-		return 0;
-
-	if (c == '\n') {
-		g_mysensors_str[g_str_cur_index] = '\0';
-		g_str_cur_index = 0;
-		strcpy(str, g_mysensors_str);
-		debug_puts("Got mysensors query: %s\n", g_mysensors_str);
-		return 1;
-	}
-
-	g_mysensors_str[g_str_cur_index++] = c;
-	if (g_str_cur_index == MYSENSOR_MAX_MSG_LENGTH) {
-		debug_puts("Received string too long from controller, discarding\r\n");
-		g_str_cur_index = 0;
-	}
-
-	return 0;
-}
-
-
 static int mysensors_split_message(char *str, char *split_str[6])
 {
 	int i;
@@ -75,16 +45,11 @@ static void mysensors_set_sensor(sensor_t *s, __unused__ int subtype, char *payl
 	}
 }
 
-static int mysensors_handle_serial()
+int mysensors_parse_message(char *query)
 {
-	char query[MYSENSOR_MAX_MSG_LENGTH];
-	unsigned char child_sensor_id, __unused__ message_type, ack, __unused__ subtype;
-	char *split_str[6], __unused__ *payload;
+	unsigned char child_sensor_id, message_type, ack, subtype;
+	char *split_str[6], *payload;
 	sensor_t *sensor;
-
-	/* Check for serial message */
-	if (!mysensors_serial_get_message(query))
-		return 0;
 
 	if (mysensors_split_message(query, split_str) != 0)
 		return 0;
@@ -197,16 +162,9 @@ mysensor_sensor_updated(sensor_t *s, sensor_value_t value)
 	mysensors_update_value_int(s, V_STATUS, value.val_i);
 }
 
-
-static void
-mysensors_main_loop()
-{
-	mysensors_handle_serial();
-}
-
 const module_t mysensors_module = {
 	.name = "display",
-	.main_loop = mysensors_main_loop,
+	.main_loop = NULL,
 	.json_parse = mysensors_json_parse,
 	.sensor_created = mysensor_sensor_created,
 	.sensor_updated = mysensor_sensor_updated,

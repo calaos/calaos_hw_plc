@@ -105,6 +105,11 @@ int wiznet_udp_init(wiznet_udp_t *udp)
 	return reinterpret_cast<UDPSocket*>(udp)->init();
 }
 
+void wiznet_udp_set_blocking(wiznet_udp_t *udp, bool blocking, int timeout)
+{
+	reinterpret_cast<UDPSocket*>(udp)->set_blocking(blocking, timeout);
+}
+
 int wiznet_udp_bind(wiznet_udp_t *udp, int port)
 {
 	return reinterpret_cast<UDPSocket*>(udp)->bind(port);

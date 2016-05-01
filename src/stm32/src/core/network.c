@@ -1,4 +1,5 @@
 #include "wiznet_iface.h"
+#include "mysensors.h"
 #include "network.h"
 #include "module.h"
 #include "utils.h"
@@ -12,10 +13,13 @@ static wiznet_udp_t *g_udp_port;
 static uint8_t g_mac[6];
 static uint16_t g_port;
 
+static wiznet_ep_t * g_net_ep;
+
+
 static void
 network_main_loop(void)
 {
-	
+	//~ char buf[MYSENSOR_MAX_MSG_LENGTH];
 }
 
 static int
@@ -37,6 +41,8 @@ network_init_interface(gen_io_t *cs, gen_io_t *rst)
 
 	ret = wiznet_udp_init(g_udp_port);
 	PANIC_ON(ret, "Failed init UDP interface\r\n");
+	
+	wiznet_udp_set_blocking(g_udp_port, false, 0);
 
 	ret = wiznet_udp_bind(g_udp_port, g_port);
 	PANIC_ON(ret, "Failed to listen to UDP interface\r\n");
@@ -44,6 +50,9 @@ network_init_interface(gen_io_t *cs, gen_io_t *rst)
 	debug_puts("Network initialized: ip %s, listening on udp port %d\r\n",
 		wiznet_iface_get_ip(g_net_iface),
 		g_port);
+		
+	g_net_ep = wiznet_ep_create();
+	PANIC_ON(!g_net_ep, "Failed create endpoint\r\n");
 
 	return 0;
 }
@@ -122,6 +131,8 @@ network_json_parse(json_value* value)
 			port = value->u.integer;
 		}
 	}
+	
+	PANIC_ON(type == NULL, "Network is mandatory");
 
 	g_port = port;
 
