@@ -9,7 +9,7 @@
 #define DEFAULT_PORT	13489
 
 static wiznet_iface_t *g_net_iface;
-static wiznet_udp_t *g_udp_port;
+static wiznet_udp_t *g_udp_socket;
 static uint8_t g_mac[6];
 static uint16_t g_port;
 
@@ -19,7 +19,16 @@ static wiznet_ep_t * g_net_ep;
 static void
 network_main_loop(void)
 {
-	//~ char buf[MYSENSOR_MAX_MSG_LENGTH];
+	char buf[MYSENSOR_MAX_MSG_LENGTH];
+	int size;
+
+	size = wiznet_udp_recv_from(g_udp_socket, g_net_ep, buf, MYSENSOR_MAX_MSG_LENGTH);
+	if (size < 0)
+		return;
+
+	buf[size] = '\0';
+
+	mysensors_parse_message(buf);
 }
 
 static int
@@ -36,15 +45,15 @@ network_init_interface(gen_io_t *cs, gen_io_t *rst)
 	ret = wiznet_iface_connect(g_net_iface);
 	PANIC_ON(ret, "Failed to obtain ip through DHCP\r\n");
 	
-	g_udp_port = wiznet_udp_create();
-	PANIC_ON(!g_udp_port, "Failed create network interface\r\n");
+	g_udp_socket = wiznet_udp_create();
+	PANIC_ON(!g_udp_socket, "Failed create network interface\r\n");
 
-	ret = wiznet_udp_init(g_udp_port);
+	ret = wiznet_udp_init(g_udp_socket);
 	PANIC_ON(ret, "Failed init UDP interface\r\n");
 	
-	wiznet_udp_set_blocking(g_udp_port, false, 0);
+	wiznet_udp_set_blocking(g_udp_socket, false, 0);
 
-	ret = wiznet_udp_bind(g_udp_port, g_port);
+	ret = wiznet_udp_bind(g_udp_socket, g_port);
 	PANIC_ON(ret, "Failed to listen to UDP interface\r\n");
 
 	debug_puts("Network initialized: ip %s, listening on udp port %d\r\n",
