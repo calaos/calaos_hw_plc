@@ -152,11 +152,11 @@ sensors_json_parse_sensor(json_value* sensor)
 		} else if (strcmp(name, "type") == 0) {
 			s_type = sensors_typestr_to_type(value->u.string.ptr);
 		} else if (strcmp(name, "active_low") == 0) {
-			s_reverse = value->u.boolean;
+			s_reverse = value->u.integer;
 		} else if (strcmp(name, "id") == 0) {
 			s_id = value->u.integer;
 		} else if (strcmp(name, "debounce") == 0) {
-			s_debounce = value->u.boolean;
+			s_debounce = value->u.integer;
 		}
         }
         PANIC_ON(s_name == NULL || s_gpio_name == NULL,
