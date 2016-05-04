@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Fri 05 Feb 2016 12:51:43 PM CET
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Wed 04 May 2016 02:23:08 PM CEST
 
 BeginCmp
 TimeStamp = /56658787;
@@ -15,21 +15,21 @@ IdModule  = Pin_Headers:Pin_Header_Straight_2x19;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A91B4E;
+TimeStamp = /5729E588/5728E764;
 Reference = P1;
 ValeurCmp = CONN_01X10;
 IdModule  = w_conn_screw:mors_10p;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A94EF4;
+TimeStamp = /5729DAE6/5729ABB7;
 Reference = P2;
 ValeurCmp = CONN_01X10;
 IdModule  = w_conn_screw:mors_10p;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A94610;
+TimeStamp = /5729DAE6/5729ABAE;
 Reference = P3;
 ValeurCmp = CONN_01X10;
 IdModule  = w_conn_screw:mors_10p;
@@ -43,210 +43,210 @@ IdModule  = w_conn_screw:mors_2p;
 EndCmp
 
 BeginCmp
-TimeStamp = /56B4B484;
+TimeStamp = /5729E588/5728E770;
 Reference = P5;
-ValeurCmp = CONN_01X06;
-IdModule  = w_conn_screw:mors_6p;
+ValeurCmp = CONN_01X10;
+IdModule  = w_conn_screw:mors_10p;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A65A1B;
+TimeStamp = /5729E588/5728E458;
 Reference = R1;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A659D7;
+TimeStamp = /5729E588/5728E451;
 Reference = R2;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A65995;
+TimeStamp = /5729E588/5728E44A;
 Reference = R3;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A65871;
+TimeStamp = /5729E588/5728E443;
 Reference = R4;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A656E7;
+TimeStamp = /5729E588/5728E427;
 Reference = R5;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A657B7;
+TimeStamp = /5729E588/5728E42E;
 Reference = R6;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A657F3;
+TimeStamp = /5729E588/5728E435;
 Reference = R7;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A65833;
+TimeStamp = /5729E588/5728E43C;
 Reference = R8;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A637CB;
+TimeStamp = /5729E588/5728E3F0;
 Reference = R9;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A63457;
+TimeStamp = /5729E588/5728E3D4;
 Reference = R10;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A63945;
+TimeStamp = /5729E588/5728E3F7;
 Reference = R11;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A636FF;
+TimeStamp = /5729E588/5728E3DB;
 Reference = R12;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A639B1;
+TimeStamp = /5729E588/5728E3FE;
 Reference = R13;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A63739;
+TimeStamp = /5729E588/5728E3E2;
 Reference = R14;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A639E9;
+TimeStamp = /5729E588/5728E405;
 Reference = R15;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A63767;
+TimeStamp = /5729E588/5728E3E9;
 Reference = R16;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56B4AA95;
+TimeStamp = /5729E588/5728E4FA;
 Reference = R17;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56B4AA9B;
+TimeStamp = /5729E588/5728E501;
 Reference = R18;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56B4AAA1;
+TimeStamp = /5729E588/5728E508;
 Reference = R19;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56B4AAA7;
+TimeStamp = /5729E588/5728E50F;
 Reference = R20;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56B4AA6D;
+TimeStamp = /5729E588/5728E4CD;
 Reference = R21;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56B4AA73;
+TimeStamp = /5729E588/5728E4D4;
 Reference = R22;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56B4AA79;
+TimeStamp = /5729E588/5728E4DB;
 Reference = R23;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /56B4AA7F;
+TimeStamp = /5729E588/5728E4E2;
 Reference = R24;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /566589DD;
+TimeStamp = /5729DAE6/5729AB42;
 Reference = U1;
 ValeurCmp = 74HC595;
 IdModule  = Housings_DIP:DIP-16__300;
 EndCmp
 
 BeginCmp
-TimeStamp = /56658CF9;
+TimeStamp = /5729DAE6/5729ABCE;
 Reference = U2;
 ValeurCmp = 74HC595;
 IdModule  = Housings_DIP:DIP-16__300;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A613FA;
+TimeStamp = /5729E588/5728E3C5;
 Reference = U3;
 ValeurCmp = LTV-847;
 IdModule  = Housings_DIP:DIP-16__300;
 EndCmp
 
 BeginCmp
-TimeStamp = /56A614C5;
+TimeStamp = /5729E588/5728E41E;
 Reference = U4;
 ValeurCmp = LTV-847;
 IdModule  = Housings_DIP:DIP-16__300;
 EndCmp
 
 BeginCmp
-TimeStamp = /56B4AA8D;
+TimeStamp = /5729E588/5728E4F1;
 Reference = U5;
 ValeurCmp = LTV-847;
 IdModule  = Housings_DIP:DIP-16__300;
