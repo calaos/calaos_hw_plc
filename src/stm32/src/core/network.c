@@ -12,9 +12,9 @@ static wiznet_iface_t *g_net_iface;
 static wiznet_udp_t *g_udp_socket;
 static uint8_t g_mac[6];
 static uint16_t g_port;
+static char *g_master_server;
 
-static wiznet_ep_t * g_net_ep;
-
+static wiznet_ep_t *g_net_recv_ep, *g_net_send_ep;
 
 static void
 network_main_loop(void)
@@ -22,12 +22,12 @@ network_main_loop(void)
 	char buf[MYSENSOR_MAX_MSG_LENGTH];
 	int size;
 
-	size = wiznet_udp_recv_from(g_udp_socket, g_net_ep, buf, MYSENSOR_MAX_MSG_LENGTH);
+	size = wiznet_udp_recv_from(g_udp_socket, g_net_recv_ep, buf, MYSENSOR_MAX_MSG_LENGTH);
 	if (size < 0)
 		return;
 
 	buf[size] = '\0';
-
+	debug_puts("Parsing message packet received from udp\r\n");
 	mysensors_parse_message(buf);
 }
 
@@ -60,8 +60,14 @@ network_init_interface(gen_io_t *cs, gen_io_t *rst)
 		wiznet_iface_get_ip(g_net_iface),
 		g_port);
 		
-	g_net_ep = wiznet_ep_create();
-	PANIC_ON(!g_net_ep, "Failed create endpoint\r\n");
+	g_net_recv_ep = wiznet_ep_create();
+	PANIC_ON(!g_net_recv_ep, "Failed create recv endpoint\r\n");
+
+	g_net_send_ep = wiznet_ep_create();
+	PANIC_ON(!g_net_send_ep, "Failed create send endpoint\r\n");
+	
+	ret = wiznet_ep_set_address(g_net_send_ep, g_master_server, g_port);
+	PANIC_ON(ret, "Master adress does not exists\r\n");
 
 	return 0;
 }
@@ -138,6 +144,8 @@ network_json_parse(json_value* value)
 			data = value;
 		} else if (strcmp(name, "port") == 0) {
 			port = value->u.integer;
+		} else if (strcmp(name, "master") == 0) {
+			g_master_server = strdup(value->u.string.ptr);
 		}
 	}
 	
