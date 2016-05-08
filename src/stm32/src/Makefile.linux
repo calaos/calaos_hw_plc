@@ -1,8 +1,9 @@
 BUILD_DIR	:= LINUX
 
 C_SRC_FILES	:= $(wildcard core/*.c HAL/linux/*.c core/display/*.c)
-CPP_SRC_FILES	:= $(wildcard core/ethernet/*/*/*.cpp core/ethernet/*.cpp)
-CPP_SRC_FILES	+= $(wildcard core/ethernet/*/*.cpp)
+C_SRC_FILES	+= $(wildcard core/network/*.c core/io/*.c)
+CPP_SRC_FILES	:= $(wildcard core/network/*/*/*.cpp core/network/*.cpp)
+CPP_SRC_FILES	+= $(wildcard core/network/*/*.cpp)
 S_SRC_FILES	:= $(wildcard core/*.S)
 SRC_FILES	:= $(S_SRC_FILES) $(CPP_SRC_FILES) $(C_SRC_FILES)
 OBJ_C_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.c,%.o,$(C_SRC_FILES)))

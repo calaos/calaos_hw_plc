@@ -38,14 +38,14 @@ en_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_deb
 	en_gpio_t *gpio = calloc(1, sizeof(struct en_gpio));
 	if (!gpio)
 		return NULL;
-		
+
 	debug_puts("Setup gpio %s, reverse: %d, dir: %d, debounce: %d\r\n",
 			gpio_name, reverse, direction, debounce);
-	
+
 	gpio->debounce = debounce;
 	gpio->debounced_value = 0;
 	gpio->hal_gpio = hal_gpio_setup(gpio_name + strlen(GPIO_PREFIX) + strlen(GPIO_PREFIX_SEPARATOR), reverse, direction);
-	
+
 	if (direction == GPIO_DIR_INPUT && debounce)
 		g_debounce_gpios[g_gpio_count++] = gpio;
 

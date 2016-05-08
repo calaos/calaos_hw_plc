@@ -1,7 +1,7 @@
 PROJECT         := CalaosPLC
 DEVICES         := NUCLEO_F411RE
 GCC4MBED_DIR    := ../gcc4mbed/
-GCC4MBED_TYPE	:= Release
+GCC4MBED_TYPE	:= Debug
 GCFLAGS 	:= -Wall -Wextra -Werror -Wno-strict-aliasing
 GPFLAGS 	:= -Wall -Wextra -Werror -Wno-strict-aliasing
 CONFIG		?= mbed_config

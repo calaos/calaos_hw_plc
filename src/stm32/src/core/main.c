@@ -5,6 +5,7 @@
 #include "display.h"
 #include "sensors.h"
 #include "network.h"
+#include "pcf8574.h"
 #include "mysensors.h"
 #include "shift_register.h"
 
@@ -15,6 +16,7 @@ main()
 
 	en_gpio_init();
 	shift_register_init();
+	pcf8574_init();
 	mysensors_init();
 	display_init();
 	network_init();
