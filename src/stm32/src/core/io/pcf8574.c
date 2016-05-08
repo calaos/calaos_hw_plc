@@ -85,7 +85,7 @@ pcf8574_json_parse(json_value* value)
         unsigned int i;
 	json_value *section;
 
-	section = config_get_section(value, "pcf8574s");
+	section = config_get_section(value, "pcf8574");
 	if (!section)
 		return -1;
 
