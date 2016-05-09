@@ -10,7 +10,6 @@ LIBS:cmos4000
 LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
-LIBS:special
 LIBS:microcontrollers
 LIBS:dsp
 LIBS:microchip
@@ -54,21 +53,21 @@ Text GLabel 3700 3450 2    60   Input ~ 0
 in7
 Text GLabel 3700 3600 2    60   Input ~ 0
 in8
-Text GLabel 8600 2800 2    60   Input ~ 0
-in6
-Text GLabel 8150 2700 2    60   Input ~ 0
-in5
-Text GLabel 8600 2600 2    60   Input ~ 0
-in4
-Text GLabel 8150 2500 2    60   Input ~ 0
-in3
 Text GLabel 8600 2400 2    60   Input ~ 0
-in2
+in6
 Text GLabel 8150 2300 2    60   Input ~ 0
+in5
+Text GLabel 8450 4700 2    60   Input ~ 0
+in4
+Text GLabel 8000 4600 2    60   Input ~ 0
+in3
+Text GLabel 8450 4500 2    60   Input ~ 0
+in2
+Text GLabel 8000 4400 2    60   Input ~ 0
 in1
-Text GLabel 8600 3000 2    60   Input ~ 0
+Text GLabel 8600 2600 2    60   Input ~ 0
 in8
-Text GLabel 8150 2900 2    60   Input ~ 0
+Text GLabel 8150 2500 2    60   Input ~ 0
 in7
 Text GLabel 3700 3750 2    60   Input ~ 0
 in9
@@ -78,13 +77,13 @@ Text GLabel 3700 4050 2    60   Input ~ 0
 in11
 Text GLabel 3700 4200 2    60   Input ~ 0
 in12
-Text GLabel 8400 4700 2    60   Input ~ 0
+Text GLabel 8550 3000 2    60   Input ~ 0
 in12
-Text GLabel 8050 4600 2    60   Input ~ 0
+Text GLabel 8200 2900 2    60   Input ~ 0
 in11
-Text GLabel 8050 4400 2    60   Input ~ 0
+Text GLabel 8200 2700 2    60   Input ~ 0
 in9
-Text GLabel 8400 4500 2    60   Input ~ 0
+Text GLabel 8550 2800 2    60   Input ~ 0
 in10
 $Sheet
 S 2800 2450 550  2450
@@ -191,26 +190,26 @@ Wire Wire Line
 Wire Wire Line
 	6100 4500 6650 4500
 Wire Wire Line
+	7650 4400 8000 4400
+Wire Wire Line
+	7650 4500 8450 4500
+Wire Wire Line
+	7650 4600 8000 4600
+Wire Wire Line
+	7650 4700 8450 4700
+Wire Wire Line
 	7800 2300 8150 2300
 Wire Wire Line
-	7800 2400 8600 2400
+	8600 2400 7800 2400
 Wire Wire Line
 	7800 2500 8150 2500
 Wire Wire Line
 	7800 2600 8600 2600
-Wire Wire Line
-	7800 2700 8150 2700
-Wire Wire Line
-	8600 2800 7800 2800
-Wire Wire Line
-	7800 2900 8150 2900
-Wire Wire Line
-	7800 3000 8600 3000
 $Comp
-L +3.3V #PWR039
+L +3.3V #PWR038
 U 1 1 572B2AC4
 P 7300 1850
-F 0 "#PWR039" H 7300 1700 50  0001 C CNN
+F 0 "#PWR038" H 7300 1700 50  0001 C CNN
 F 1 "+3.3V" H 7300 1990 50  0000 C CNN
 F 2 "" H 7300 1850 60  0000 C CNN
 F 3 "" H 7300 1850 60  0000 C CNN
@@ -218,10 +217,10 @@ F 3 "" H 7300 1850 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR040
+L +3.3V #PWR039
 U 1 1 572B2ACA
 P 7150 4000
-F 0 "#PWR040" H 7150 3850 50  0001 C CNN
+F 0 "#PWR039" H 7150 3850 50  0001 C CNN
 F 1 "+3.3V" H 7150 4140 50  0000 C CNN
 F 2 "" H 7150 4000 60  0000 C CNN
 F 3 "" H 7150 4000 60  0000 C CNN
@@ -233,10 +232,10 @@ Wire Wire Line
 Wire Wire Line
 	7150 4100 7150 4000
 $Comp
-L GND #PWR041
+L GND #PWR040
 U 1 1 572B2AD2
 P 7300 3400
-F 0 "#PWR041" H 7300 3150 50  0001 C CNN
+F 0 "#PWR040" H 7300 3150 50  0001 C CNN
 F 1 "GND" H 7300 3250 50  0000 C CNN
 F 2 "" H 7300 3400 60  0000 C CNN
 F 3 "" H 7300 3400 60  0000 C CNN
@@ -244,10 +243,10 @@ F 3 "" H 7300 3400 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR042
+L GND #PWR041
 U 1 1 572B2AD8
 P 7150 5500
-F 0 "#PWR042" H 7150 5250 50  0001 C CNN
+F 0 "#PWR041" H 7150 5250 50  0001 C CNN
 F 1 "GND" H 7150 5350 50  0000 C CNN
 F 2 "" H 7150 5500 60  0000 C CNN
 F 3 "" H 7150 5500 60  0000 C CNN
@@ -259,13 +258,13 @@ Wire Wire Line
 Wire Wire Line
 	6450 5200 6650 5200
 Wire Wire Line
-	7650 4400 8050 4400
+	7800 2700 8200 2700
 Wire Wire Line
-	7650 4500 8400 4500
+	7800 2800 8550 2800
 Wire Wire Line
-	8050 4600 7650 4600
+	8200 2900 7800 2900
 Wire Wire Line
-	8400 4700 7650 4700
+	8550 3000 7800 3000
 Wire Wire Line
 	7650 4800 8050 4800
 Wire Wire Line
@@ -287,10 +286,10 @@ INT
 Text HLabel 6450 5200 0    60   Input ~ 0
 INT
 $Comp
-L GND #PWR043
+L GND #PWR042
 U 1 1 572AA068
 P 6650 2850
-F 0 "#PWR043" H 6650 2600 50  0001 C CNN
+F 0 "#PWR042" H 6650 2600 50  0001 C CNN
 F 1 "GND" H 6650 2700 50  0000 C CNN
 F 2 "" H 6650 2850 60  0000 C CNN
 F 3 "" H 6650 2850 60  0000 C CNN
@@ -308,10 +307,10 @@ Wire Wire Line
 	6650 2800 6800 2800
 Connection ~ 6650 2800
 $Comp
-L GND #PWR044
+L GND #PWR043
 U 1 1 572AAB50
 P 6550 4950
-F 0 "#PWR044" H 6550 4700 50  0001 C CNN
+F 0 "#PWR043" H 6550 4700 50  0001 C CNN
 F 1 "GND" H 6550 4800 50  0000 C CNN
 F 2 "" H 6550 4950 60  0000 C CNN
 F 3 "" H 6550 4950 60  0000 C CNN
@@ -326,10 +325,10 @@ Wire Wire Line
 	6650 4900 6550 4900
 Connection ~ 6550 4900
 $Comp
-L +3.3V #PWR045
+L +3.3V #PWR044
 U 1 1 572AAEDA
 P 6550 4700
-F 0 "#PWR045" H 6550 4550 50  0001 C CNN
+F 0 "#PWR044" H 6550 4550 50  0001 C CNN
 F 1 "+3.3V" H 6550 4840 50  0000 C CNN
 F 2 "" H 6550 4700 60  0000 C CNN
 F 3 "" H 6550 4700 60  0000 C CNN
