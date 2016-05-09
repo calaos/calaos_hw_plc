@@ -1,4 +1,4 @@
-update=mer. 04 mai 2016 22:05:32 CEST
+update=Mon 09 May 2016 01:50:04 PM CEST
 version=1
 last_client=kicad
 [cvpcb]
@@ -28,7 +28,7 @@ BoardOutlineThickness=0.09999999999999999
 ModuleOutlineThickness=0.15
 [eeschema]
 version=1
-LibDir=libs/w_conn_screw.pretty
+LibDir=libs/w_conn_screw.pretty;libs
 [eeschema/libraries]
 LibName1=power
 LibName2=device
@@ -61,3 +61,4 @@ LibName28=atmel
 LibName29=contrib
 LibName30=valves
 LibName31=F411RE
+LibName32=libs/w_analog
