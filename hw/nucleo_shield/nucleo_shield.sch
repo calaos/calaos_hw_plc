@@ -10,7 +10,6 @@ LIBS:cmos4000
 LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
-LIBS:special
 LIBS:microcontrollers
 LIBS:dsp
 LIBS:microchip
@@ -68,22 +67,22 @@ F 3 "" H 5650 2650 60  0000 C CNN
 	1    5400 2700
 	1    0    0    -1  
 $EndComp
-Text GLabel 10350 2750 2    60   Input ~ 0
+Text GLabel 10350 2250 2    60   Input ~ 0
 SRLatch
-Text GLabel 9950 2650 2    60   Input ~ 0
+Text GLabel 9950 2150 2    60   Input ~ 0
 SRCLK
 $Comp
 L GND #PWR01
 U 1 1 56699180
-P 10850 2550
-F 0 "#PWR01" H 10850 2300 50  0001 C CNN
-F 1 "GND" H 10850 2400 50  0000 C CNN
-F 2 "" H 10850 2550 60  0000 C CNN
-F 3 "" H 10850 2550 60  0000 C CNN
-	1    10850 2550
+P 11150 2550
+F 0 "#PWR01" H 11150 2300 50  0001 C CNN
+F 1 "GND" H 11150 2400 50  0000 C CNN
+F 2 "" H 11150 2550 60  0000 C CNN
+F 3 "" H 11150 2550 60  0000 C CNN
+	1    11150 2550
 	1    0    0    -1  
 $EndComp
-Text GLabel 9950 2850 2    60   Input ~ 0
+Text GLabel 9950 2350 2    60   Input ~ 0
 SRDATA
 $Comp
 L GND #PWR02
@@ -154,12 +153,12 @@ $EndComp
 $Comp
 L +5V #PWR08
 U 1 1 56AB5C14
-P 6650 2000
-F 0 "#PWR08" H 6650 1850 50  0001 C CNN
-F 1 "+5V" H 6650 2140 50  0000 C CNN
-F 2 "" H 6650 2000 60  0000 C CNN
-F 3 "" H 6650 2000 60  0000 C CNN
-	1    6650 2000
+P 7100 2000
+F 0 "#PWR08" H 7100 1850 50  0001 C CNN
+F 1 "+5V" H 7100 2140 50  0000 C CNN
+F 2 "" H 7100 2000 60  0000 C CNN
+F 3 "" H 7100 2000 60  0000 C CNN
+	1    7100 2000
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -222,9 +221,9 @@ SRCLK
 Text GLabel 2150 6450 2    60   Input ~ 0
 SRDATA
 Wire Wire Line
-	9950 2650 9900 2650
+	9950 2150 9900 2150
 Wire Wire Line
-	9900 2550 10850 2550
+	9900 2550 11150 2550
 Wire Wire Line
 	4500 2700 4700 2700
 Wire Wire Line
@@ -243,9 +242,9 @@ Wire Wire Line
 	5700 2700 6000 2700
 Connection ~ 5900 2700
 Wire Wire Line
-	10350 2750 9900 2750
+	10350 2250 9900 2250
 Wire Wire Line
-	9900 2850 9950 2850
+	9900 2350 9950 2350
 Wire Wire Line
 	3500 3550 3500 3450
 Wire Wire Line
@@ -253,7 +252,7 @@ Wire Wire Line
 Wire Wire Line
 	3750 2000 4700 2000
 Wire Wire Line
-	6650 2000 5700 2000
+	7100 2000 5700 2000
 Wire Wire Line
 	1850 6450 2150 6450
 Wire Wire Line
@@ -266,14 +265,14 @@ Text GLabel 8850 1850 0    60   Input ~ 0
 I2C1_SDA
 Wire Wire Line
 	8300 1750 8950 1750
-Text GLabel 5950 1800 2    60   Input ~ 0
+Text GLabel 6450 1800 2    60   Input ~ 0
 SPI3_MISO
 Text GLabel 4450 1900 0    60   Input ~ 0
 SPI3_MOSI
 Text GLabel 4400 1750 0    60   Input ~ 0
 SPI3_SCK
 Wire Wire Line
-	5950 1800 5700 1800
+	6450 1800 5700 1800
 Wire Wire Line
 	4400 1750 4700 1750
 Wire Wire Line
@@ -371,14 +370,12 @@ Text GLabel 8300 5400 0    60   Input ~ 0
 SPI3_MOSI
 Text GLabel 8800 5300 2    60   Input ~ 0
 SPI3_MISO
-Text GLabel 8700 2150 0    60   Input ~ 0
+Text GLabel 10000 3050 2    60   Input ~ 0
 SPI1_SCK
-Text GLabel 8150 2250 0    60   Input ~ 0
+Text GLabel 10550 2950 2    60   Input ~ 0
 SPI1_MISO
-Text GLabel 8850 2350 0    60   Input ~ 0
+Text GLabel 10000 2850 2    60   Input ~ 0
 SPI1_MOSI
-Text GLabel 8250 2450 0    60   Input ~ 0
-SD_CS
 $Comp
 L CONN_01X05 P7
 U 1 1 572A9A07
@@ -445,18 +442,16 @@ Wire Wire Line
 	5400 5900 5650 5900
 Wire Wire Line
 	5650 6000 4350 6000
-Text GLabel 8800 2550 0    60   Input ~ 0
+Text GLabel 8800 3250 0    60   Input ~ 0
 LCD_CS
 Wire Wire Line
-	8700 2150 8950 2150
+	10000 3050 9900 3050
 Wire Wire Line
-	8950 2250 8150 2250
+	9900 2950 10550 2950
 Wire Wire Line
-	8850 2350 8950 2350
+	10000 2850 9900 2850
 Wire Wire Line
-	8250 2450 8950 2450
-Wire Wire Line
-	8950 2550 8800 2550
+	8950 3250 8800 3250
 Text GLabel 5450 6100 0    60   Input ~ 0
 LCD_CS
 Wire Wire Line
@@ -465,12 +460,12 @@ Text GLabel 4950 6200 0    60   Input ~ 0
 LCD_RST
 Text GLabel 5450 6300 0    60   Input ~ 0
 LCD_DC
-Text GLabel 8250 2650 0    60   Input ~ 0
+Text GLabel 8350 3350 0    60   Input ~ 0
 LCD_RST
-Text GLabel 8700 2850 0    60   Input ~ 0
+Text GLabel 8800 3450 0    60   Input ~ 0
 LCD_DC
 Wire Wire Line
-	8950 2650 8250 2650
+	8950 3350 8350 3350
 Wire Wire Line
 	5650 6200 4950 6200
 Wire Wire Line
@@ -604,7 +599,7 @@ Wire Wire Line
 Wire Wire Line
 	7500 4350 7800 4350
 Wire Wire Line
-	8950 2850 8700 2850
+	8950 3450 8800 3450
 Text GLabel 4100 2600 0    60   Input ~ 0
 RS_RX
 Text GLabel 4100 2800 0    60   Input ~ 0
@@ -684,4 +679,16 @@ Wire Wire Line
 	1400 2400 1400 2550
 Wire Wire Line
 	8300 5600 7150 5600
+Text GLabel 5950 1900 2    60   Input ~ 0
+ETH_RST
+Wire Wire Line
+	5700 1900 5950 1900
+Text GLabel 4100 2400 0    60   Input ~ 0
+ETH_CS
+Wire Wire Line
+	4100 2400 4700 2400
+Text GLabel 10600 1650 2    60   Input ~ 0
+SD_CS
+Wire Wire Line
+	10600 1650 9900 1650
 $EndSCHEMATC
