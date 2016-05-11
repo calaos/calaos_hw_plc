@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Tue 10 May 2016 01:58:51 PM CEST
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Wed 11 May 2016 06:33:34 PM CEST
 
 BeginCmp
 TimeStamp = /572F38F4;
@@ -29,14 +29,14 @@ IdModule  = w_conn_screw:mors_10p;
 EndCmp
 
 BeginCmp
-TimeStamp = /5729DAE6/5729ABB7;
+TimeStamp = /5729DAE6/57326C94;
 Reference = P2;
-ValeurCmp = CONN_OUT2;
+ValeurCmp = CONN_OUT3;
 IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
 EndCmp
 
 BeginCmp
-TimeStamp = /5729DAE6/5729ABAE;
+TimeStamp = /5729DAE6/5732DAA1;
 Reference = P3;
 ValeurCmp = CONN_OUT1;
 IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
@@ -64,17 +64,17 @@ IdModule  = Pin_Headers:Pin_Header_Straight_2x04;
 EndCmp
 
 BeginCmp
-TimeStamp = /572A9A07;
+TimeStamp = /5732EADC;
 Reference = P7;
-ValeurCmp = SD_CONN;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x05;
+ValeurCmp = CONN_LCD_SD;
+IdModule  = Pin_Headers:Pin_Header_Straight_2x05;
 EndCmp
 
 BeginCmp
-TimeStamp = /572AB992;
+TimeStamp = /5729DAE6/57331532;
 Reference = P8;
-ValeurCmp = LCD_CONN;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x09;
+ValeurCmp = CONN_OUT4;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
 EndCmp
 
 BeginCmp
@@ -110,6 +110,34 @@ TimeStamp = /5731D7CF;
 Reference = P13;
 ValeurCmp = CONN_RS485_IN;
 IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
+EndCmp
+
+BeginCmp
+TimeStamp = /5729DAE6/5732E015;
+Reference = P14;
+ValeurCmp = CONN_OUT2;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
+EndCmp
+
+BeginCmp
+TimeStamp = /57333397;
+Reference = P15;
+ValeurCmp = CONN_ANALOG;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x06;
+EndCmp
+
+BeginCmp
+TimeStamp = /57337E5A;
+Reference = P16;
+ValeurCmp = CONN_EXTI2C;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
+EndCmp
+
+BeginCmp
+TimeStamp = /5733734C;
+Reference = P17;
+ValeurCmp = CONN_EXT;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x05;
 EndCmp
 
 BeginCmp
@@ -344,6 +372,13 @@ IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
+TimeStamp = /5729DAE6/57335AE7;
+Reference = R34;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
 TimeStamp = /572F34DE;
 Reference = R35;
 ValeurCmp = R;
@@ -355,6 +390,27 @@ TimeStamp = /572F35F4;
 Reference = R36;
 ValeurCmp = R;
 IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /573365D0;
+Reference = R37;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /57336EF7;
+Reference = R38;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /57337A72;
+Reference = R39;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
@@ -425,6 +481,20 @@ TimeStamp = /5729DAE6/57307CE9;
 Reference = U10;
 ValeurCmp = ULN2803;
 IdModule  = Housings_DIP:DIP-18__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /5729DAE6/57326A39;
+Reference = U11;
+ValeurCmp = 74HC595;
+IdModule  = Housings_DIP:DIP-16__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /5729DAE6/57331448;
+Reference = U12;
+ValeurCmp = 74HC595;
+IdModule  = Housings_DIP:DIP-16__300;
 EndCmp
 
 EndListe
