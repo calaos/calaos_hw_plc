@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Wed 11 May 2016 06:33:34 PM CEST
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Thu 12 May 2016 01:30:43 PM CEST
 
 BeginCmp
 TimeStamp = /572F38F4;
@@ -120,17 +120,17 @@ IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
 EndCmp
 
 BeginCmp
-TimeStamp = /57333397;
+TimeStamp = /5734225A;
 Reference = P15;
-ValeurCmp = CONN_ANALOG;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x06;
+ValeurCmp = CONN_EXT2;
+IdModule  = Pin_Headers:Pin_Header_Straight_2x03;
 EndCmp
 
 BeginCmp
 TimeStamp = /57337E5A;
 Reference = P16;
 ValeurCmp = CONN_EXTI2C;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x05;
 EndCmp
 
 BeginCmp
@@ -138,6 +138,20 @@ TimeStamp = /5733734C;
 Reference = P17;
 ValeurCmp = CONN_EXT;
 IdModule  = Pin_Headers:Pin_Header_Straight_1x05;
+EndCmp
+
+BeginCmp
+TimeStamp = /5733A232;
+Reference = P18;
+ValeurCmp = CONN_1WIRE;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x03;
+EndCmp
+
+BeginCmp
+TimeStamp = /5734A2DB;
+Reference = P19;
+ValeurCmp = CONN_EXT_SPI;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x06;
 EndCmp
 
 BeginCmp
@@ -382,14 +396,14 @@ BeginCmp
 TimeStamp = /572F34DE;
 Reference = R35;
 ValeurCmp = R;
-IdModule  = Resistors_SMD:R_0805_HandSoldering;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
 TimeStamp = /572F35F4;
 Reference = R36;
 ValeurCmp = R;
-IdModule  = Resistors_SMD:R_0805_HandSoldering;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
@@ -407,8 +421,22 @@ IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /57337A72;
+TimeStamp = /5733CEEB;
 Reference = R39;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM15mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /5733E4B6;
+Reference = R40;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /5734C48B;
+Reference = R41;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
