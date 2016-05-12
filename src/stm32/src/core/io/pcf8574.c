@@ -54,6 +54,7 @@ pcf8574_json_parse_one(json_value* sensor)
 	pcf8574_t *exp;
 	const char *name;
 
+        PANIC_ON(g_max_pcf8574_id == MAX_PCF8574, "Too many PCF8574\r\n");
         exp = calloc(1, sizeof(struct pcf8574));
 
         length = sensor->u.object.length;

@@ -54,6 +54,8 @@ shift_register_json_parse_one(json_value* sensor)
 	shift_register_t *sr;
 	const char *name;
 
+        PANIC_ON(g_max_shift_register_id == MAX_SHIFT_REGISTERS, "Too many shift registers\r\n");
+
         sr = calloc(1, sizeof(struct shift_register));
 
         length = sensor->u.object.length;

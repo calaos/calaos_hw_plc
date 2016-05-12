@@ -1,13 +1,16 @@
 #include "HAL.h"
 #include "utils.h"
 
+#include <stdlib.h>
+
 /**
  * Initialize I2C bus from string
  */
-void
-hal_i2c_init(uint32_t frequency)
+hal_i2c_t *
+hal_i2c_setup(const char *sda, const char *scl, uint32_t frequency)
 {
 	debug_puts("Init i2c freq %d\n", frequency);
+	return NULL;
 }
 
 /**
@@ -18,7 +21,7 @@ hal_i2c_init(uint32_t frequency)
  * @param length Length of data
  */
 void
-hal_i2c_write(uint8_t addr, __unused__ const uint8_t *data, __unused__ unsigned int length)
+hal_i2c_write(hal_i2c_t *i2c, uint8_t addr, const uint8_t *data, unsigned int length)
 {
 	debug_puts("I2C write at addr %x\r\n", addr);
 }
@@ -31,7 +34,7 @@ hal_i2c_write(uint8_t addr, __unused__ const uint8_t *data, __unused__ unsigned 
  * @param length Length of data
  */
 void
-hal_i2c_read(uint8_t addr, __unused__ uint8_t *data, __unused__ unsigned int length)
+hal_i2c_read(hal_i2c_t *i2c, uint8_t addr, uint8_t *data, unsigned int length)
 {	
 	debug_puts("I2C read at addr %x\r\n", addr);
 }

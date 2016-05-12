@@ -3,6 +3,8 @@ extern "C" {
 }
 #include <mbed.h>
 
+#include "mbed_util.h"
+
 SPI spi(SPI_MOSI, SPI_MISO, SPI_SCK);
 
 extern "C" void
@@ -17,7 +19,8 @@ hal_spi_init(uint32_t frequency)
  * @value Value to send through SPI
  */
 extern "C" int
-hal_spi_write(uint8_t value)
+hal_spi_write(hal_spi_t *spi, uint8_t value);
 {
+	
 	return spi.write(value);
 }

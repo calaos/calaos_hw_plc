@@ -10,9 +10,16 @@ I2C i2c(I2C_SDA, I2C_SCL);
 /**
  * Initialize I2C bus from string
  */
-extern "C" void
-hal_i2c_init(__attribute__((unused)) uint32_t frequency)
+extern "C" hal_i2c_t *
+hal_i2c_setup(const char *sda, const char *scl, uint32_t frequency)
 {
+	PinName psda, pscl;
+	psda = mbed_pinname_from_str(sda);
+	pscl = mbed_pinname_from_str(scl);
+	if (sda == NC || scl == NC)
+		return NULL;
+
+	return (hal_i2c_t *) new I2C(psda, pscl);
 }
 
 /**
@@ -23,10 +30,11 @@ hal_i2c_init(__attribute__((unused)) uint32_t frequency)
  * @param length Length of data
  */
 extern "C" void
-hal_i2c_write(uint8_t addr,
-	const uint8_t *data, unsigned int length)
+hal_i2c_write(hal_i2c_t *i2c, uint8_t addr,
+		const uint8_t *data, unsigned int length)
 {
-	i2c.write(addr << 1, (const char *) data, length);
+	I2C *pi2c = (I2C *) i2c;
+	pi2c->write(addr << 1, (const char *) data, length);
 }
 
 /**
@@ -37,9 +45,10 @@ hal_i2c_write(uint8_t addr,
  * @param length Length of data
  */
 extern "C" void
-hal_i2c_read(uint8_t addr, 
-	uint8_t *data, unsigned int length)
+hal_i2c_read(hal_i2c_t *i2c, uint8_t addr,
+		uint8_t *data, unsigned int length)
 {
-	i2c.read(addr << 1, (char *) data, length);
+	I2C *pi2c = (I2C *) i2c;
+	pi2c->read(addr << 1, (char *) data, length);
 }
 

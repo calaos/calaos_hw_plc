@@ -1,4 +1,6 @@
 #include "HAL.h"
+#include "spi.h"
+#include "i2c.h"
 #include "debug.h"
 #include "config.h"
 #include "module.h"
@@ -13,7 +15,9 @@ int
 main()
 {
 	hal_system_init();
-
+	
+	spi_init();
+	i2c_init();
 	en_gpio_init();
 	shift_register_init();
 	pcf8574_init();

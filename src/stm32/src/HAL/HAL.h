@@ -102,12 +102,14 @@ hal_get_filesystem_prefix();
 /**
  * I2C
  */
+ 
+typedef struct hal_i2c hal_i2c_t;
 
 /**
  * Initialize I2C bus 
  */
-void
-hal_i2c_init(uint32_t frequency);
+hal_i2c_t *
+hal_i2c_setup(const char *sda, const char *scl, uint32_t frequency);
 
 /**
  * Write data to I2C bus
@@ -116,7 +118,7 @@ hal_i2c_init(uint32_t frequency);
  * @param length Length of data
  */
 void
-hal_i2c_write(uint8_t addr, const uint8_t *data, unsigned int length);
+hal_i2c_write(hal_i2c_t *i2c, uint8_t addr, const uint8_t *data, unsigned int length);
 
 /**
  * Read data from I2C bus
@@ -125,18 +127,21 @@ hal_i2c_write(uint8_t addr, const uint8_t *data, unsigned int length);
  * @param length Length of data
  */
 void
-hal_i2c_read(uint8_t addr, uint8_t *data, unsigned int length);
+hal_i2c_read(hal_i2c_t *i2c, uint8_t addr, uint8_t *data, unsigned int length);
 
 /**
  * SPI
  */
 
+
+typedef struct hal_spi hal_spi_t;
+
 /**
  * SPI init
  * @frequency Set the SPI to the desired frequency
  */
-void
-hal_spi_init(uint32_t frequency);
+hal_spi_t *
+hal_spi_setup(const char *mosi, const char *miso, const char *sck, uint32_t frequency);
 
 /**
  * Send a value through SPI
@@ -144,7 +149,7 @@ hal_spi_init(uint32_t frequency);
  * @return Value read through SPI
  */
 int
-hal_spi_write(uint8_t value);
+hal_spi_write(hal_spi_t *spi, uint8_t value);
 
 #ifdef __cplusplus
 }

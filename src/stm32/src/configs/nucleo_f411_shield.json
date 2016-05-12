@@ -6,6 +6,17 @@
 	"mysensors": {
 		"node_id": 42
 	},
+	"i2c": [{
+		"name": "i2c1",
+		"sda": "PB_15",
+		"scl": "PB_2"
+	}],
+	"spi": [{
+		"name": "spi1",
+		"mosi": "PB_15",
+		"miso": "PB_2"
+		"sck": "PB_2"
+	}],
 	"sdisplay": {
 		"type": "ili9341",
 		"width": 240,

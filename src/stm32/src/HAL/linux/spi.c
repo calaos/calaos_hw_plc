@@ -1,11 +1,14 @@
 #include "HAL.h"
 #include "utils.h"
 
+#include <stdlib.h>
 
-void
-hal_spi_init(uint32_t frequency)
+hal_spi_t *
+hal_spi_setup(const char *mosi, const char *miso, const char *sck, uint32_t frequency)
 {
 	debug_puts("SPI: init freq %d\n", frequency);
+
+	return NULL;
 }
 
 /**
@@ -13,7 +16,7 @@ hal_spi_init(uint32_t frequency)
  * @value Value to send through SPI
  */
 int
-hal_spi_write(uint8_t __unused__ value)
+hal_spi_write(hal_spi_t *spi, uint8_t value)
 {
 	return 0;
 }
