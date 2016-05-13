@@ -24,8 +24,8 @@
 #include <stdio.h>
 #include <inttypes.h>
 
-WIZnetInterface::WIZnetInterface(gen_io_t *cs, gen_io_t *reset) :
-		WIZnet_Chip(cs, reset)
+WIZnetInterface::WIZnetInterface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *reset) :
+		WIZnet_Chip(spi, cs, reset)
 {
     ip_set = false;
 }

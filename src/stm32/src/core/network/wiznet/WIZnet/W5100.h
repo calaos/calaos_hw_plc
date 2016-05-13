@@ -20,6 +20,7 @@
 #pragma once
 
 #include "HAL.h"
+#include "spi.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -96,7 +97,7 @@ public:
     * @param cs cs of the W5200
     * @param reset reset pin of the W5200
     */
-	WIZnet_Chip(gen_io_t *_cs, gen_io_t *_reset);
+	WIZnet_Chip(spi_bus_t *spi, gen_io_t *_cs, gen_io_t *_reset);
 
     /*
     * Connect the W5200 module to the ssid contained in the constructor.
@@ -261,6 +262,7 @@ protected:
     void spi_read(uint16_t addr, uint8_t *buf, uint16_t len);
     gen_io_t *cs;
     gen_io_t *reset_pin;
+    spi_bus_t *spi;
 };
 
 extern uint32_t str_to_ip(const char* str);

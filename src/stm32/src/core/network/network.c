@@ -1,8 +1,11 @@
+#define _GNU_SOURCE 1
+
 #include "wiznet_iface.h"
 #include "mysensors.h"
 #include "network.h"
 #include "module.h"
 #include "utils.h"
+#include "spi.h"
 
 #include <string.h>
 
@@ -32,11 +35,11 @@ network_main_loop(void)
 }
 
 static int
-network_init_interface(gen_io_t *cs, gen_io_t *rst)
+network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
 {
 	int ret;
 
-	g_net_iface = wiznet_iface_create(cs, rst);
+	g_net_iface = wiznet_iface_create(spi, cs, rst);
 	PANIC_ON(!g_net_iface, "Failed create network interface\r\n");
 	
 	ret = wiznet_iface_init_dhcp(g_net_iface, g_mac);
@@ -95,8 +98,8 @@ wiznet_parse_json(json_value* net_data)
         unsigned int i, length;
 	json_value *value;
 	const char *name;
-	int frequency = 1000000;
 	gen_io_t *cs = NULL, *rst = NULL;
+	static spi_bus_t *spi_bus = NULL;
 
 	length = net_data->u.object.length;
 	for (i = 0; i < length; i++) {
@@ -107,15 +110,14 @@ wiznet_parse_json(json_value* net_data)
 			cs = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
 		} else if (strcmp(name, "rst") == 0) {
 			rst = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
-		} else if (strcmp(name, "freq") == 0) {
-			frequency = value->u.integer;
+		} else if (strcmp(name, "spi") == 0) {
+			spi_bus = spi_bus_get_by_name(value->u.string.ptr);
 		}
 	}
-	PANIC_ON(cs == NULL, "Missing io for network cs\r\n");
-	PANIC_ON(rst == NULL, "Missing io for network rst\r\n");
-	hal_spi_init(frequency);
+	PANIC_ON(cs == NULL || rst == NULL || spi_bus == NULL,
+			"Missing io for network\r\n");
 
-	return network_init_interface(cs, rst);
+	return network_init_interface(spi_bus, cs, rst);
 }
 
 static int

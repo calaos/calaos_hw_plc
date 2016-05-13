@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "generic_io.h"
+#include "spi.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -14,7 +15,7 @@ extern "C" {
  */
 typedef struct wiznet_iface wiznet_iface_t;
 
-wiznet_iface_t *wiznet_iface_create(gen_io_t *cs, gen_io_t *reset);
+wiznet_iface_t *wiznet_iface_create(spi_bus_t *spi, gen_io_t *cs, gen_io_t *reset);
 
 void wiznet_iface_destroy(wiznet_iface_t *iface);
 

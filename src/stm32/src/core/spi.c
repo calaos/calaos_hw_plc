@@ -1,31 +1,25 @@
 #define _GNU_SOURCE 1
 
 #include "module.h"
+#include "utils.h"
 #include "debug.h"
 #include "json.h"
-#include "utils.h"
+#include "spi.h"
 
 #include <string.h>
 #include <stdlib.h>
 
 #define MAX_SPI_BUS	4	
 
-struct spi {
-	char *name;		/* Shift register name */
-	hal_spi_t *hal_spi;
-};
+static int g_max_spi_bus_id = 0;
+static struct spi_bus *g_spis[MAX_SPI_BUS];
 
-typedef struct spi spi_t;
-
-static int g_max_spi_id = 0;
-static struct spi *g_spis[MAX_SPI_BUS];
-
-spi_t *
-spi_get_by_name(const char *name) 
+spi_bus_t *
+spi_bus_get_by_name(const char *name) 
 {
 	int i;
 
-	for (i = 0; i < g_max_spi_id; i++) {
+	for (i = 0; i < g_max_spi_bus_id; i++) {
 		if (strncmp(name, g_spis[i]->name, strlen(name)) == 0)
 			return g_spis[i];
 	}
@@ -34,26 +28,26 @@ spi_get_by_name(const char *name)
 }
 
 static int
-spi_json_parse_one(json_value* spibus)
+spi_json_parse_one(json_value* json_spi)
 {
 	int length, i;
 	json_value *value;
-	spi_t *spistruct;
+	spi_bus_t *spibus;
 	const char *name;
 	char mosi[10], miso[10], sck[10];
 	int freq = 1000000;
 
-        spistruct = calloc(1, sizeof(struct spi));
+        spibus = calloc(1, sizeof(struct spi_bus));
         
-        PANIC_ON(g_max_spi_id == MAX_SPI_BUS, "Too many spi buses\r\n");
+        PANIC_ON(g_max_spi_bus_id == MAX_SPI_BUS, "Too many spi buses\r\n");
 
-        length = spibus->u.object.length;
+        length = json_spi->u.object.length;
         for (i = 0; i < length; i++) {
-		value = spibus->u.object.values[i].value;
-		name = spibus->u.object.values[i].name;
+		value = json_spi->u.object.values[i].value;
+		name = json_spi->u.object.values[i].name;
 
 		if (strcmp(name, "name") == 0) {
-			spistruct->name = strdup(value->u.string.ptr);
+			spibus->name = strdup(value->u.string.ptr);
 		} else if (strcmp(name, "mosi") == 0) {
 			strcpy(mosi, value->u.string.ptr);
 		} else if (strcmp(name, "miso") == 0) {
@@ -65,10 +59,10 @@ spi_json_parse_one(json_value* spibus)
 		}
         }
 
-        spistruct->hal_spi = hal_spi_setup(mosi, miso, sck, freq);
+        spibus->hal_spi = hal_spi_setup(mosi, miso, sck, freq);
 
-	debug_puts("Adding spi bus %s with %d output\r\n", spistruct->name);
-	g_spis[g_max_spi_id++] = spistruct;
+	debug_puts("Adding spi bus %s with %d output\r\n", spibus->name);
+	g_spis[g_max_spi_bus_id++] = spibus;
 
 	return 0;
 }
@@ -106,7 +100,7 @@ static const module_t spi_module = {
 
 
 void
-spi_init()
+spi_bus_init()
 {
 	module_register(&spi_module);
 }

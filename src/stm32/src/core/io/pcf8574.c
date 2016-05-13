@@ -7,6 +7,7 @@
 #include "generic_io.h"
 #include "json.h"
 #include "utils.h"
+#include "i2c.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -15,6 +16,7 @@
 
 struct pcf8574 {
 	gen_io_t *int_io;
+	i2c_bus_t *i2c;
 	char *name;			/* Expander name */
 	uint8_t output_value;		/* Count of output for this shift register */
 	uint8_t input_value;		/* Cached input value */
@@ -68,11 +70,14 @@ pcf8574_json_parse_one(json_value* sensor)
 			exp->addr = value->u.integer;
 		} else if (strcmp(name, "int") == 0) {
 			exp->int_io = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+		} else if (strcmp(name, "int") == 0) {
+			exp->i2c = i2c_bus_get_by_name(value->u.string.ptr);
 		}
         }
+        PANIC_ON(exp->i2c == NULL || exp->addr == 0 || exp->int_io == NULL,
+			"Missing info for pcf8574\r\n");
         exp->output_value = 0;
         exp->need_update = 1;
-
 	debug_puts("Adding pcf8574 %s with %d output\r\n", exp->name, exp->addr);
 	g_pcf8574s[g_max_pcf8574_id++] = exp;
 
@@ -107,7 +112,7 @@ pcf8574_set_output(pcf8574_t *exp, uint8_t output, gpio_state_t state)
 		exp->output_value |= (1 << output);
 
 	exp->need_update = 1;
-	hal_i2c_write(exp->addr, &exp->output_value, 1);
+	i2c_bus_write(exp->i2c, exp->addr, &exp->output_value, 1);
 
 	return 0;
 }
@@ -148,12 +153,13 @@ static gpio_state_t
 pcf8574_io_read(void *io)
 {
 	pcf8574_io_t *exp_io = io;
+	pcf8574_t *exp = exp_io->exp;
 
 	/* if there was an interrupt, read the new value */
-	if (gen_io_read(exp_io->exp->int_io) || exp_io->exp->need_update)
-		hal_i2c_read(exp_io->exp->addr, &exp_io->exp->input_value, 1);
+	if (gen_io_read(exp->int_io) || exp->need_update)
+		i2c_bus_read(exp->i2c, exp->addr, &exp->input_value, 1);
 
-	return exp_io->exp->input_value & (1 << exp_io->index);
+	return exp->input_value & (1 << exp_io->index);
 }
 
 /**
