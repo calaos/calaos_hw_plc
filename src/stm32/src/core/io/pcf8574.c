@@ -103,7 +103,7 @@ pcf8574_json_parse(json_value* value)
 
 
 static int
-pcf8574_set_output(pcf8574_t *exp, uint8_t output, gpio_state_t state)
+pcf8574_set_output(pcf8574_t *exp, uint8_t output, int state)
 {
 
 	if (state == 0)
@@ -142,14 +142,14 @@ pcf8574_io_setup(const char *exp_io_name, __unused__ int reverse,
 }
  
 static void
-pcf8574_io_write(void *io, gpio_state_t state)
+pcf8574_io_write(void *io, int state)
 {
 	pcf8574_io_t *exp_io = io;
 	
 	pcf8574_set_output(exp_io->exp, exp_io->index, state);
 }
 
-static gpio_state_t
+static int
 pcf8574_io_read(void *io)
 {
 	pcf8574_io_t *exp_io = io;

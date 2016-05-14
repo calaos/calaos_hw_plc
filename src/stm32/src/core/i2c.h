@@ -7,18 +7,26 @@
 extern "C" {
 #endif
 
-typedef struct i2c_bus i2c_bus_t;
+/**
+ * Prototype, public
+ */
 
-struct i2c_bus {
-	char *name;
-	hal_i2c_t *hal_i2c;
-};
+typedef struct i2c_bus i2c_bus_t;
 
 i2c_bus_t *
 i2c_bus_get_by_name(const char *name);
 
 void
 i2c_bus_init();
+
+/**
+ * Implementation, private
+ */
+
+struct i2c_bus {
+	char *name;
+	hal_i2c_t *hal_i2c;
+};
 
 static inline void
 i2c_bus_write(i2c_bus_t *i2c, uint8_t addr, const uint8_t *data, unsigned int length)
