@@ -1,13 +1,16 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ili9341.h"
+
 #include "generic_io.h"
+#include "ili9341.h"
 #include "utils.h"
 #include "HAL.h"
+#include "spi.h"
 
 static uint32_t g_ili9341_width, g_ili9341_height;
 static gen_io_t *g_ili9341_cs = NULL, *g_ili9341_dc = NULL, *g_ili9341_rst = NULL;
+static spi_bus_t *g_ili9341_spi = NULL;
 
 static void
 ili9341_send_reg(uint8_t reg)
@@ -15,7 +18,7 @@ ili9341_send_reg(uint8_t reg)
 	/* write register */
 	gen_io_write(g_ili9341_dc, ILI9341_REG);
 	gen_io_write(g_ili9341_cs, 0);
-	hal_spi_write(reg);
+	spi_bus_write(g_ili9341_spi, reg);
 	gen_io_write(g_ili9341_cs, 1);
 }
 
@@ -28,7 +31,7 @@ ili9341_send_data(const uint8_t *value, uint8_t size)
 	
 	gen_io_write(g_ili9341_dc, ILI9341_DATA);    
 	for (i = 0; i < size; i++)
-		hal_spi_write(value[i]);
+		spi_bus_write(g_ili9341_spi, value[i]);
 
 	gen_io_write(g_ili9341_cs, 1);
 }
@@ -41,11 +44,11 @@ ili9341_send_reg_data(uint8_t reg, const uint8_t *value, uint8_t size)
 	gen_io_write(g_ili9341_cs, 0);
 
 	gen_io_write(g_ili9341_dc, ILI9341_REG);
-	hal_spi_write(reg);
+	spi_bus_write(g_ili9341_spi, reg);
 	
 	gen_io_write(g_ili9341_dc, ILI9341_DATA);    
 	for (i = 0; i < size; i++)
-		hal_spi_write(value[i]);
+		spi_bus_write(g_ili9341_spi, value[i]);
 
 	gen_io_write(g_ili9341_cs, 1);
 }
@@ -178,7 +181,6 @@ ili9341_parse_json(json_value *disp_data)
         unsigned int i, length;
 	json_value *value;
 	const char *name;
-	int frequency = 1000000;
 
 	length = disp_data->u.object.length;
 	for (i = 0; i < length; i++) {
@@ -191,20 +193,21 @@ ili9341_parse_json(json_value *disp_data)
 			g_ili9341_dc = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
 		} else if (strcmp(name, "rst") == 0) {
 			g_ili9341_rst = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
-		}else if (strcmp(name, "freq") == 0) {
-			frequency = value->u.integer;
+		} else if (strcmp(name, "spi") == 0) {
+			g_ili9341_spi = spi_bus_get_by_name(value->u.string.ptr);
 		}
 	}
-	PANIC_ON(g_ili9341_cs == NULL, "Missing io for screen cs\r\n");
-	PANIC_ON(g_ili9341_dc == NULL, "Missing io for screen dc\r\n");
-
+	PANIC_ON(g_ili9341_cs == NULL || g_ili9341_dc == NULL || g_ili9341_spi == NULL,
+			"Missing info for screen\r\n");
 	/* Deselect cs */
 	gen_io_write(g_ili9341_cs, 1);
-	/* Deassert reset */
-	if (g_ili9341_rst != NULL)
-		gen_io_write(g_ili9341_rst, 1);
 
-	hal_spi_init(frequency);
+	/* Do reset */
+	if (g_ili9341_rst != NULL) {
+		gen_io_write(g_ili9341_rst, 0);
+		ms_delay(100);	
+		gen_io_write(g_ili9341_rst, 1);
+	}
 }
 
 display_ops_t ili9341_display_ops = {

@@ -16,8 +16,8 @@ main()
 {
 	hal_system_init();
 	
-	spi_init();
-	i2c_init();
+	spi_bus_init();
+	i2c_bus_init();
 	en_gpio_init();
 	shift_register_init();
 	pcf8574_init();

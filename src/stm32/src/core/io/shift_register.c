@@ -118,7 +118,7 @@ shift_register_update(shift_register_t *sr)
 }
 
 static int
-shift_register_set_output(shift_register_t *sr, int output, gpio_state_t state)
+shift_register_set_output(shift_register_t *sr, int output, int state)
 {
 	debug_puts("Setting shift register ouput %d to value %d\r\n", output, state);
 
@@ -157,7 +157,7 @@ shift_register_io_setup(const char *srio_name, int reverse, gpio_dir_t direction
 }
 
 static void
-shift_register_io_write(void *io, gpio_state_t state)
+shift_register_io_write(void *io, int state)
 {
 	shift_register_io_t *sr_io = io;
 	shift_register_set_output(sr_io->sr, sr_io->output, state);

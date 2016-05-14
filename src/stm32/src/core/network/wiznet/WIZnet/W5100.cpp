@@ -49,8 +49,8 @@
 
 WIZnet_Chip* WIZnet_Chip::inst;
 
-WIZnet_Chip::WIZnet_Chip(gen_io_t *_cs, gen_io_t *_reset):
-    cs(_cs), reset_pin(_reset)
+WIZnet_Chip::WIZnet_Chip(spi_bus_t *_spi, gen_io_t *_cs, gen_io_t *_reset):
+    cs(_cs), reset_pin(_reset), spi(_spi)
 {
 
     gen_io_write(cs, GPIO_STATE_HIGH);
@@ -286,11 +286,11 @@ void WIZnet_Chip::spi_write(uint16_t addr, const uint8_t *buf, uint16_t len)
     for(int i = 0; i < len; i++) {
             /* TODO: check if it can be moved outside the loop */
             gen_io_write(cs, 0);
-    	hal_spi_write(0xf0);
-    	hal_spi_write(addr >> 8);
-    	hal_spi_write(addr & 0xff);
+    	spi_bus_write(spi, 0xf0);
+    	spi_bus_write(spi, addr >> 8);
+    	spi_bus_write(spi, addr & 0xff);
         addr++;
-    	hal_spi_write(buf[i]);
+    	spi_bus_write(spi, buf[i]);
             gen_io_write(cs, 1);
     }
 #if DBG_SPI
@@ -311,11 +311,11 @@ void WIZnet_Chip::spi_read(uint16_t addr, uint8_t *buf, uint16_t len)
     for(int i = 0; i < len; i++) {
             /* TODO: check if it can be moved outside the loop */
             gen_io_write(cs, 0);
-        hal_spi_write(0x0f);
-        hal_spi_write(addr >> 8);
-        hal_spi_write(addr & 0xff);
+        spi_bus_write(spi, 0x0f);
+        spi_bus_write(spi, addr >> 8);
+        spi_bus_write(spi, addr & 0xff);
         addr++;
-        buf[i] = hal_spi_write(0);
+        buf[i] = spi_bus_write(spi, 0);
             gen_io_write(cs, 1);
     }
 #if DBG_SPI

@@ -5,13 +5,23 @@ extern "C" {
 
 #include "mbed_util.h"
 
-SPI spi(SPI_MOSI, SPI_MISO, SPI_SCK);
-
-extern "C" void
-hal_spi_init(uint32_t frequency)
+extern "C" hal_spi_t *
+hal_spi_setup(const char *mosi, const char *miso, const char *sck, uint32_t frequency)
 {
-	spi.format(8,0);
-	spi.frequency(frequency);
+	PinName pmosi, pmiso, psck;
+	SPI *spi;
+	
+	pmosi = mbed_pinname_from_str(mosi);
+	pmiso = mbed_pinname_from_str(miso);
+	psck = mbed_pinname_from_str(sck);
+	if (pmosi == NC || pmiso == NC || psck == NC)
+		return NULL;
+
+	spi = new SPI(pmosi, pmiso, psck);
+	spi->format(8, 0);
+	spi->frequency(frequency);
+
+	return (hal_spi_t *) spi;
 }
 
 /**
@@ -19,8 +29,9 @@ hal_spi_init(uint32_t frequency)
  * @value Value to send through SPI
  */
 extern "C" int
-hal_spi_write(hal_spi_t *spi, uint8_t value);
+hal_spi_write(hal_spi_t *spi, uint8_t value)
 {
 	
-	return spi.write(value);
+	SPI *pspi = (SPI *) spi;
+	return pspi->write(value);
 }

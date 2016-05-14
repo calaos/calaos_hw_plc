@@ -5,8 +5,6 @@ extern "C" {
 #include "HAL.h"
 }
 
-I2C i2c(I2C_SDA, I2C_SCL);
-
 /**
  * Initialize I2C bus from string
  */
@@ -16,7 +14,7 @@ hal_i2c_setup(const char *sda, const char *scl, uint32_t frequency)
 	PinName psda, pscl;
 	psda = mbed_pinname_from_str(sda);
 	pscl = mbed_pinname_from_str(scl);
-	if (sda == NC || scl == NC)
+	if (psda == NC || pscl == NC)
 		return NULL;
 
 	return (hal_i2c_t *) new I2C(psda, pscl);

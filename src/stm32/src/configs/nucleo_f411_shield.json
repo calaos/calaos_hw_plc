@@ -10,18 +10,28 @@
 		"name": "i2c1",
 		"sda": "PB_15",
 		"scl": "PB_2"
+	}, {
+		"name": "i2c3",
+		"sda": "PB_4",
+		"scl": "PA_8"
 	}],
 	"spi": [{
 		"name": "spi1",
 		"mosi": "PB_15",
-		"miso": "PB_2"
-		"sck": "PB_2"
+		"miso": "PB_14",
+		"sck": "PB_13"
+	}, {
+		"name": "spi3",
+		"mosi": "",
+		"miso": "PC_11",
+		"sck": "PC_10"
 	}],
 	"sdisplay": {
 		"type": "ili9341",
 		"width": 240,
 		"height": 320,
 		"data": {
+			"spi": "spi1",
 			"rst": "gpio@PC_0",
 			"cs": "gpio@PC_3",
 			"dc": "gpio@PC_1",
@@ -34,6 +44,7 @@
 		"mac": "78:ac:c0:97:f2:67",
 		"port": 14987,
 		"data": {
+			"i2c": "i2c1",
 			"rst": "gpio@PB_3",
 			"cs": "gpio@PA_10",
 			"freq": 20000000

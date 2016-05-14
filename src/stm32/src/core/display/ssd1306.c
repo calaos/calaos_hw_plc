@@ -3,18 +3,20 @@
 #include <string.h>
 #include "ssd1306.h"
 #include "utils.h"
+#include "i2c.h"
 #include "HAL.h"
 
 static uint8_t g_ssd1306_address = 0;
 static uint8_t *g_ssd1306_buffer;
 static uint32_t g_ssd1306_width, g_ssd1306_height;
+static i2c_bus_t *g_ssd1306_i2c = NULL;
 
 void
 ssd1306_send_command(uint8_t command)
 {
 	uint8_t cmd[2] = {0x00, command};
 
-	hal_i2c_write(g_ssd1306_address, cmd, 2);
+	i2c_bus_write(g_ssd1306_i2c, g_ssd1306_address, cmd, 2);
 }
 
 static const uint8_t ssd1306_init_data[] = {
@@ -113,7 +115,7 @@ ssd1306_display()
 	// We have to send 64 packets
 	for (packet = 0; packet < 64; packet++) {
 		memcpy(&send_val[1], &g_ssd1306_buffer[packet*16], 16);
-		hal_i2c_write(g_ssd1306_address, send_val, 17);
+		i2c_bus_write(g_ssd1306_i2c, g_ssd1306_address, send_val, 17);
 	}
 }
 
@@ -131,9 +133,12 @@ ssd1306_parse_json(json_value *disp_data)
 
 		if (strcmp(name, "address") == 0) {
 			g_ssd1306_address = strtol(value->u.string.ptr, NULL, 16);
+		} else if (strcmp(name, "address") == 0) {
+			g_ssd1306_i2c = i2c_bus_get_by_name(value->u.string.ptr);
 		}
 	}
-	PANIC_ON(g_ssd1306_address == 0, "Missing address for screen\r\n");
+	PANIC_ON(g_ssd1306_address == 0 || g_ssd1306_i2c == NULL,
+			"Missing ssd1306 info\r\n");
 }
 
 display_ops_t ssd1306_display_ops = {

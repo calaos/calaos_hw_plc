@@ -7,9 +7,9 @@
 
 extern "C" {
 
-wiznet_iface_t *wiznet_iface_create(gen_io_t *cs, gen_io_t *reset)
+wiznet_iface_t *wiznet_iface_create(spi_bus_t *spi, gen_io_t *cs, gen_io_t *reset)
 {
-	return reinterpret_cast<wiznet_iface_t *>( new WIZnetInterface(cs, reset) );
+	return reinterpret_cast<wiznet_iface_t *>( new WIZnetInterface(spi, cs, reset) );
 }
 
 void wiznet_iface_destroy(wiznet_iface_t *iface)

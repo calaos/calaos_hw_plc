@@ -1,9 +1,15 @@
 #ifndef _GENERIC_IO_H
 #define _GENERIC_IO_H
 
+#include <stdint.h>
+
 #include "gpio.h"
 
 #define GEN_IO_MAX_NAME_SIZE	16
+
+/**
+ * Prototype, public
+ */
 
 /**
  * Pin state
@@ -37,8 +43,8 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 
 
 typedef struct gen_io_ops {
-	void (*io_write)(void *io, gpio_state_t state);
-	gpio_state_t (*io_read)(void *io);
+	void (*io_write)(void *io, int state);
+	int (*io_read)(void *io);
 	void * (*io_setup)(const char *io_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce);
 	const char *prefix;
 } gen_io_ops_t;
@@ -46,15 +52,35 @@ typedef struct gen_io_ops {
 void
 gen_io_ops_register(const gen_io_ops_t * ops);
 
-void
-gen_io_write(gen_io_t *io, int state);
 
-gpio_state_t
-gen_io_read(gen_io_t *io);
+/**
+ * Implementation, private
+ */
+struct gen_io {
+	const gen_io_ops_t *ops;
+	void *io;
+	gpio_dir_t dir;
+	uint8_t reverse;
+};
 
 
-gpio_dir_t
-gen_io_get_dir(gen_io_t *io);
+static inline void
+gen_io_write(gen_io_t *io, int state)
+{
+	io->ops->io_write(io->io, (state & 0x1) ^ io->reverse);
+}
+
+static inline int
+gen_io_read(gen_io_t *io)
+{
+	return io->ops->io_read(io->io) ^ io->reverse;
+}
+
+static inline gpio_dir_t
+gen_io_get_dir(gen_io_t *io)
+{
+	return io->dir;
+}
 
 
 

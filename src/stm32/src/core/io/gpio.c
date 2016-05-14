@@ -54,14 +54,14 @@ en_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_deb
 }
 
 void
-en_gpio_write(void *io, gpio_state_t state)
+en_gpio_write(void *io, int state)
 {
 	en_gpio_t *gpio = io;
 
 	hal_gpio_write(gpio->hal_gpio, state);
 }
 
-gpio_state_t
+int
 en_gpio_read(void *io)
 {
 	en_gpio_t *gpio = io;

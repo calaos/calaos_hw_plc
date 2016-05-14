@@ -6,6 +6,26 @@
 	"mysensors": {
 		"node_id": 42
 	},
+	"i2c": [{
+		"name": "i2c1",
+		"sda": "PB_15",
+		"scl": "PB_2"
+	}, {
+		"name": "i2c3",
+		"sda": "PB_4",
+		"scl": "PA_8"
+	}],
+	"spi": [{
+		"name": "spi1",
+		"mosi": "PB_15",
+		"miso": "PB_14",
+		"sck": "PB_13"
+	}, {
+		"name": "spi3",
+		"mosi": "",
+		"miso": "PC_11",
+		"sck": "PC_10"
+	}],
 	"display_backup": {
 		"type": "ssd1306",
 		"width": 128,
