@@ -6,7 +6,7 @@ GCFLAGS 	:= -Wall -Wextra -Werror -Wno-strict-aliasing
 GPFLAGS 	:= -Wall -Wextra -Werror -Wno-strict-aliasing
 CONFIG		?= mbed_config
 GAFLAGS 	:= -DCONFIG_PATH='"configs/$(CONFIG)_reduced.json"'
-EXCLUDE		:= HAL/linux
+EXCLUDE		:= core/hal/linux
 NO_FLOAT_SCANF	:= 1
 NO_FLOAT_PRINTF	:= 1
 OPTIMIZATION	:= s

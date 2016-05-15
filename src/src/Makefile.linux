@@ -1,6 +1,6 @@
 BUILD_DIR	:= LINUX
 
-C_SRC_FILES	:= $(wildcard core/*.c HAL/linux/*.c core/display/*.c)
+C_SRC_FILES	:= $(wildcard core/*.c core/hal/linux/*.c core/display/*.c)
 C_SRC_FILES	+= $(wildcard core/network/*.c core/io/*.c core/bus/*.c)
 CPP_SRC_FILES	:= $(wildcard core/network/*/*/*.cpp core/network/*.cpp)
 CPP_SRC_FILES	+= $(wildcard core/network/*/*.cpp)
@@ -10,9 +10,9 @@ OBJ_C_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.c,%.o,$(C_SRC_FILES)))
 OBJ_CPP_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.cpp,%.o,$(CPP_SRC_FILES)))
 OBJ_S_FILES	:= $(addprefix $(BUILD_DIR)/,$(patsubst %.S,%.o,$(S_SRC_FILES)))
 OBJS		:= $(OBJ_S_FILES) $(OBJ_C_FILES) $(OBJ_CPP_FILES)
-HDR_FILES	:= $(wildcard core/*.h HAL/linux/*.h HAL/*.h)
+HDR_FILES	:= $(wildcard core/*.h core/hal/linux/*.h core/hal/*.h)
 CONFIG 		?= linux_config
-CFLAGS		:= $(addprefix -I,$(sort $(dir $(SRC_FILES)))) -IHAL -Wall -Wextra -Werror -g -Wno-unused-parameter
+CFLAGS		:= $(addprefix -I,$(sort $(dir $(SRC_FILES) $(HDR_FILES)))) -I -Wall -Wextra -Werror -g -Wno-unused-parameter
 ASFLAGS 	:= -DCONFIG_PATH='"configs/$(CONFIG)_reduced.json"'
 
 all: $(BUILD_DIR)/hw_plc
