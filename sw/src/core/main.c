@@ -23,6 +23,7 @@ main()
 	en_gpio_init();
 	shift_register_init();
 	pcf8574_init();
+	bme280_init();
 	mysensors_init();
 	display_init();
 	network_init();
