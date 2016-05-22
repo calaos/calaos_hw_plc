@@ -49,7 +49,7 @@
 		"mac": "78:ac:c0:97:f2:67",
 		"port": 14987,
 		"data": {
-			"i2c": "spi3",
+			"spi": "spi3",
 			"rst": "gpio@PB_3",
 			"cs": "gpio@PA_10",
 			"freq": 20000000

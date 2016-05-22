@@ -4,6 +4,7 @@
 #include "debug.h"
 #include "config.h"
 #include "module.h"
+#include "bme280.h"
 #include "display.h"
 #include "sensors.h"
 #include "network.h"
