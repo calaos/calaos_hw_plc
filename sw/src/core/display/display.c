@@ -67,17 +67,13 @@ display_init_screen()
 }
 
 static int
-display_json_parse(json_value* value)
+display_json_parse(json_value* section)
 {
         unsigned int i, length;
-	json_value *section, *disp_data = NULL;
+	json_value *value, *disp_data = NULL;
 	display_ops_t const *disp_ops;
 	char *name;
 	const char *type = NULL;
-
-	section = config_get_section(value, "display");
-	if (!section)
-		return -1;
 
 	length = section->u.object.length;
 	for (i = 0; i < length; i++) {

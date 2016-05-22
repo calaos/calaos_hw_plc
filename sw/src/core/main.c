@@ -15,7 +15,8 @@ int
 main()
 {
 	hal_system_init();
-	
+
+	/* TODO: need some initcall mecanism */
 	spi_bus_init();
 	i2c_bus_init();
 	en_gpio_init();

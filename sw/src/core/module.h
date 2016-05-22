@@ -13,7 +13,10 @@
  */
 typedef struct module {
 	const char * name;
+	unsigned int poll_time;
 	void (*main_loop)(void);
+	/* Parse a json section
+	 * return 0 if ok, or a negative value in case of error */
 	int (*json_parse)(json_value* value);
 	/* Sensor related function for modules to listen on sensor events */
 	void (*sensor_created)(sensor_t *s);

@@ -84,14 +84,9 @@ shift_register_json_parse_one(json_value* sensor)
 
 
 static int
-shift_register_json_parse(json_value* value)
+shift_register_json_parse(json_value* section)
 {
         unsigned int i;
-	json_value *section;
-
-	section = config_get_section(value, "shift_registers");
-	if (!section)
-		return -1;
 
 	for (i = 0; i < section->u.array.length; i++) {
 		shift_register_json_parse_one(section->u.array.values[i]);
@@ -167,7 +162,7 @@ shift_register_io_write(void *io, int state)
  * Module
  */
 static const module_t shift_register_module = {
-	.name = "shift_register",
+	.name = "shift_registers",
 	.main_loop = NULL,
 	.json_parse = shift_register_json_parse,
 	.sensor_created = NULL,

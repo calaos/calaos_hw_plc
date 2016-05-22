@@ -131,9 +131,9 @@ ssd1306_parse_json(json_value *disp_data)
 		value = disp_data->u.object.values[i].value;
 		name = disp_data->u.object.values[i].name;
 
-		if (strcmp(name, "address") == 0) {
+		if (strcmp(name, "addr") == 0) {
 			g_ssd1306_address = strtol(value->u.string.ptr, NULL, 16);
-		} else if (strcmp(name, "address") == 0) {
+		} else if (strcmp(name, "i2c") == 0) {
 			g_ssd1306_i2c = i2c_bus_get_by_name(value->u.string.ptr);
 		}
 	}

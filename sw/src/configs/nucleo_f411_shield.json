@@ -26,7 +26,12 @@
 		"miso": "PC_11",
 		"sck": "PC_10"
 	}],
-	"sdisplay": {
+	"bme280": {
+		"i2c": "i2c1",
+		"addr": "0x76",
+		"refresh": 1000
+	},
+	"display": {
 		"type": "ili9341",
 		"width": 240,
 		"height": 320,
@@ -44,7 +49,7 @@
 		"mac": "78:ac:c0:97:f2:67",
 		"port": 14987,
 		"data": {
-			"i2c": "i2c1",
+			"i2c": "spi3",
 			"rst": "gpio@PB_3",
 			"cs": "gpio@PA_10",
 			"freq": 20000000

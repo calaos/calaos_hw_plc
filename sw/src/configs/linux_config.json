@@ -26,22 +26,16 @@
 		"miso": "PC_11",
 		"sck": "PC_10"
 	}],
-	"display_backup": {
-		"type": "ssd1306",
-		"width": 128,
-		"height": 64,
-		"disp_data": {
-			"address": "0x3C"
-		}
-	},
 	"display": {
 		"type": "ili9341",
 		"width": 240,
 		"height": 320,
 		"data": {
+			"spi": "spi1",
 			"rst": "gpio@PC_0",
 			"cs": "gpio@PC_3",
 			"dc": "gpio@PC_1",
+			"freq": 20000000
 		}
 	},
 	"net": {

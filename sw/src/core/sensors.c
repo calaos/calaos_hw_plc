@@ -172,15 +172,10 @@ sensors_json_parse_sensor(json_value* sensor)
 
 
 static int
-sensors_json_parse(json_value* value)
+sensors_json_parse(json_value* section)
 {
         unsigned int i;
-	json_value *section;
 
-	section = config_get_section(value, "sensors");
-	if (!section)
-		return -1;
-	
 	for (i = 0; i < section->u.array.length; i++) {
 		sensors_json_parse_sensor(section->u.array.values[i]);
 	}

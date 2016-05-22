@@ -86,14 +86,9 @@ pcf8574_json_parse_one(json_value* sensor)
 
 
 static int
-pcf8574_json_parse(json_value* value)
+pcf8574_json_parse(json_value* section)
 {
         unsigned int i;
-	json_value *section;
-
-	section = config_get_section(value, "pcf8574");
-	if (!section)
-		return -1;
 
 	for (i = 0; i < section->u.array.length; i++) {
 		pcf8574_json_parse_one(section->u.array.values[i]);

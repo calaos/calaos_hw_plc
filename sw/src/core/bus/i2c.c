@@ -59,7 +59,7 @@ i2c_json_parse_one(json_value* json_i2c)
 
         i2cstruct->hal_i2c = hal_i2c_setup(sda, scl, freq);
 
-	debug_puts("Adding i2c bus %s with %d output\r\n", i2cstruct->name);
+	debug_puts("Adding i2c bus %s\r\n", i2cstruct->name);
 	g_i2cs[g_max_i2c_bus_id++] = i2cstruct;
 
 	return 0;
@@ -67,14 +67,9 @@ i2c_json_parse_one(json_value* json_i2c)
 
 
 static int
-i2c_json_parse(json_value* value)
+i2c_json_parse(json_value* section)
 {
         unsigned int i;
-	json_value *section;
-
-	section = config_get_section(value, "i2c");
-	if (!section)
-		return -1;
 
 	for (i = 0; i < section->u.array.length; i++) {
 		i2c_json_parse_one(section->u.array.values[i]);

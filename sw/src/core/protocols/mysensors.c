@@ -128,11 +128,7 @@ mysensors_json_parse_section(json_value* section)
 static int
 mysensors_json_parse(json_value* value)
 {
-        json_value *section;
-        
-        section = config_get_section(value, "mysensors");
-	if (section)
-		mysensors_json_parse_section(section);
+	mysensors_json_parse_section(value);
 
 	if (g_assigned_node_id == 0) {
 		mysensors_send_message_str(0, 0, INTERNAL, REQUEST, I_ID_REQUEST, "1.0");
@@ -163,7 +159,7 @@ mysensor_sensor_updated(sensor_t *s, sensor_value_t value)
 }
 
 const module_t mysensors_module = {
-	.name = "display",
+	.name = "mysensors",
 	.main_loop = NULL,
 	.json_parse = mysensors_json_parse,
 	.sensor_created = mysensor_sensor_created,

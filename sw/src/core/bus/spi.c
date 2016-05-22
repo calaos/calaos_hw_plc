@@ -61,7 +61,7 @@ spi_json_parse_one(json_value* json_spi)
 
         spibus->hal_spi = hal_spi_setup(mosi, miso, sck, freq);
 
-	debug_puts("Adding spi bus %s with %d output\r\n", spibus->name);
+	debug_puts("Adding spi bus %s\r\n", spibus->name);
 	g_spis[g_max_spi_bus_id++] = spibus;
 
 	return 0;
@@ -69,14 +69,9 @@ spi_json_parse_one(json_value* json_spi)
 
 
 static int
-spi_json_parse(json_value* value)
+spi_json_parse(json_value* section)
 {
         unsigned int i;
-	json_value *section;
-
-	section = config_get_section(value, "spi");
-	if (!section)
-		return -1;
 
 	for (i = 0; i < section->u.array.length; i++) {
 		spi_json_parse_one(section->u.array.values[i]);

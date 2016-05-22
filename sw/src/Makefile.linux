@@ -2,6 +2,7 @@ BUILD_DIR	:= LINUX
 
 C_SRC_FILES	:= $(wildcard core/*.c core/hal/linux/*.c core/display/*.c)
 C_SRC_FILES	+= $(wildcard core/network/*.c core/io/*.c core/bus/*.c)
+C_SRC_FILES	+= $(wildcard core/protocols/*.c)
 CPP_SRC_FILES	:= $(wildcard core/network/*/*/*.cpp core/network/*.cpp)
 CPP_SRC_FILES	+= $(wildcard core/network/*/*.cpp)
 S_SRC_FILES	:= $(wildcard core/*.S)

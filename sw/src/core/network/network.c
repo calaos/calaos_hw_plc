@@ -121,17 +121,13 @@ wiznet_parse_json(json_value* net_data)
 }
 
 static int
-network_json_parse(json_value* value)
+network_json_parse(json_value* section)
 {
         unsigned int i, length;
-	json_value *section, __unused__ *data = NULL;
+	json_value *value, __unused__ *data = NULL;
 	char *name;
 	__unused__ const char *type = NULL;
 	int port = DEFAULT_PORT;
-
-	section = config_get_section(value, "net");
-	if (!section)
-		return -1;
 
 	length = section->u.object.length;
 	for (i = 0; i < length; i++) {
