@@ -99,9 +99,10 @@ sensor_get_value(sensor_t *s, sensor_value_t *value)
 static int
 sensors_json_parse(json_value* section)
 {
-	int length, i;
+	int length, i, j;
 	json_value *value;
 	const char *name;
+	int ret;
 
         length = section->u.object.length;
 
@@ -110,11 +111,11 @@ sensors_json_parse(json_value* section)
 		value = section->u.object.values[i].value;
 		name = section->u.object.values[i].name;
 		debug_puts("Adding section %s\r\n", name);
-		for (i = 0; i < g_cur_sensor_handler; i++) {
-			if (strcmp(name, g_sensors_handler[i]->name))
+		for (j = 0; j < g_cur_sensor_handler; j++) {
+			if (strcmp(name, g_sensors_handler[j]->name))
 				continue;
 
-			 g_sensors_handler[i]->json_parse(value);
+			 ret = g_sensors_handler[j]->json_parse(value);
 			 break;
 		}
         }

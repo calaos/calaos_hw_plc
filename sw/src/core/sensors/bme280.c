@@ -90,7 +90,7 @@ static int bme280_init_hardware(bme280_t *bme280)
 	bme280->dig_H4 = (cmd[4] << 4) | (cmd[5] & 0x0f);
 	bme280->dig_H5 = (cmd[6] << 4) | ((cmd[5]>>4) & 0x0f);
 	bme280->dig_H6 = cmd[7];
-	
+
 	return 0;
 }
 
