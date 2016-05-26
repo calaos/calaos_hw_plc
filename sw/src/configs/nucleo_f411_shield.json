@@ -62,164 +62,164 @@
 		"switch" : [{
 			"name": "sw1",
 			"io": "gpio@PC_13",
-			"dir": "input",
+			"dir": "in",
 			"active_low": 1,
 			"id": 0
 		}, {
 			"name": "out1",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@0",
 			"active_low": 1,
 			"id": 1
 		}, {
 			"name": "out2",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@1",
 			"active_low": 1,
 			"id": 2
 		}, {
 			"name": "out3",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@2",
 			"active_low": 1,
 			"id": 3
 		}, {
 			"name": "out4",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@3",
 			"active_low": 1,
 			"id": 4
 		}, {
 			"name": "out5",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@4",
 			"active_low": 1,
 			"id": 5
 		}, {
 			"name": "out6",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@5",
 			"active_low": 1,
 			"id": 6
 		}, {
 			"name": "out7",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@6",
 			"active_low": 1,
 			"id": 7
 		}, {
 			"name": "out8",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@7",
 			"active_low": 1,
 			"id": 8
 		}, {
 			"name": "out9",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@8",
 			"active_low": 1,
 			"id": 9
 		}, {
 			"name": "out10",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@9",
 			"active_low": 1,
 			"id": 10
 		}, {
 			"name": "out11",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@10",
 			"active_low": 1,
 			"id": 11
 		}, {
 			"name": "out12",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@11",
 			"active_low": 1,
 			"id": 12
 		}, {
 			"name": "out13",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@12",
 			"active_low": 1,
 			"id": 13
 		}, {
 			"name": "out114",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@13",
 			"active_low": 1,
 			"id": 14
 		}, {
 			"name": "out15",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@14",
 			"active_low": 1,
 			"id": 15
 		}, {
 			"name": "out16",
-			"dir": "output",
+			"dir": "out",
 			"io": "sr1@15",
 			"active_low": 1,
 			"id": 16
 		}, {
 			"name": "24vin1",
 			"io": "gpio@PB_5",
-			"dir": "input",
+			"dir": "in",
 			"id": 40
 		}, {
 			"name": "24vin2",
 			"io": "gpio@PB_4",
-			"dir": "input",
+			"dir": "in",
 			"id": 41
 		}, {
 			"name": "24vin3",
 			"io": "gpio@PB_10",
-			"dir": "input",
+			"dir": "in",
 			"id": 42
 		}, {
 			"name": "24vin4",
 			"io": "gpio@PA_8",
-			"dir": "input",
+			"dir": "in",
 			"id": 43
 		}, {
 			"name": "24vin5",
 			"io": "gpio@PA_0",
-			"dir": "input",
+			"dir": "in",
 			"id": 44
 		}, {
 			"name": "24vin6",
 			"io": "gpio@PA_1",
-			"dir": "input",
+			"dir": "in",
 			"id": 45
 		}, {
 			"name": "24vin7",
 			"io": "gpio@PA_4",
-			"dir": "input",
+			"dir": "in",
 			"id": 46
 		}, {
 			"name": "24vin8",
 			"io": "gpio@PB_0",
-			"dir": "input",
+			"dir": "in",
 			"id": 47
 		}, {
 			"name": "24vin9",
 			"io": "gpio@PC_11",
-			"dir": "input",
+			"dir": "in",
 			"id": 48
 		}, {
 			"name": "24vin10",
 			"io": "gpio@PC_10",
-			"dir": "input",
+			"dir": "in",
 			"id": 49
 		}, {
 			"name": "24vin11",
 			"io": "gpio@PD_2",
-			"dir": "input",
+			"dir": "in",
 			"id": 50
 		}, {
 			"name": "24vin12",
 			"io": "gpio@PC_12",
-			"dir": "input",
+			"dir": "in",
 			"id": 51
 		}],
 	"bme280": {

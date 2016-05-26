@@ -202,7 +202,7 @@ static const sensors_ops_t bme280_ops =
 static int
 bme280_json_parse(json_value* section)
 {
-	int length, i;
+	int length, i, id = 0;
 	json_value *value;
 	const char *name;
 	bme280_t *bme280;
@@ -221,12 +221,14 @@ bme280_json_parse(json_value* section)
 			bme280->i2c = i2c_bus_get_by_name(value->u.string.ptr);
 		} else if (strcmp(name, "refresh") == 0) {
 			bme280->refresh_time = value->u.integer;
+		}else if (strcmp(name, "id") == 0) {
+			id = value->u.integer;
 		}
         }
 
-	sensor_create_sensor(SENSORS_TYPE_PRESSURE, "bme280", 0, &bme280_ops, bme280);
-	sensor_create_sensor(SENSORS_TYPE_HUMIDITY, "bme280", 0, &bme280_ops, bme280);
-	sensor_create_sensor(SENSORS_TYPE_TEMP, "bme280", 0, &bme280_ops, bme280);
+	sensor_create(SENSORS_TYPE_PRESSURE, "bme280", id, &bme280_ops, bme280);
+	sensor_create(SENSORS_TYPE_HUMIDITY, "bme280", id + 1, &bme280_ops, bme280);
+	sensor_create(SENSORS_TYPE_TEMP, "bme280", id + 2, &bme280_ops, bme280);
 
 	return bme280_init_hardware(bme280);
 }

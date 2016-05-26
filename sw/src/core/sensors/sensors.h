@@ -79,13 +79,8 @@ sensor_handler_register(const sensor_handler_t *sensor_handler);
  * @param data Sensor private data
  */
 sensor_t *
-sensor_create_sensor(sensors_type_t type, const char *name, unsigned char id, const sensors_ops_t *ops, void *data);
+sensor_create(sensors_type_t type, const char *name, unsigned char id, const sensors_ops_t *ops, void *data);
 
-/**
- * Init sensor module
- */
-void
-sensors_init();
 
 /**
  * Get a sensor by its id
@@ -133,5 +128,11 @@ sensor_set_value(sensor_t *s, sensor_value_t value);
 
 void
 sensor_get_value(sensor_t *s, sensor_value_t *value);
+
+/**
+ * Init sensor module
+ */
+void
+sensors_init();
 
 #endif

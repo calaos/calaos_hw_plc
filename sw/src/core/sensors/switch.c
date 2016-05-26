@@ -61,7 +61,7 @@ switch_json_parse_one(json_value* sensor)
 	const char *name;
 	const char *s_name = NULL, *s_gpio_name = NULL;
 	unsigned char s_id = 0;
-	int s_gpio_dir = GPIO_DIR_OUTPUT, s_reverse = 0, s_type = -1;
+	int s_gpio_dir = GPIO_DIR_OUTPUT, s_reverse = 0;
 	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_ENABLE;
 	json_value *value;
 	switch_t *sw;
@@ -79,7 +79,7 @@ switch_json_parse_one(json_value* sensor)
 		} else if (strcmp(name, "io") == 0) {
 			s_gpio_name = value->u.string.ptr;
 		} else if (strcmp(name, "dir") == 0) {
-			if (strcmp(value->u.string.ptr, "input") == 0)
+			if (strcmp(value->u.string.ptr, "in") == 0)
 				s_gpio_dir = GPIO_DIR_INPUT;
 		} else if (strcmp(name, "active_low") == 0) {
 			s_reverse = value->u.integer;
@@ -92,11 +92,11 @@ switch_json_parse_one(json_value* sensor)
 
         PANIC_ON(s_name == NULL || s_gpio_name == NULL,
 			"Incomplete sensor description");
-	sw->io = gen_io_setup(SENSORS_TYPE_SWITCH, s_reverse, s_gpio_dir, s_debounce);
+	sw->io = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
 	sw->last_state = 0;
 
 	/* TODO: Check parameters */
-	sensor_create_sensor(s_type, s_name, s_id, &switch_ops, sw);
+	sensor_create(SENSORS_TYPE_SWITCH, s_name, s_id, &switch_ops, sw);
 
 	return 0;
 }

@@ -24,7 +24,7 @@ sensor_handler_register(const sensor_handler_t *sensor_handler)
 {
 	PANIC_ON(g_cur_sensor_handler == MAX_SENSOR_HANDLER_COUNT, "Too many sensor handlers\r\n");
 	g_sensors_handler[g_cur_sensor_handler++] = sensor_handler;
-	
+
 	return 0;
 }
 
@@ -38,7 +38,7 @@ sensors_get_by_id(int id)
 };
 
 sensor_t *
-sensor_create_sensor(sensors_type_t type, const char *name, unsigned char id, const sensors_ops_t *ops, void *data)
+sensor_create(sensors_type_t type, const char *name, unsigned char id, const sensors_ops_t *ops, void *data)
 {
 	sensor_t *s;
 
@@ -109,7 +109,7 @@ sensors_json_parse(json_value* section)
         for (i = 0; i < length; i++) {
 		value = section->u.object.values[i].value;
 		name = section->u.object.values[i].name;
-		
+		debug_puts("Adding section %s\r\n", name);
 		for (i = 0; i < g_cur_sensor_handler; i++) {
 			if (strcmp(name, g_sensors_handler[i]->name))
 				continue;

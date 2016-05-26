@@ -60,14 +60,20 @@
 		"switch" : [{
 			"name": "input1",
 			"io": "gpio@0",
-			"direction": "input",
+			"dir": "in",
 			"active_low": 1,
 			"id": 0
 		}, {
 			"name": "output1",
-			"direction": "output",
+			"dir": "out",
 			"io": "sr1@0",
 			"id": 1
-		}]
+		}],
+		"bme280": {
+			"i2c": "i2c1",
+			"addr": "0x76",
+			"refresh": 1000,
+			"id": 60
+		}
 	}
 }
