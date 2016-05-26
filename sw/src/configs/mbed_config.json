@@ -45,63 +45,54 @@
 	}],
 	"sensors": [{
 		"name": "input1",
-		"type": "switch",
 		"io": "gpio@PC_13",
 		"direction": "input",
 		"active_low": 1,
 		"id": 0
 	}, {
 		"name": "output1",
-		"type": "switch",
 		"direction": "output",
 		"io": "sr1@0",
 		"active_low": 1,
 		"id": 1
 	}, {
 		"name": "output2",
-		"type": "switch",
 		"direction": "output",
 		"io": "sr1@1",
 		"active_low": 1,
 		"id": 2
 	}, {
 		"name": "output3",
-		"type": "switch",
 		"direction": "output",
 		"io": "sr1@2",
 		"active_low": 1,
 		"id": 3
 	}, {
 		"name": "output4",
-		"type": "switch",
 		"direction": "output",
 		"io": "sr1@3",
 		"active_low": 1,
 		"id": 4
 	}, {
 		"name": "output5",
-		"type": "switch",
 		"direction": "output",
 		"io": "sr1@4",
 		"active_low": 1,
 		"id": 5
 	}, {
 		"name": "output6",
-		"type": "switch",
 		"direction": "output",
 		"io": "sr1@5",
 		"active_low": 1,
 		"id": 6
 	}, {
 		"name": "output7",
-		"type": "switch",
 		"direction": "output",
 		"io": "sr1@6",
 		"active_low": 1,
 		"id": 7
 	}, {
 		"name": "output8",
-		"type": "switch",
 		"direction": "output",
 		"io": "sr1@7",
 		"active_low": 1,

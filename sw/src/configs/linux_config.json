@@ -51,23 +51,23 @@
 	},
 	"shift_registers": [{
 		"name": "sr1",
-		"data": "gpio@2",
-		"latch": "gpio@3",
-		"clock": "gpio@4",
-		"count": 8,
+		"data": "gpio@PB_15",
+		"clock": "gpio@PB_2",
+		"latch": "gpio@PB_1",
+		"count": 16
 	}],
-	"sensors": [{
-		"name": "input1",
-		"type": "switch",
-		"io": "gpio@0",
-		"direction": "input",
-		"active_low": 1,
-		"id": 0
-	}, {
-		"name": "output1",
-		"type": "switch",
-		"direction": "output",
-		"io": "sr1@0",
-		"id": 1
-	}]
+	"sensors": {
+		"switch" : [{
+			"name": "input1",
+			"io": "gpio@0",
+			"direction": "input",
+			"active_low": 1,
+			"id": 0
+		}, {
+			"name": "output1",
+			"direction": "output",
+			"io": "sr1@0",
+			"id": 1
+		}]
+	}
 }
