@@ -23,7 +23,7 @@ typedef struct sensors_ops sensors_ops_t;
  */
 typedef struct sensor {
 	char name[SENSOR_MAX_NAME_LENGTH];
-	sensors_ops_t *ops;
+	const sensors_ops_t *ops;
 	unsigned int id;
         sensors_type_t type;
         void *data;
@@ -79,7 +79,7 @@ sensor_handler_register(const sensor_handler_t *sensor_handler);
  * @param data Sensor private data
  */
 sensor_t *
-sensor_create_sensor(sensors_type_t type, const char *name, unsigned char id, sensors_ops_t *ops, void *data);
+sensor_create_sensor(sensors_type_t type, const char *name, unsigned char id, const sensors_ops_t *ops, void *data);
 
 /**
  * Init sensor module

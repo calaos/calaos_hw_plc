@@ -4,7 +4,6 @@
 #include "debug.h"
 #include "config.h"
 #include "module.h"
-#include "bme280.h"
 #include "display.h"
 #include "sensors.h"
 #include "network.h"
@@ -23,7 +22,6 @@ main()
 	en_gpio_init();
 	shift_register_init();
 	pcf8574_init();
-	bme280_init();
 	mysensors_init();
 	display_init();
 	network_init();

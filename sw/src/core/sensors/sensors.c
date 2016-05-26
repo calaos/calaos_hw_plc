@@ -1,5 +1,7 @@
 #include "utils.h"
+#include "bme280.h"
 #include "module.h"
+#include "switch.h"
 #include "sensors.h"
 
 #include <string.h>
@@ -36,7 +38,7 @@ sensors_get_by_id(int id)
 };
 
 sensor_t *
-sensor_create_sensor(sensors_type_t type, const char *name, unsigned char id, sensors_ops_t *ops, void *data)
+sensor_create_sensor(sensors_type_t type, const char *name, unsigned char id, const sensors_ops_t *ops, void *data)
 {
 	sensor_t *s;
 
@@ -134,5 +136,7 @@ static const module_t sensors_module = {
 void
 sensors_init()
 {
+	bme280_init();
+	switch_init();
 	module_register(&sensors_module);
 }

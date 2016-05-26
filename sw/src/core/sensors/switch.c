@@ -47,7 +47,7 @@ switch_set(sensor_t * sensor, void *data, sensor_value_t value)
 	gen_io_write(sw->io, state);
 }
 
-sensors_ops_t switch_ops =
+static const sensors_ops_t switch_ops =
 {
 	.poll = switch_poll,
 	.set = switch_set,
@@ -92,7 +92,7 @@ switch_json_parse_one(json_value* sensor)
 
         PANIC_ON(s_name == NULL || s_gpio_name == NULL,
 			"Incomplete sensor description");
-	sw->io = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
+	sw->io = gen_io_setup(SENSORS_TYPE_SWITCH, s_reverse, s_gpio_dir, s_debounce);
 	sw->last_state = 0;
 
 	/* TODO: Check parameters */
