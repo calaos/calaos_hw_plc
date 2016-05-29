@@ -8,6 +8,7 @@
 #include "sensors.h"
 #include "network.h"
 #include "pcf8574.h"
+#include "onewire.h"
 #include "mysensors.h"
 #include "shift_register.h"
 

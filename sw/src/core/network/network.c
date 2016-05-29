@@ -40,37 +40,37 @@ network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
 	int ret;
 
 	g_net_iface = wiznet_iface_create(spi, cs, rst);
-	PANIC_ON(!g_net_iface, "Failed create network interface\r\n");
+	PANIC_ON(!g_net_iface, "Failed create network interface");
 	
 	ret = wiznet_iface_init_dhcp(g_net_iface, g_mac);
-	PANIC_ON(ret, "Failed to init network\r\n");
+	PANIC_ON(ret, "Failed to init network");
 
 	ret = wiznet_iface_connect(g_net_iface);
-	PANIC_ON(ret, "Failed to obtain ip through DHCP\r\n");
+	PANIC_ON(ret, "Failed to obtain ip through DHCP");
 	
 	g_udp_socket = wiznet_udp_create();
-	PANIC_ON(!g_udp_socket, "Failed create network interface\r\n");
+	PANIC_ON(!g_udp_socket, "Failed create network interface");
 
 	ret = wiznet_udp_init(g_udp_socket);
-	PANIC_ON(ret, "Failed init UDP interface\r\n");
+	PANIC_ON(ret, "Failed init UDP interface");
 	
 	wiznet_udp_set_blocking(g_udp_socket, false, 0);
 
 	ret = wiznet_udp_bind(g_udp_socket, g_port);
-	PANIC_ON(ret, "Failed to listen to UDP interface\r\n");
+	PANIC_ON(ret, "Failed to listen to UDP interface");
 
 	debug_puts("Network initialized: ip %s, listening on udp port %d\r\n",
 		wiznet_iface_get_ip(g_net_iface),
 		g_port);
 		
 	g_net_recv_ep = wiznet_ep_create();
-	PANIC_ON(!g_net_recv_ep, "Failed create recv endpoint\r\n");
+	PANIC_ON(!g_net_recv_ep, "Failed create recv endpoint");
 
 	g_net_send_ep = wiznet_ep_create();
-	PANIC_ON(!g_net_send_ep, "Failed create send endpoint\r\n");
+	PANIC_ON(!g_net_send_ep, "Failed create send endpoint");
 	
 	ret = wiznet_ep_set_address(g_net_send_ep, g_master_server, g_port);
-	PANIC_ON(ret, "Master adress does not exists\r\n");
+	PANIC_ON(ret, "Master adress does not exists");
 
 	return 0;
 }

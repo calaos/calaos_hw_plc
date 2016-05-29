@@ -208,7 +208,7 @@ bme280_json_parse(json_value* section)
 	bme280_t *bme280;
 
 	bme280 = malloc(sizeof(bme280_t));
-	PANIC_ON(!bme280, "Alloc failed\r\n");
+	PANIC_ON(!bme280, "Alloc failed");
 
         length = section->u.object.length;
         for (i = 0; i < length; i++) {

@@ -44,7 +44,7 @@ gen_io_ops_register(const gen_io_ops_t * ops)
 	PANIC_ON(ops->io_setup == NULL || ops->prefix == NULL,
 		"incomplete io operations");
 
-        PANIC_ON(g_gen_io_ops_count == MAX_GENERIC_IO_OPS, "Too many generic io ops\r\n");
+        PANIC_ON(g_gen_io_ops_count == MAX_GENERIC_IO_OPS, "Too many generic io ops");
 
 	g_gen_io_ops[g_gen_io_ops_count++] = ops;
 }

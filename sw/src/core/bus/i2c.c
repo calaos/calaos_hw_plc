@@ -2,6 +2,7 @@
 
 #include "module.h"
 #include "debug.h"
+#include "queue.h"
 #include "utils.h"
 #include "json.h"
 #include "i2c.h"
@@ -9,19 +10,16 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_I2C_BUS	4	
-
-static int g_max_i2c_bus_id = 0;
-static struct i2c_bus *g_i2cs[MAX_I2C_BUS];
+static SLIST_HEAD(, i2c_bus) g_i2cs = SLIST_HEAD_INITIALIZER();
 
 i2c_bus_t *
 i2c_bus_get_by_name(const char *name) 
 {
-	int i;
-
-	for (i = 0; i < g_max_i2c_bus_id; i++) {
-		if (strncmp(name, g_i2cs[i]->name, strlen(name)) == 0)
-			return g_i2cs[i];
+	struct i2c_bus *bus;
+	
+	SLIST_FOREACH(bus, &g_i2cs, link) {
+		if (strncmp(name, bus->name, strlen(name)) == 0)
+			return bus;
 	}
 
 	return NULL;
@@ -37,12 +35,10 @@ i2c_json_parse_one(json_value* json_i2c)
 	char sda[10], scl[10];
 	int freq = 1000000;
 
-        i2cstruct = calloc(1, sizeof(struct i2c_bus));
-        
-        PANIC_ON(g_max_i2c_bus_id == MAX_I2C_BUS, "Too many i2c buses\r\n");
+	i2cstruct = calloc(1, sizeof(struct i2c_bus));
 
-        length = json_i2c->u.object.length;
-        for (i = 0; i < length; i++) {
+	length = json_i2c->u.object.length;
+	for (i = 0; i < length; i++) {
 		value = json_i2c->u.object.values[i].value;
 		name = json_i2c->u.object.values[i].name;
 
@@ -55,12 +51,12 @@ i2c_json_parse_one(json_value* json_i2c)
 		} else if (strcmp(name, "freq") == 0) {
 			freq = value->u.integer;
 		}
-        }
+	}
 
-        i2cstruct->hal_i2c = hal_i2c_setup(sda, scl, freq);
+	i2cstruct->hal_i2c = hal_i2c_setup(sda, scl, freq);
 
 	debug_puts("Adding i2c bus %s\r\n", i2cstruct->name);
-	g_i2cs[g_max_i2c_bus_id++] = i2cstruct;
+	SLIST_INSERT_HEAD(&g_i2cs, i2cstruct, link);
 
 	return 0;
 }
@@ -69,14 +65,13 @@ i2c_json_parse_one(json_value* json_i2c)
 static int
 i2c_json_parse(json_value* section)
 {
-        unsigned int i;
+	unsigned int i;
 
 	for (i = 0; i < section->u.array.length; i++) {
 		i2c_json_parse_one(section->u.array.values[i]);
 	}
 	return 0;
 }
-
 
 
 

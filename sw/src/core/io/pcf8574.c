@@ -1,18 +1,17 @@
 #define _GNU_SOURCE 1
 
+#include "generic_io.h"
 #include "pcf8574.h"
 #include "sensors.h"
 #include "module.h"
 #include "debug.h"
-#include "generic_io.h"
-#include "json.h"
+#include "queue.h"
 #include "utils.h"
+#include "json.h"
 #include "i2c.h"
 
 #include <string.h>
 #include <stdlib.h>
-
-#define MAX_PCF8574		8	
 
 struct pcf8574 {
 	gen_io_t *int_io;
@@ -22,6 +21,7 @@ struct pcf8574 {
 	uint8_t input_value;		/* Cached input value */
 	uint8_t addr;			/* I2C address of this expander */
 	uint8_t need_update;
+	SLIST_ENTRY(pcf8574) link;
 };
 
 struct pcf8574_io {
@@ -32,17 +32,16 @@ struct pcf8574_io {
 typedef struct pcf8574 pcf8574_t;
 typedef struct pcf8574_io pcf8574_io_t;
 
-static int g_max_pcf8574_id = 0;
-static struct pcf8574 *g_pcf8574s[MAX_PCF8574];
+static SLIST_HEAD(, pcf8574) g_pcf8574s = SLIST_HEAD_INITIALIZER();
 
 pcf8574_t *
 pcf8574_get_by_name(const char *name) 
 {
-	int i;
+	struct pcf8574 *pcf;
 
-	for (i = 0; i < g_max_pcf8574_id; i++) {
-		if (strncmp(name, g_pcf8574s[i]->name, strlen(name)) == 0)
-			return g_pcf8574s[i];
+	SLIST_FOREACH(pcf, &g_pcf8574s, link) {
+		if (strncmp(name, pcf->name, strlen(name)) == 0)
+			return pcf;
 	}
 
 	return NULL;
@@ -56,8 +55,8 @@ pcf8574_json_parse_one(json_value* sensor)
 	pcf8574_t *exp;
 	const char *name;
 
-        PANIC_ON(g_max_pcf8574_id == MAX_PCF8574, "Too many PCF8574\r\n");
         exp = calloc(1, sizeof(struct pcf8574));
+        PANIC_ON(!exp, "Alloc failed");
 
         length = sensor->u.object.length;
         for (i = 0; i < length; i++) {
@@ -79,8 +78,8 @@ pcf8574_json_parse_one(json_value* sensor)
         exp->output_value = 0;
         exp->need_update = 1;
 	debug_puts("Adding pcf8574 %s with %d output\r\n", exp->name, exp->addr);
-	g_pcf8574s[g_max_pcf8574_id++] = exp;
 
+	SLIST_INSERT_HEAD(&g_pcf8574s, exp, link);
 	return 0;
 }
 

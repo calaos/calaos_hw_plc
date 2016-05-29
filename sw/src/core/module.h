@@ -12,8 +12,17 @@
  *  Module struct
  */
 typedef struct module {
+	/**
+	 * Module name
+	 */
 	const char * name;
+	/**
+	 * Polling time
+	 */
 	unsigned int poll_time;
+	/**
+	 * Module main loop hook
+	 */
 	void (*main_loop)(void);
 	/* Parse a json section
 	 * return 0 if ok, or a negative value in case of error */

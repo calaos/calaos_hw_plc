@@ -114,23 +114,31 @@ sample code bearing this copyright.
 //--------------------------------------------------------------------------
 */
  
+#include "json.h"
+#include "utils.h"
+#include "queue.h"
+#include "module.h"
 #include "onewire.h"
 #include "generic_io.h"
 
+#include <string.h>
 
-#define MAX_1W_BUS	4
+static SLIST_HEAD(, onewire_bus) g_onewires = SLIST_HEAD_INITIALIZER();
 
-static int g_max_onewirebus_id = 0;
-static struct onewire_bus *g_onewires[MAX_1W_BUS];
 
 struct onewire_bus {
 	gen_io_t *wire;
+	const char *name;
+#if ONEWIRE_SEARCH
+    // global search state
+    unsigned char ROM_NO[8];
+    uint8_t LastDiscrepancy;
+    uint8_t LastFamilyDiscrepancy;
+    uint8_t LastDeviceFlag;
+#endif
+	SLIST_ENTRY(onewire_bus) link;
 };	
 
-#if ONEWIRE_SEARCH
-    reset_search();
-#endif
-}
  
  
 // Perform the onewire reset function.  We will wait up to 250uS for
@@ -139,26 +147,26 @@ struct onewire_bus {
 //
 // Returns 1 if a device asserted a presence pulse, 0 otherwise.
 //
-uint8_t onewire_reset(void)
+uint8_t onewire_reset(onewire_bus_t *onewire)
 {
    uint8_t r;
    uint8_t retries = 125;
  
-    wire.input();
+    gen_io_set_dir(onewire->wire, GPIO_DIR_INPUT);
     // wait until the wire is high... just in case
     do {
         if (--retries == 0) {
              return 0;
         }
         us_delay(2);
-    } while (wire.read() != 1);
+    } while (gen_io_read(onewire->wire) != 1);
 
-    wire.output();
-    wire = 0;
+    gen_io_set_dir(onewire->wire, GPIO_DIR_OUTPUT);
+    gen_io_write(onewire->wire, 0);
     us_delay(480);
-    wire.input();
+    gen_io_set_dir(onewire->wire, GPIO_DIR_INPUT);
     us_delay(70);
-    r = !wire.read();
+    r = !gen_io_read(onewire->wire);
     us_delay(410);
     return r;
 }
@@ -167,18 +175,18 @@ uint8_t onewire_reset(void)
 // Write a bit. Port and bit is used to cut lookup time and provide
 // more certain timing.
 //
-void onewire_write_bit(uint8_t v)
+void onewire_write_bit(onewire_bus_t *onewire, uint8_t v)
 {
-    wire.output();
+    gen_io_set_dir(onewire->wire, GPIO_DIR_OUTPUT);
     if (v & 1) {
-        wire = 0;   // drive output low
+        gen_io_write(onewire->wire, 0);   // drive output low
         us_delay(10);
-        wire = 1;   // drive output high
+        gen_io_write(onewire->wire, 1);   // drive output high
         us_delay(55);
     } else {
-        wire = 0;   // drive output low
+        gen_io_write(onewire->wire, 0);   // drive output low
         us_delay(65);
-        wire = 1;   // drive output high
+        gen_io_write(onewire->wire, 1);   // drive output high
         us_delay(5);
     }
 }
@@ -187,16 +195,16 @@ void onewire_write_bit(uint8_t v)
 // Read a bit. Port and bit is used to cut lookup time and provide
 // more certain timing.
 //
-uint8_t onewire_read_bit(void)
+uint8_t onewire_bus_read_bit(onewire_bus_t *onewire)
 {
     uint8_t r;
  
-    wire.output();
-    wire = 0;
+    gen_io_set_dir(onewire->wire, GPIO_DIR_OUTPUT);
+    gen_io_write(onewire->wire, 0);
     us_delay(1);
-    wire.input();
+    gen_io_set_dir(onewire->wire, GPIO_DIR_INPUT);
     us_delay(6);
-    r = wire.read();
+    r = gen_io_read(onewire->wire);
     us_delay(54);
     return r;
 }
@@ -208,75 +216,76 @@ uint8_t onewire_read_bit(void)
 // go tri-state at the end of the write to avoid heating in a short or
 // other mishap.
 //
-void onewire_write(uint8_t v, uint8_t power /* = 0 */) {
+void onewire_bus_write(onewire_bus_t *onewire, uint8_t v, uint8_t power) {
     uint8_t bitMask;
  
-    for (bitMask = 0x01; bitMask; bitMask <<= 1) {
-    onewire_write_bit( (bitMask & v)?1:0);
+	for (bitMask = 0x01; bitMask; bitMask <<= 1) {
+		onewire_bus_write_bit(onewire, (bitMask & v)?1:0);
     }
     if ( !power) {
-        wire.input();
+        gen_io_set_dir(onewire->wire, GPIO_DIR_INPUT);
     }
 }
  
-void onewire_write_bytes(const uint8_t *buf, uint16_t count, bool power /* = 0 */) {
+void onewire_write_bytes(onewire_bus_t *onewire, const uint8_t *buf, uint16_t count, bool power) {
   for (uint16_t i = 0 ; i < count ; i++)
-    write(buf[i]);
+    onewire_bus_write(onewire, buf[i], power);
   if (!power) {
-        wire.input();
+        gen_io_set_dir(onewire->wire, GPIO_DIR_INPUT);
   }
 }
  
 //
 // Read a byte
 //
-uint8_t onewire_read() {
+uint8_t onewire_read(onewire_bus_t *onewire) {
     uint8_t bitMask;
     uint8_t r = 0;
  
-    for (bitMask = 0x01; bitMask; bitMask <<= 1) {
-    if ( onewire_read_bit()) r |= bitMask;
-    }
+	for (bitMask = 0x01; bitMask; bitMask <<= 1) {
+		if ( onewire_bus_read_bit(onewire))
+			r |= bitMask;
+	}
     return r;
 }
  
-void onewire_read_bytes(uint8_t *buf, uint16_t count) {
+void onewire_read_bytes(onewire_bus_t *onewire, uint8_t *buf, uint16_t count) {
   for (uint16_t i = 0 ; i < count ; i++)
-    buf[i] = read();
+    buf[i] = onewire_bus_read(onewire);
 }
  
 //
 // Do a ROM select
 //
-void onewire_select(const uint8_t rom[8])
+void onewire_select(onewire_bus_t *onewire, const uint8_t rom[8])
 {
     uint8_t i;
  
-    write(0x55);           // Choose ROM
+    onewire_bus_write(onewire, 0x55, 0);           // Choose ROM
  
-    for (i = 0; i < 8; i++) write(rom[i]);
+    for (i = 0; i < 8; i++) onewire_bus_write(onewire, rom[i], 0);
 }
  
 //
 // Do a ROM skip
 //
-void onewire_skip()
+void onewire_skip(onewire_bus_t *onewire)
 {
-    write(0xCC);           // Skip ROM
+    onewire_bus_write(onewire, 0xCC, 0);           // Skip ROM
 }
  
-void onewire_depower()
+void onewire_depower(onewire_bus_t *onewire)
 {
-    wire.input();
+    gen_io_set_dir(onewire->wire, GPIO_DIR_INPUT);
 }
- 
+
 #if ONEWIRE_SEARCH
  
 //
 // You need to use this function to start a search again from the beginning.
 // You do not need to do it for the first search, though you could.
 //
-void onewire_reset_search()
+void onewire_reset_search(onewire_bus_t *onewire)
 {
   // reset the search state
   LastDiscrepancy = 0;
@@ -291,7 +300,7 @@ void onewire_reset_search()
 // Setup the search to find the device type 'family_code' on the next call
 // to search(*newAddr) if it is present.
 //
-void onewire_target_search(uint8_t family_code)
+void onewire_target_search(onewire_bus_t *onewire, uint8_t family_code)
 {
    // set the search state to find SearchFamily type devices
    ROM_NO[0] = family_code;
@@ -318,7 +327,7 @@ void onewire_target_search(uint8_t family_code)
 // Return true  : device found, ROM number in ROM_NO buffer
 //        false : device not found, end of search
 //
-uint8_t onewire_search(uint8_t *newAddr)
+uint8_t onewire_search(onewire_bus_t *onewire, uint8_t *newAddr)
 {
    uint8_t id_bit_number;
    uint8_t last_zero, rom_byte_number, search_result;
@@ -443,7 +452,7 @@ uint8_t onewire_search(uint8_t *newAddr)
 // "Understanding and Using Cyclic Redundancy Checks with Maxim iButton Products"
 // Compute a Dallas Semiconductor 8 bit CRC directly.
 //
-uint8_t onewire_crc8(const uint8_t *addr, uint8_t len)
+uint8_t onewire_bus_crc8(const uint8_t *addr, uint8_t len)
 {
     uint8_t crc = 0;
     
@@ -468,30 +477,57 @@ onewire_json_parse_one(json_value* json_onewire)
 	json_value *value;
 	onewire_bus_t *onewire_bus;
 	const char *name;
-	char mosi[10], miso[10], sck[10];
-	int freq = 1000000;
 
 	onewire_bus = calloc(1, sizeof(struct onewire_bus));
-        
-        PANIC_ON(g_max_onewire_bus_id == MAX_SPI_BUS, "Too many 1w buses\r\n");
 
-        length = json_onwire->u.object.length;
-        for (i = 0; i < length; i++) {
+	length = json_onewire->u.object.length;
+	for (i = 0; i < length; i++) {
 		value = json_onewire->u.object.values[i].value;
 		name = json_onewire->u.object.values[i].name;
 
 		if (strcmp(name, "name") == 0) {
-			onewirebus->name = strdup(value->u.string.ptr);
-		} else if (strcmp(name, "freq") == 0) {
-			freq = value->u.integer;
+			onewire_bus->name = strdup(value->u.string.ptr);
+		} else if (strcmp(name, "1w") == 0) {
 			onewire_bus->wire = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
 		}
-        }
+	}
 
-	debug_puts("Adding 1w bus %s\r\n", spibus->name);
-	g_spis[g_max_spi_bus_id++] = spibus;
+	debug_puts("Adding 1w bus %s\r\n", onewire_bus->name);
+	SLIST_INSERT_HEAD(&g_onewires, onewire_bus, link);
+
+#if ONEWIRE_SEARCH
+    onewire_bus_reset_search(onewire_bus);
+#endif
 
 	return 0;
 }
 
+static int
+onewire_bus_json_parse(json_value* section)
+{
+	unsigned int i;
 
+	for (i = 0; i < section->u.array.length; i++) {
+		onewire_json_parse_one(section->u.array.values[i]);
+	}
+	return 0;
+}
+
+
+/**
+ * Module
+ */
+static const module_t onewire_module = {
+	.name = "1w",
+	.main_loop = NULL,
+	.json_parse = onewire_bus_json_parse,
+	.sensor_created = NULL,
+	.sensor_updated = NULL,
+};
+
+
+void
+onewire_bus_init()
+{
+	module_register(&onewire_module);
+}

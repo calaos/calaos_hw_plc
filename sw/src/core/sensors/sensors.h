@@ -25,8 +25,8 @@ typedef struct sensor {
 	char name[SENSOR_MAX_NAME_LENGTH];
 	const sensors_ops_t *ops;
 	unsigned int id;
-        sensors_type_t type;
-        void *data;
+	sensors_type_t type;
+	void *data;
 } sensor_t;
 
 /**

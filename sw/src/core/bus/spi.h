@@ -2,6 +2,7 @@
 #define _SPI_H
 
 #include "HAL.h"
+#include "queue.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,6 +22,7 @@ spi_bus_init();
 struct spi_bus {
 	char *name;
 	hal_spi_t *hal_spi;
+	SLIST_ENTRY(spi_bus) link;
 };
 
 static inline int

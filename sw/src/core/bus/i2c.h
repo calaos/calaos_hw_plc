@@ -2,6 +2,7 @@
 #define _I2C_H
 
 #include "HAL.h"
+#include "queue.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,6 +27,7 @@ i2c_bus_init();
 struct i2c_bus {
 	char *name;
 	hal_i2c_t *hal_i2c;
+	SLIST_ENTRY(i2c_bus) link;
 };
 
 static inline void

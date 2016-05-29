@@ -67,7 +67,7 @@ switch_json_parse_one(json_value* sensor)
 	switch_t *sw;
 	
 	sw = malloc(sizeof(switch_t));
-	PANIC_ON(!sw, "Alloc failed\r\n");
+	PANIC_ON(!sw, "Alloc failed");
 
         length = sensor->u.object.length;
         for (i = 0; i < length; i++) {

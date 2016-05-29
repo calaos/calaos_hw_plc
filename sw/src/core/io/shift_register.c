@@ -1,17 +1,16 @@
 #define _GNU_SOURCE 1
 
 #include "shift_register.h"
+#include "generic_io.h"
 #include "sensors.h"
 #include "module.h"
 #include "debug.h"
-#include "generic_io.h"
-#include "json.h"
 #include "utils.h"
+#include "queue.h"
+#include "json.h"
 
 #include <string.h>
 #include <stdlib.h>
-
-#define MAX_SHIFT_REGISTERS	4	
 
 struct shift_register {
 	char *name;		/* Shift register name */
@@ -20,6 +19,7 @@ struct shift_register {
 	gen_io_t *clock;
 	uint32_t current_value;
 	uint8_t count;		/* Count of output for this shift register */
+	SLIST_ENTRY(shift_register) link;
 };
 
 struct shift_register_io {
@@ -30,19 +30,18 @@ struct shift_register_io {
 typedef struct shift_register shift_register_t;
 typedef struct shift_register_io shift_register_io_t;
 
-static int g_max_shift_register_id = 0;
-static struct shift_register *g_shift_registers[MAX_SHIFT_REGISTERS];
+static SLIST_HEAD(,shift_register) g_shift_registers = SLIST_HEAD_INITIALIZER();
 
 shift_register_t *
 shift_register_get_by_name(const char *name) 
 {
-	int i;
-
-	for (i = 0; i < g_max_shift_register_id; i++) {
-		if (strncmp(name, g_shift_registers[i]->name, strlen(name)) == 0)
-			return g_shift_registers[i];
-	}
+	struct shift_register *sr;
 	
+	SLIST_FOREACH(sr, &g_shift_registers, link) {
+		if (strncmp(name, sr->name, strlen(name)) == 0)
+			return sr;
+	}
+
 	return NULL;
 }
 
@@ -54,9 +53,8 @@ shift_register_json_parse_one(json_value* sensor)
 	shift_register_t *sr;
 	const char *name;
 
-        PANIC_ON(g_max_shift_register_id == MAX_SHIFT_REGISTERS, "Too many shift registers\r\n");
-
         sr = calloc(1, sizeof(struct shift_register));
+        PANIC_ON(!sr, "Failed to alloc shift register");
 
         length = sensor->u.object.length;
         for (i = 0; i < length; i++) {
@@ -77,7 +75,7 @@ shift_register_json_parse_one(json_value* sensor)
         }
 
 	debug_puts("Adding shift register %s with %d output\r\n", sr->name, sr->count);
-	g_shift_registers[g_max_shift_register_id++] = sr;
+	SLIST_INSERT_HEAD(&g_shift_registers, sr, link);
 
 	return 0;
 }

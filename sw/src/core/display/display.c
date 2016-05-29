@@ -90,7 +90,7 @@ display_json_parse(json_value* section)
 			g_display.height = value->u.integer;
 		}
 	}
-	PANIC_ON(!disp_data, "Failed to find display data section\r\n");
+	PANIC_ON(!disp_data, "Failed to find display data section");
 	debug_puts("Setup display w %d, h %d\r\n", g_display.width, g_display.height);
 
 	for (i = 0; i < ARRAY_SIZE(g_display_ops); i++) {
@@ -100,7 +100,7 @@ display_json_parse(json_value* section)
 			break;
 		}
 	}
-	PANIC_ON(!g_cur_disp, "Failed to find display matching configuration\r\n");
+	PANIC_ON(!g_cur_disp, "Failed to find display matching configuration");
 
 	g_cur_disp->parse_json(disp_data);
 	display_init_screen();

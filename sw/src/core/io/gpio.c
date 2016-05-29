@@ -1,6 +1,7 @@
 #include "HAL.h"
 #include "gpio.h"
 #include "utils.h"
+#include "queue.h"
 #include "module.h"
 
 #include <stdlib.h>
@@ -16,21 +17,17 @@
 
 #define DEBOUNCE_SAMPLES_COUNT	8
 
-#define MAX_OPENED_GPIOS	64
-
 struct en_gpio {
 	hal_gpio_t *hal_gpio;
 	gpio_debounce_t debounce;
 	char debounced_value, samples;
+	SLIST_ENTRY(en_gpio) link;
 };
 
 typedef struct en_gpio en_gpio_t;
 
-/**
- * Currently opened GPIOs
- */
-static struct en_gpio *g_debounce_gpios[MAX_OPENED_GPIOS];
-static unsigned int g_gpio_count = 0;
+SLIST_HEAD( ,en_gpio) g_debounce_gpios = SLIST_HEAD_INITIALIZER();
+
 
 void *
 en_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
@@ -47,7 +44,7 @@ en_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_deb
 	gpio->hal_gpio = hal_gpio_setup(gpio_name + strlen(GPIO_PREFIX) + strlen(GPIO_PREFIX_SEPARATOR), reverse, direction);
 
 	if (direction == GPIO_DIR_INPUT && debounce)
-		g_debounce_gpios[g_gpio_count++] = gpio;
+		SLIST_INSERT_HEAD(&g_debounce_gpios, gpio, link);
 
 	debug_puts("GPIO address %p\r\n", gpio);
 	return gpio;
@@ -87,15 +84,13 @@ static void
 en_gpio_main_loop()
 {
 	unsigned long long time = hal_get_micro();
-	unsigned int i;
 	en_gpio_t *gpio;
 	
 	if ((time - g_gpio_last_read_time) < (DEBOUNCE_TIME * 1000))
 		return;
 
 	g_gpio_last_read_time = time;
-	for(i = 0; i < g_gpio_count; i++) {
-		gpio = g_debounce_gpios[i];
+	SLIST_FOREACH(gpio, &g_debounce_gpios, link) {
 		char value = hal_gpio_read(gpio->hal_gpio);
 
 		/* Value is still different from the last one */

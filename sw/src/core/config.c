@@ -41,14 +41,14 @@ config_init()
 		length = ftell(config);
 		rewind(config);
 		buffer = malloc(length);
-		PANIC_ON(!buffer, "Can not allocate enough memory\r\n");
+		PANIC_ON(!buffer, "Can not allocate enough memory");
 
 		fread(buffer, 1, length, config);
 	}
 
 	value = json_parse(buffer, length);
 
-	PANIC_ON(value == NULL, "Unable to parse data\r\n");
+	PANIC_ON(value == NULL, "Unable to parse data");
 
 	if (config != NULL) {
 		free(buffer);

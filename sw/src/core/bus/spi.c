@@ -2,6 +2,7 @@
 
 #include "module.h"
 #include "utils.h"
+#include "queue.h"
 #include "debug.h"
 #include "json.h"
 #include "spi.h"
@@ -9,19 +10,16 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_SPI_BUS	4	
-
-static int g_max_spi_bus_id = 0;
-static struct spi_bus *g_spis[MAX_SPI_BUS];
+static SLIST_HEAD(, spi_bus) g_spis = SLIST_HEAD_INITIALIZER();
 
 spi_bus_t *
 spi_bus_get_by_name(const char *name) 
 {
-	int i;
+	struct spi_bus *bus;
 
-	for (i = 0; i < g_max_spi_bus_id; i++) {
-		if (strncmp(name, g_spis[i]->name, strlen(name)) == 0)
-			return g_spis[i];
+	SLIST_FOREACH(bus, &g_spis, link) {
+		if (strncmp(name, bus->name, strlen(name)) == 0)
+			return bus;
 	}
 
 	return NULL;
@@ -38,8 +36,6 @@ spi_json_parse_one(json_value* json_spi)
 	int freq = 1000000;
 
         spibus = calloc(1, sizeof(struct spi_bus));
-        
-        PANIC_ON(g_max_spi_bus_id == MAX_SPI_BUS, "Too many spi buses\r\n");
 
         length = json_spi->u.object.length;
         for (i = 0; i < length; i++) {
@@ -62,8 +58,7 @@ spi_json_parse_one(json_value* json_spi)
         spibus->hal_spi = hal_spi_setup(mosi, miso, sck, freq);
 
 	debug_puts("Adding spi bus %s\r\n", spibus->name);
-	g_spis[g_max_spi_bus_id++] = spibus;
-
+	SLIST_INSERT_HEAD(&g_spis, spibus, link);
 	return 0;
 }
 

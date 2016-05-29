@@ -7,7 +7,7 @@
 #include <string.h>
 
 #define SENSOR_MAX_NAME_LENGTH		32
-#define MAX_SENSOR_COUNT		128
+#define MAX_SENSOR_COUNT			128
 #define MAX_SENSOR_HANDLER_COUNT	16
 
 /**
@@ -22,7 +22,7 @@ static const sensor_handler_t *g_sensors_handler[MAX_SENSOR_HANDLER_COUNT];
 int
 sensor_handler_register(const sensor_handler_t *sensor_handler)
 {
-	PANIC_ON(g_cur_sensor_handler == MAX_SENSOR_HANDLER_COUNT, "Too many sensor handlers\r\n");
+	PANIC_ON(g_cur_sensor_handler == MAX_SENSOR_HANDLER_COUNT, "Too many sensor handlers");
 	g_sensors_handler[g_cur_sensor_handler++] = sensor_handler;
 
 	return 0;
@@ -41,6 +41,8 @@ sensor_t *
 sensor_create(sensors_type_t type, const char *name, unsigned char id, const sensors_ops_t *ops, void *data)
 {
 	sensor_t *s;
+
+	PANIC_ON(id >= MAX_SENSOR_COUNT, "Id is too big");
 
 	if (g_sensors[id] != NULL)
 		return NULL;
