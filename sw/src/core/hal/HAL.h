@@ -94,6 +94,14 @@ int
 hal_gpio_read(hal_gpio_t *gpio);
 
 /**
+ * Set a gpio dir
+ * @param gpio The gpio to get value from
+ * @param dir Direction to set
+ */
+void
+hal_gpio_set_dir(hal_gpio_t *gpio, gpio_dir_t dir);
+
+/**
  * Get filesystem prefix
  */
 const char *

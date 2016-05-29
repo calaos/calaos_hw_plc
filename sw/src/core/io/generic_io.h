@@ -44,6 +44,7 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 
 typedef struct gen_io_ops {
 	void (*io_write)(void *io, int state);
+	void (*io_set_dir)(void *io, gpio_dir_t dir);
 	int (*io_read)(void *io);
 	void * (*io_setup)(const char *io_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce);
 	const char *prefix;
@@ -80,6 +81,12 @@ static inline gpio_dir_t
 gen_io_get_dir(gen_io_t *io)
 {
 	return io->dir;
+}
+
+void
+gen_io_set_dir(gen_io_t *io, gpio_dir_t dir)
+{
+	io->ops->io_set_dir(io->io, dir);
 }
 
 

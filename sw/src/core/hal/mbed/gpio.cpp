@@ -43,3 +43,12 @@ hal_gpio_read(hal_gpio_t *gpio)
 {
 	return gpio->io->read();
 }
+
+extern "C" void
+hal_gpio_set_dir(hal_gpio_t *gpio, gpio_dir_t dir);
+{
+	if (dir == GPIO_DIR_INPUT)
+		gpio->io.input();
+	else
+		gpio->io.output();	
+}

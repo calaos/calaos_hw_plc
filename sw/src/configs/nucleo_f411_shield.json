@@ -22,9 +22,13 @@
 		"sck": "PB_13"
 	}, {
 		"name": "spi3",
-		"mosi": "",
+		"mosi": "PC_12",
 		"miso": "PC_11",
 		"sck": "PC_10"
+	}],
+	"1w": [{
+		"name": "1w1",
+		"pin": "gpio@PC_10"
 	}],
 	"display": {
 		"type": "ili9341",

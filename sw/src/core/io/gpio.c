@@ -72,6 +72,15 @@ en_gpio_read(void *io)
 		return hal_gpio_read(gpio->hal_gpio);
 }
 
+
+void
+en_gpio_set_dir(void *io, gpio_dir_t dir)
+{
+	en_gpio_t *gpio = io;
+
+	hal_gpio_set_dir(gpio->hal_gpio, dir);
+}
+
 static unsigned long long g_gpio_last_read_time = 0;
 
 static void
@@ -114,6 +123,7 @@ static const module_t en_gpio_module = {
 static const gen_io_ops_t gpio_ops = {
 	.io_write = en_gpio_write,
 	.io_read = en_gpio_read,
+	.io_set_dir = en_gpio_set_dir,
 	.io_setup = en_gpio_setup,
 	.prefix = GPIO_PREFIX,
 };
