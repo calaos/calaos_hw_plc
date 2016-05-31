@@ -5,6 +5,6 @@
 
 void
 ds1820_init();
- 
+
 #endif /* DS1820_H_ */
  
