@@ -7,7 +7,7 @@
 #include <string.h>
 
 #define SENSOR_MAX_NAME_LENGTH		32
-#define MAX_SENSOR_COUNT			128
+#define MAX_SENSOR_COUNT		128
 #define MAX_SENSOR_HANDLER_COUNT	16
 
 /**
@@ -104,7 +104,6 @@ sensors_json_parse(json_value* section)
 	int length, i, j;
 	json_value *value;
 	const char *name;
-	int ret;
 
         length = section->u.object.length;
 
@@ -117,7 +116,7 @@ sensors_json_parse(json_value* section)
 			if (strcmp(name, g_sensors_handler[j]->name))
 				continue;
 
-			 ret = g_sensors_handler[j]->json_parse(value);
+			 g_sensors_handler[j]->json_parse(value);
 			 break;
 		}
         }

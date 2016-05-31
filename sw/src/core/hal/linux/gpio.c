@@ -34,3 +34,8 @@ hal_gpio_read(hal_gpio_t *gpio)
 	gpio = gpio;
 	return 0;
 }
+
+void
+hal_gpio_set_dir(hal_gpio_t *gpio, gpio_dir_t dir)
+{
+}

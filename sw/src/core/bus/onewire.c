@@ -113,7 +113,8 @@ sample code bearing this copyright.
 // Branding Policy.
 //--------------------------------------------------------------------------
 */
- 
+#define _GNU_SOURCE 1
+
 #include "json.h"
 #include "utils.h"
 #include "queue.h"
@@ -130,24 +131,22 @@ struct onewire_bus {
 	gen_io_t *wire;
 	const char *name;
 #if ONEWIRE_SEARCH
-    // global search state
-    unsigned char ROM_NO[8];
-    uint8_t LastDiscrepancy;
-    uint8_t LastFamilyDiscrepancy;
-    uint8_t LastDeviceFlag;
+	// global search state
+	unsigned char ROM_NO[8];
+	uint8_t LastDiscrepancy;
+	uint8_t LastFamilyDiscrepancy;
+	uint8_t LastDeviceFlag;
 #endif
 	SLIST_ENTRY(onewire_bus) link;
-};	
+};
 
- 
- 
 // Perform the onewire reset function.  We will wait up to 250uS for
 // the bus to come high, if it doesn't then it is broken or shorted
 // and we return a 0;
 //
 // Returns 1 if a device asserted a presence pulse, 0 otherwise.
 //
-uint8_t onewire_reset(onewire_bus_t *onewire)
+uint8_t onewire_bus_reset(onewire_bus_t *onewire)
 {
    uint8_t r;
    uint8_t retries = 125;
@@ -175,7 +174,7 @@ uint8_t onewire_reset(onewire_bus_t *onewire)
 // Write a bit. Port and bit is used to cut lookup time and provide
 // more certain timing.
 //
-void onewire_write_bit(onewire_bus_t *onewire, uint8_t v)
+void onewire_bus_write_bit(onewire_bus_t *onewire, uint8_t v)
 {
     gen_io_set_dir(onewire->wire, GPIO_DIR_OUTPUT);
     if (v & 1) {
@@ -227,8 +226,9 @@ void onewire_bus_write(onewire_bus_t *onewire, uint8_t v, uint8_t power) {
     }
 }
  
-void onewire_write_bytes(onewire_bus_t *onewire, const uint8_t *buf, uint16_t count, bool power) {
-  for (uint16_t i = 0 ; i < count ; i++)
+void onewire_bus_write_bytes(onewire_bus_t *onewire, const uint8_t *buf, uint16_t count, bool power) {
+  uint16_t i;
+  for (i = 0 ; i < count ; i++)
     onewire_bus_write(onewire, buf[i], power);
   if (!power) {
         gen_io_set_dir(onewire->wire, GPIO_DIR_INPUT);
@@ -238,7 +238,7 @@ void onewire_write_bytes(onewire_bus_t *onewire, const uint8_t *buf, uint16_t co
 //
 // Read a byte
 //
-uint8_t onewire_read(onewire_bus_t *onewire) {
+uint8_t onewire_bus_read(onewire_bus_t *onewire) {
     uint8_t bitMask;
     uint8_t r = 0;
  
@@ -249,32 +249,34 @@ uint8_t onewire_read(onewire_bus_t *onewire) {
     return r;
 }
  
-void onewire_read_bytes(onewire_bus_t *onewire, uint8_t *buf, uint16_t count) {
-  for (uint16_t i = 0 ; i < count ; i++)
+void onewire_bus_read_bytes(onewire_bus_t *onewire, uint8_t *buf, uint16_t count) {
+  uint16_t i;
+  for (i = 0 ; i < count ; i++)
     buf[i] = onewire_bus_read(onewire);
 }
  
 //
 // Do a ROM select
 //
-void onewire_select(onewire_bus_t *onewire, const uint8_t rom[8])
+void onewire_bus_select(onewire_bus_t *onewire, const uint8_t rom[8])
 {
     uint8_t i;
  
     onewire_bus_write(onewire, 0x55, 0);           // Choose ROM
  
-    for (i = 0; i < 8; i++) onewire_bus_write(onewire, rom[i], 0);
+    for (i = 0; i < 8; i++)
+	onewire_bus_write(onewire, rom[i], 0);
 }
  
 //
 // Do a ROM skip
 //
-void onewire_skip(onewire_bus_t *onewire)
+void onewire_bus_skip(onewire_bus_t *onewire)
 {
     onewire_bus_write(onewire, 0xCC, 0);           // Skip ROM
 }
  
-void onewire_depower(onewire_bus_t *onewire)
+void onewire_bus_depower(onewire_bus_t *onewire)
 {
     gen_io_set_dir(onewire->wire, GPIO_DIR_INPUT);
 }
@@ -285,7 +287,7 @@ void onewire_depower(onewire_bus_t *onewire)
 // You need to use this function to start a search again from the beginning.
 // You do not need to do it for the first search, though you could.
 //
-void onewire_reset_search(onewire_bus_t *onewire)
+void onewire_bus_reset_search(onewire_bus_t *onewire)
 {
   // reset the search state
   LastDiscrepancy = 0;
@@ -300,7 +302,7 @@ void onewire_reset_search(onewire_bus_t *onewire)
 // Setup the search to find the device type 'family_code' on the next call
 // to search(*newAddr) if it is present.
 //
-void onewire_target_search(onewire_bus_t *onewire, uint8_t family_code)
+void onewire_bus_target_search(onewire_bus_t *onewire, uint8_t family_code)
 {
    // set the search state to find SearchFamily type devices
    ROM_NO[0] = family_code;
@@ -327,7 +329,7 @@ void onewire_target_search(onewire_bus_t *onewire, uint8_t family_code)
 // Return true  : device found, ROM number in ROM_NO buffer
 //        false : device not found, end of search
 //
-uint8_t onewire_search(onewire_bus_t *onewire, uint8_t *newAddr)
+uint8_t onewire_bus_search(onewire_bus_t *onewire, uint8_t *newAddr)
 {
    uint8_t id_bit_number;
    uint8_t last_zero, rom_byte_number, search_result;

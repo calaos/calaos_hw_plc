@@ -11,8 +11,8 @@ typedef struct registered_module {
 	TAILQ_ENTRY(registered_module) link;
 } registered_module_t;
 
-static TAILQ_HEAD( ,registered_module) g_registered_module;
-static TAILQ_HEAD( ,registered_module) g_active_module;
+static TAILQ_HEAD( ,registered_module) g_registered_module = TAILQ_HEAD_INITIALIZER(g_registered_module);
+static TAILQ_HEAD( ,registered_module) g_active_module = TAILQ_HEAD_INITIALIZER(g_active_module);
 
 
 int module_register(const module_t * mod)
@@ -20,7 +20,6 @@ int module_register(const module_t * mod)
 	registered_module_t *rmod;
 
 	debug_puts("Registering module %s\r\n", mod->name);
-	PANIC_ON(mod->json_parse == NULL, "Missing json_parse callback");
 
 	rmod = malloc(sizeof(registered_module_t));
 	rmod->mod = mod;
@@ -33,23 +32,26 @@ int module_register(const module_t * mod)
 
 int module_json_parse(json_value* value)
 {
-	unsigned int i;
 	json_value *section;
-	registered_module_t *mod;
+	registered_module_t *rmod;
 
 	while (!TAILQ_EMPTY(&g_registered_module)) {
-		mod = TAILQ_FIRST(&g_registered_module);
-		TAILQ_REMOVE(&g_registered_module, mod, link);
-		section = config_get_section(value, mod->mod->name);
+		rmod = TAILQ_FIRST(&g_registered_module);
+		TAILQ_REMOVE(&g_registered_module, rmod, link);
+		if (!rmod->mod->json_parse)
+			continue;
+
+		section = config_get_section(value, rmod->mod->name);
 		if (!section) {
-			debug_puts("No json for module %s\r\n", mod->mod->name);
+			debug_puts("No json for module %s\r\n", rmod->mod->name);
 			continue;
 		}
 
-		if (mod->mod->json_parse(section) == 0) {
-			TAILQ_INSERT_TAIL(&g_active_module, mod, link);
+		if (rmod->mod->json_parse(section) == 0) {
+			TAILQ_INSERT_TAIL(&g_active_module, rmod, link);
 		} else {
-			debug_puts("Failed to parse json for module %s\r\n", mod->mod->name);
+			debug_puts("Failed to parse json for module %s\r\n", rmod->mod->name);
+			free(rmod);
 		}
 	}
 
@@ -61,22 +63,22 @@ int module_json_parse(json_value* value)
  */
 void module_main_loop()
 {
-	struct registered_module *mod;
+	struct registered_module *rmod;
 	
-	TAILQ_FOREACH(mod, &g_active_module, link) {
-		if (mod->mod->main_loop) {
-			mod->mod->main_loop();
+	TAILQ_FOREACH(rmod, &g_active_module, link) {
+		if (rmod->mod->main_loop) {
+			rmod->mod->main_loop();
 		}
 	}
 }
 
 int module_sensor_created(sensor_t* s)
 {
-	struct registered_module *mod;
+	struct registered_module *rmod;
 	
-	TAILQ_FOREACH(mod, &g_active_module, link) {
-		if (mod->mod->sensor_created) {
-			mod->mod->sensor_created(s);
+	TAILQ_FOREACH(rmod, &g_active_module, link) {
+		if (rmod->mod->sensor_created) {
+			rmod->mod->sensor_created(s);
 		}
 	}
 
@@ -86,11 +88,11 @@ int module_sensor_created(sensor_t* s)
 int
 module_sensor_updated(sensor_t* s, sensor_value_t new_value)
 {
-	struct registered_module *mod;
+	struct registered_module *rmod;
 	
-	TAILQ_FOREACH(mod, &g_active_module, link) {
-		if (mod->mod->sensor_updated) {
-			mod->mod->sensor_updated(s, new_value);
+	TAILQ_FOREACH(rmod, &g_active_module, link) {
+		if (rmod->mod->sensor_updated) {
+			rmod->mod->sensor_updated(s, new_value);
 		}
 	}
 

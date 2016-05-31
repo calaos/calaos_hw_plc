@@ -83,7 +83,7 @@ gen_io_get_dir(gen_io_t *io)
 	return io->dir;
 }
 
-void
+static inline void
 gen_io_set_dir(gen_io_t *io, gpio_dir_t dir)
 {
 	io->ops->io_set_dir(io->io, dir);

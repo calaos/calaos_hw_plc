@@ -174,7 +174,7 @@ bme280_poll(sensor_t * sensor, void *data)
 	if ((time - bme280->last_refresh) < bme280->refresh_time)
 		return;
 
-	bme280->last_refresh =	time;
+	bme280->last_refresh =time;
 
 	/* Read the whole temp + humid + pressure in one i2c burst */
 	samples[0] = 0xF7;
@@ -225,12 +225,16 @@ bme280_json_parse(json_value* section)
 			id = value->u.integer;
 		}
         }
+        if (bme280_init_hardware(bme280)) {
+		free(bme280);
+		return 1;
+	}
 
 	sensor_create(SENSORS_TYPE_PRESSURE, "bme280", id, &bme280_ops, bme280);
 	sensor_create(SENSORS_TYPE_HUMIDITY, "bme280", id + 1, &bme280_ops, bme280);
 	sensor_create(SENSORS_TYPE_TEMP, "bme280", id + 2, &bme280_ops, bme280);
 
-	return bme280_init_hardware(bme280);
+	return 0;
 }
 
 static const sensor_handler_t bme280_sensor_handler = {
