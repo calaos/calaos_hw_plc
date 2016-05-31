@@ -16,12 +16,12 @@
  
 // you can exclude onewire_search by defining that to 0
 #ifndef ONEWIRE_SEARCH
-#define ONEWIRE_SEARCH 0
+#define ONEWIRE_SEARCH 1
 #endif
  
 // You can exclude CRC checks altogether by defining this to 0
 #ifndef ONEWIRE_CRC
-#define ONEWIRE_CRC 0
+#define ONEWIRE_CRC 1
 #endif
 
 typedef struct onewire_bus onewire_bus_t;

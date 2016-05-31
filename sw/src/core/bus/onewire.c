@@ -132,10 +132,10 @@ struct onewire_bus {
 	const char *name;
 #if ONEWIRE_SEARCH
 	// global search state
-	unsigned char ROM_NO[8];
-	uint8_t LastDiscrepancy;
-	uint8_t LastFamilyDiscrepancy;
-	uint8_t LastDeviceFlag;
+	unsigned char rom_no[8];
+	uint8_t last_discrepancy;
+	uint8_t last_family_discrepancy;
+	uint8_t last_device_flag;
 #endif
 	SLIST_ENTRY(onewire_bus) link;
 };
@@ -289,14 +289,17 @@ void onewire_bus_depower(onewire_bus_t *onewire)
 //
 void onewire_bus_reset_search(onewire_bus_t *onewire)
 {
-  // reset the search state
-  LastDiscrepancy = 0;
-  LastDeviceFlag = false;
-  LastFamilyDiscrepancy = 0;
-  for(int i = 7; ; i--) {
-    ROM_NO[i] = 0;
-    if ( i == 0) break;
-  }
+        int i;
+
+        // reset the search state
+        onewire->last_discrepancy = 0;
+        onewire->last_device_flag = false;
+        onewire->last_family_discrepancy = 0;
+
+        for(i = 7; ; i--) {
+                onewire->rom_no[i] = 0;
+                if ( i == 0) break;
+        }
 }
  
 // Setup the search to find the device type 'family_code' on the next call
@@ -304,13 +307,15 @@ void onewire_bus_reset_search(onewire_bus_t *onewire)
 //
 void onewire_bus_target_search(onewire_bus_t *onewire, uint8_t family_code)
 {
-   // set the search state to find SearchFamily type devices
-   ROM_NO[0] = family_code;
-   for (uint8_t i = 1; i < 8; i++)
-      ROM_NO[i] = 0;
-   LastDiscrepancy = 64;
-   LastFamilyDiscrepancy = 0;
-   LastDeviceFlag = false;
+        uint8_t i;
+        // set the search state to find SearchFamily type devices
+        onewire->rom_no[0] = family_code;
+
+        for (i = 1; i < 8; i++)
+                onewire->rom_no[i] = 0;
+        onewire->last_discrepancy = 64;
+        onewire->last_family_discrepancy = 0;
+        onewire->last_device_flag = false;
 }
  
 //
@@ -326,46 +331,46 @@ void onewire_bus_target_search(onewire_bus_t *onewire, uint8_t family_code)
 //--------------------------------------------------------------------------
 // Perform the 1-Wire Search Algorithm on the 1-Wire bus using the existing
 // search state.
-// Return true  : device found, ROM number in ROM_NO buffer
+// Return true  : device found, ROM number in onewire->rom_no buffer
 //        false : device not found, end of search
 //
 uint8_t onewire_bus_search(onewire_bus_t *onewire, uint8_t *newAddr)
 {
-   uint8_t id_bit_number;
-   uint8_t last_zero, rom_byte_number, search_result;
-   uint8_t id_bit, cmp_id_bit;
+        uint8_t id_bit_number;
+        uint8_t last_zero, rom_byte_number, search_result;
+        uint8_t id_bit, cmp_id_bit;
+        int i;
+        unsigned char rom_byte_mask, search_direction;
  
-   unsigned char rom_byte_mask, search_direction;
- 
-   // initialize for search
-   id_bit_number = 1;
-   last_zero = 0;
-   rom_byte_number = 0;
-   rom_byte_mask = 1;
-   search_result = 0;
+        // initialize for search
+        id_bit_number = 1;
+        last_zero = 0;
+        rom_byte_number = 0;
+        rom_byte_mask = 1;
+        search_result = 0;
  
    // if the last call was not the last one
-   if (!LastDeviceFlag)
+   if (!onewire->last_device_flag)
    {
       // 1-Wire reset
-      if (!reset())
+      if (!onewire_bus_reset(onewire))
       {
          // reset the search
-         LastDiscrepancy = 0;
-         LastDeviceFlag = false;
-         LastFamilyDiscrepancy = 0;
+         onewire->last_discrepancy = 0;
+         onewire->last_device_flag = false;
+         onewire->last_family_discrepancy = 0;
          return false;
       }
  
       // issue the search command
-      write(0xF0);
+      onewire_bus_write(onewire, 0xF0, 0);
  
       // loop to do the search
       do
       {
          // read a bit and its complement
-         id_bit = read_bit();
-         cmp_id_bit = read_bit();
+         id_bit = onewire_bus_read_bit(onewire);
+         cmp_id_bit = onewire_bus_read_bit(onewire);
  
          // check for no devices on 1-wire
          if ((id_bit == 1) && (cmp_id_bit == 1))
@@ -379,11 +384,11 @@ uint8_t onewire_bus_search(onewire_bus_t *onewire, uint8_t *newAddr)
             {
                // if this discrepancy if before the Last Discrepancy
                // on a previous next then pick the same as last time
-               if (id_bit_number < LastDiscrepancy)
-                  search_direction = ((ROM_NO[rom_byte_number] & rom_byte_mask) > 0);
+               if (id_bit_number < onewire->last_discrepancy)
+                  search_direction = ((onewire->rom_no[rom_byte_number] & rom_byte_mask) > 0);
                else
                   // if equal to last pick 1, if not then pick 0
-                  search_direction = (id_bit_number == LastDiscrepancy);
+                  search_direction = (id_bit_number == onewire->last_discrepancy);
  
                // if 0 was picked then record its position in LastZero
                if (search_direction == 0)
@@ -392,19 +397,19 @@ uint8_t onewire_bus_search(onewire_bus_t *onewire, uint8_t *newAddr)
  
                   // check for Last discrepancy in family
                   if (last_zero < 9)
-                     LastFamilyDiscrepancy = last_zero;
+                     onewire->last_family_discrepancy = last_zero;
                }
             }
  
             // set or clear the bit in the ROM byte rom_byte_number
             // with mask rom_byte_mask
             if (search_direction == 1)
-              ROM_NO[rom_byte_number] |= rom_byte_mask;
+              onewire->rom_no[rom_byte_number] |= rom_byte_mask;
             else
-              ROM_NO[rom_byte_number] &= ~rom_byte_mask;
+              onewire->rom_no[rom_byte_number] &= ~rom_byte_mask;
  
             // serial number search direction write bit
-            write_bit(search_direction);
+            onewire_bus_write_bit(onewire, search_direction);
  
             // increment the byte counter id_bit_number
             // and shift the mask rom_byte_mask
@@ -424,26 +429,28 @@ uint8_t onewire_bus_search(onewire_bus_t *onewire, uint8_t *newAddr)
       // if the search was successful then
       if (!(id_bit_number < 65))
       {
-         // search successful so set LastDiscrepancy,LastDeviceFlag,search_result
-         LastDiscrepancy = last_zero;
+         // search successful so set onewire->last_discrepancy,onewire->last_device_flag,search_result
+         onewire->last_discrepancy = last_zero;
  
          // check for last device
-         if (LastDiscrepancy == 0)
-            LastDeviceFlag = true;
+         if (onewire->last_discrepancy == 0)
+            onewire->last_device_flag = true;
  
          search_result = true;
       }
    }
  
    // if no device found then reset counters so next 'search' will be like a first
-   if (!search_result || !ROM_NO[0])
+   if (!search_result || !onewire->rom_no[0])
    {
-      LastDiscrepancy = 0;
-      LastDeviceFlag = false;
-      LastFamilyDiscrepancy = 0;
+      onewire->last_discrepancy = 0;
+      onewire->last_device_flag = false;
+      onewire->last_family_discrepancy = 0;
       search_result = false;
    }
-   for (int i = 0; i < 8; i++) newAddr[i] = ROM_NO[i];
+   for (i = 0; i < 8; i++)
+        newAddr[i] = onewire->rom_no[i];
+
    return search_result;
   }
  
@@ -457,10 +464,11 @@ uint8_t onewire_bus_search(onewire_bus_t *onewire, uint8_t *newAddr)
 uint8_t onewire_bus_crc8(const uint8_t *addr, uint8_t len)
 {
     uint8_t crc = 0;
+    uint8_t i;
     
     while (len--) {
         uint8_t inbyte = *addr++;
-        for (uint8_t i = 8; i; i--) {
+        for (i = 8; i; i--) {
             uint8_t mix = (crc ^ inbyte) & 0x01;
             crc >>= 1;
             if (mix) crc ^= 0x8C;
