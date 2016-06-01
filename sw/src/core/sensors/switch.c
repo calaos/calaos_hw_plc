@@ -11,15 +11,18 @@
 typedef struct sensor_switch {
 	gen_io_t *io;
 	int last_state;
+	sensor_t *s;
+	SLIST_ENTRY(sensor_switch) link;
 } switch_t;
+
+static SLIST_HEAD(, sensor_switch) g_switch_list;
 
 /**
  *  Switch
  */
 static void
-switch_poll(sensor_t * sensor, void *data)
+switch_poll_one(switch_t *sw)
 {
-	switch_t *sw = data;
 	sensor_value_t value;
 	int state;
 
@@ -31,7 +34,17 @@ switch_poll(sensor_t * sensor, void *data)
 	if (state != sw->last_state) {
 		sw->last_state = state;
 		value.val_i = state;
-		module_sensor_updated(sensor, value);
+		sensors_sensor_updated(sw->s, value);
+	}
+}
+
+static void
+switch_poll()
+{
+	struct sensor_switch *sw; 
+	
+	SLIST_FOREACH(sw, &g_switch_list, link) {
+		switch_poll_one(sw);
 	}
 }
 
@@ -49,7 +62,6 @@ switch_set(sensor_t * sensor, void *data, sensor_value_t value)
 
 static const sensors_ops_t switch_ops =
 {
-	.poll = switch_poll,
 	.set = switch_set,
 	.req = NULL,
 };
@@ -94,10 +106,9 @@ switch_json_parse_one(json_value* sensor)
 			"Incomplete sensor description");
 	sw->io = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
 	sw->last_state = 0;
+	sw->s = sensor_create(SENSORS_TYPE_SWITCH, s_name, s_id, &switch_ops, sw);
 
-	/* TODO: Check parameters */
-	sensor_create(SENSORS_TYPE_SWITCH, s_name, s_id, &switch_ops, sw);
-
+	SLIST_INSERT_HEAD(&g_switch_list, sw, link);
 	return 0;
 }
 
@@ -119,13 +130,14 @@ switch_json_parse(json_value* section)
 /**
  * Module
  */
-static const sensor_handler_t switch_sensor_handler = {
+static sensor_handler_t switch_sensor_handler = {
 	.name = "switch",
-	.json_parse = switch_json_parse
+	.json_parse = switch_json_parse,
+	.poll = switch_poll,
 };
 
 void
 switch_init()
 {
-	sensor_handler_register(&switch_sensor_handler);
+	sensors_register_handler(&switch_sensor_handler);
 }

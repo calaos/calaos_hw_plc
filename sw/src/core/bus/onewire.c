@@ -531,8 +531,6 @@ static const module_t onewire_module = {
 	.name = "1w",
 	.main_loop = NULL,
 	.json_parse = onewire_bus_json_parse,
-	.sensor_created = NULL,
-	.sensor_updated = NULL,
 };
 
 

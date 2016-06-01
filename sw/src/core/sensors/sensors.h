@@ -3,6 +3,7 @@
 
 #include "json.h"
 #include "gpio.h"
+#include "queue.h"
 
 #define SENSOR_MAX_NAME_LENGTH	32
 
@@ -39,10 +40,6 @@ typedef union sensor_value {
 
 struct sensors_ops {
 	/**
-	 * Function call in main loop
-	 */
-	void (* poll)(sensor_t *, void *data);
-	/**
 	 * Function call when set is received from controller
 	 */
 	void (* set)(sensor_t *, void *data, sensor_value_t value);
@@ -64,11 +61,44 @@ typedef struct sensor_handler {
 	 * Parse a sensor json section
 	 */
 	int (*json_parse)(json_value* value);
+	/**
+	 * Function call in main loop
+	 */
+	void (* poll)();
+
+	/* Link list link */
+	SLIST_ENTRY(sensor_handler) link;
 } sensor_handler_t;
 
-
+/**
+ * Register a sensor handler
+ * @param sensor_handler Operations of the sensor handler
+ * @return 0 on success, a positive value on error
+ */
 int
-sensor_handler_register(const sensor_handler_t *sensor_handler);
+sensors_register_handler(sensor_handler_t *sensor_handler);
+
+typedef struct sensor_watcher {
+	/**
+	 * Call back when sensor has been created
+	 */
+	void (*sensor_created)(sensor_t *s);
+	/**
+	 * Call back when sensor has been updated (new value);
+	 */
+	void (*sensor_updated)(sensor_t *s, sensor_value_t new_value);
+
+	/* Link list link */
+	SLIST_ENTRY(sensor_watcher) link;
+}sensor_watcher_t;
+
+/**
+ * Register a sensor watcher
+ * @param sensor_watcher Operations of the sensor watcher
+ * @return 0 on success, a positive value on error
+ */
+int
+sensors_register_watcher(sensor_watcher_t *sensor_watcher);
 
 /**
  * Create a sensor
@@ -123,11 +153,24 @@ sensor_get_id(sensor_t *s)
 	return s->id;
 }
 
+/**
+ * Set a sensor value
+ * @param s Sensor to set
+ * @param value Value to set 
+ */
 void
 sensor_set_value(sensor_t *s, sensor_value_t value);
 
+/**
+ * Get a sensor value
+ * @param s Sensor to get value from
+ * @param[out] value Sensor value 
+ */
 void
 sensor_get_value(sensor_t *s, sensor_value_t *value);
+
+int
+sensors_sensor_updated(sensor_t* s, sensor_value_t new_value);
 
 /**
  * Init sensor module

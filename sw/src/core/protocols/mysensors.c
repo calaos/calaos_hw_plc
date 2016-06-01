@@ -111,7 +111,7 @@ mysensors_json_parse_section(json_value* section)
 {
 	unsigned int i;
 	json_value* entry;
-	if (section == NULL || section->type != json_object)
+	if (section->type != json_object)
 		return -1;
 
         for (i = 0; i < section->u.object.length; i++) {
@@ -123,20 +123,6 @@ mysensors_json_parse_section(json_value* section)
         }
 
 	return 0;
-}
-
-static int
-mysensors_json_parse(json_value* value)
-{
-	mysensors_json_parse_section(value);
-
-	if (g_assigned_node_id == 0) {
-		mysensors_send_message_str(0, 0, INTERNAL, REQUEST, I_ID_REQUEST, "1.0");
-		/* FIXME: Wait message */
-		g_assigned_node_id = 1;
-	}
-
-        return 0;
 }
 
 static void
@@ -158,12 +144,31 @@ mysensor_sensor_updated(sensor_t *s, sensor_value_t value)
 	mysensors_update_value_int(s, V_STATUS, value.val_i);
 }
 
-const module_t mysensors_module = {
+static sensor_watcher_t mysensor_watcher = {
+	.sensor_created = mysensor_sensor_created,
+	.sensor_updated = mysensor_sensor_updated,
+};
+
+static int
+mysensors_json_parse(json_value* value)
+{
+	mysensors_json_parse_section(value);
+
+	if (g_assigned_node_id == 0) {
+		mysensors_send_message_str(0, 0, INTERNAL, REQUEST, I_ID_REQUEST, "1.0");
+		/* FIXME: Wait message */
+		g_assigned_node_id = 1;
+	}
+	
+	sensors_register_watcher(&mysensor_watcher);
+
+        return 0;
+}
+
+static const module_t mysensors_module = {
 	.name = "mysensors",
 	.main_loop = NULL,
 	.json_parse = mysensors_json_parse,
-	.sensor_created = mysensor_sensor_created,
-	.sensor_updated = mysensor_sensor_updated,
 };
 
 void

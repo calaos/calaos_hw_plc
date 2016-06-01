@@ -163,8 +163,6 @@ static const module_t pcf8574_module = {
 	.name = "pcf8574",
 	.main_loop = NULL,
 	.json_parse = pcf8574_json_parse,
-	.sensor_created = NULL,
-	.sensor_updated = NULL,
 };
 
 static const gen_io_ops_t pcf8574_io_ops = {

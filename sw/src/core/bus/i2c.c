@@ -82,8 +82,6 @@ static const module_t i2c_module = {
 	.name = "i2c",
 	.main_loop = NULL,
 	.json_parse = i2c_json_parse,
-	.sensor_created = NULL,
-	.sensor_updated = NULL,
 };
 
 

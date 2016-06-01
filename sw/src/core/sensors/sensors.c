@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "queue.h"
 #include "bme280.h"
 #include "module.h"
 #include "switch.h"
@@ -8,34 +9,52 @@
 
 #define SENSOR_MAX_NAME_LENGTH		32
 #define MAX_SENSOR_COUNT		128
-#define MAX_SENSOR_HANDLER_COUNT	16
 
 /**
  * Sensor management
  */
-static unsigned char g_max_sensor_id = 0;
-static sensor_t *g_sensors[MAX_SENSOR_COUNT];
+static sensor_t *g_sensors[MAX_SENSOR_COUNT] = {NULL};
 
-static unsigned char g_cur_sensor_handler = 0;
-static const sensor_handler_t *g_sensors_handler[MAX_SENSOR_HANDLER_COUNT];
+static SLIST_HEAD(,sensor_handler) g_sensors_handler_list = SLIST_HEAD_INITIALIZER(g_sensors_handler_list);
+static SLIST_HEAD(,sensor_watcher) g_sensors_watcher_list = SLIST_HEAD_INITIALIZER(g_sensors_watcher_list);
 
 int
-sensor_handler_register(const sensor_handler_t *sensor_handler)
+sensors_register_handler(sensor_handler_t *sensor_handler)
 {
-	PANIC_ON(g_cur_sensor_handler == MAX_SENSOR_HANDLER_COUNT, "Too many sensor handlers");
-	g_sensors_handler[g_cur_sensor_handler++] = sensor_handler;
+	SLIST_INSERT_HEAD(&g_sensors_handler_list, sensor_handler, link);
+	return 0;
+}
 
+int
+sensors_register_watcher(sensor_watcher_t *sensor_watcher)
+{
+	SLIST_INSERT_HEAD(&g_sensors_watcher_list, sensor_watcher, link);
 	return 0;
 }
 
 sensor_t *
 sensors_get_by_id(int id)
 {
-	if (id > g_max_sensor_id)
+	if (id > MAX_SENSOR_COUNT)
 		return NULL;
 
 	return g_sensors[id];	
 };
+
+
+static int
+sensors_sensor_created(sensor_t* s)
+{
+	struct sensor_watcher *w;
+	
+	SLIST_FOREACH(w, &g_sensors_watcher_list, link) {
+		if (w->sensor_created) {
+			w->sensor_created(s);
+		}
+	}
+
+	return 0;
+}
 
 sensor_t *
 sensor_create(sensors_type_t type, const char *name, unsigned char id, const sensors_ops_t *ops, void *data)
@@ -56,12 +75,10 @@ sensor_create(sensors_type_t type, const char *name, unsigned char id, const sen
 	s->type = type;
 	s->ops = ops;
 	s->data = data;
+	PANIC_ON(g_sensors[id] != NULL, "Duplicated sensors id");
 	g_sensors[id] = s;
 
-	module_sensor_created(s);
-
-	if (id > g_max_sensor_id)
-		g_max_sensor_id = id;
+	sensors_sensor_created(s);
 
 	return s;
 }
@@ -70,16 +87,26 @@ sensor_create(sensors_type_t type, const char *name, unsigned char id, const sen
 static void
 sensors_main_loop()
 {
-	unsigned int i;
-
-	for (i = 0; i < g_max_sensor_id; i++) {
-		if (g_sensors[i] == NULL)
-			continue;
-
-		sensor_t *s = g_sensors[i];
-		if (s->ops->poll)
-			s->ops->poll(s, s->data);
+	struct sensor_handler *handler;
+	
+	SLIST_FOREACH(handler, &g_sensors_handler_list, link) {
+		if (handler->poll)
+			handler->poll();
 	}
+}
+
+int
+sensors_sensor_updated(sensor_t* s, sensor_value_t new_value)
+{
+	struct sensor_watcher *w;
+	
+	SLIST_FOREACH(w, &g_sensors_watcher_list, link) {
+		if (w->sensor_updated) {
+			w->sensor_updated(s, new_value);
+		}
+	}
+
+	return 0;
 }
 
 
@@ -101,9 +128,10 @@ sensor_get_value(sensor_t *s, sensor_value_t *value)
 static int
 sensors_json_parse(json_value* section)
 {
-	int length, i, j;
+	int length, i;
 	json_value *value;
 	const char *name;
+	struct sensor_handler *handler;
 
         length = section->u.object.length;
 
@@ -112,11 +140,12 @@ sensors_json_parse(json_value* section)
 		value = section->u.object.values[i].value;
 		name = section->u.object.values[i].name;
 		debug_puts("Adding section %s\r\n", name);
-		for (j = 0; j < g_cur_sensor_handler; j++) {
-			if (strcmp(name, g_sensors_handler[j]->name))
+	
+		SLIST_FOREACH(handler, &g_sensors_handler_list, link) {
+			if (strcmp(name, handler->name))
 				continue;
 
-			 g_sensors_handler[j]->json_parse(value);
+			 handler->json_parse(value);
 			 break;
 		}
         }
@@ -131,8 +160,6 @@ static const module_t sensors_module = {
 	.name = "sensors",
 	.main_loop = sensors_main_loop,
 	.json_parse = sensors_json_parse,
-	.sensor_created = NULL,
-	.sensor_updated = NULL,
 };
 
 void

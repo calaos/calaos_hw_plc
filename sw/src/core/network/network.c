@@ -162,8 +162,6 @@ static const module_t network_module = {
 	.name = "network",
 	.main_loop = network_main_loop,
 	.json_parse = network_json_parse,
-	.sensor_created = NULL,
-	.sensor_updated = NULL,
 };
 
 void

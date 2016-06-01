@@ -111,8 +111,6 @@ static const module_t en_gpio_module = {
 	.name = "en_gpio",
 	.main_loop = en_gpio_main_loop,
 	.json_parse = NULL,
-	.sensor_created = NULL,
-	.sensor_updated = NULL,
 };
 
 static const gen_io_ops_t gpio_ops = {

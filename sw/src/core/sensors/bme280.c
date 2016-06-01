@@ -26,8 +26,11 @@ typedef struct sensor_bme280 {
 	uint16_t dig_H1, dig_H3;
 	int16_t dig_H2, dig_H4, dig_H5, dig_H6;
 	int32_t t_fine;
+
+	SLIST_ENTRY(sensor_bme280) link;
 } bme280_t;
 
+SLIST_HEAD(, sensor_bme280) g_bme280_list = SLIST_HEAD_INITIALIZER(g_bme280_list);
 
 
 static int bme280_init_hardware(bme280_t *bme280)
@@ -163,9 +166,8 @@ bme280_get_humidity(bme280_t *bme280, uint32_t hum_raw)
 }
 
 static void
-bme280_poll(sensor_t * sensor, void *data)
+bme280_poll_one(bme280_t *bme280)
 {
-	bme280_t *bme280 = data;
 	uint8_t samples[8];
 	uint32_t press_raw, temp_raw, hum_raw;
 	float temp, hum, press;
@@ -192,9 +194,18 @@ bme280_poll(sensor_t * sensor, void *data)
 	debug_puts("temp: %f, humidity: %f, pressure:%f\r\n", temp, hum, press);
 }
 
+
+static void
+bme280_poll()
+{
+	bme280_t *bme280;
+	SLIST_FOREACH(bme280, &g_bme280_list, link) {
+		bme280_poll_one(bme280);
+	}
+}
+
 static const sensors_ops_t bme280_ops =
 {
-	.poll = bme280_poll,
 	.set = NULL,
 	.req = NULL,
 };
@@ -229,7 +240,8 @@ bme280_json_parse(json_value* section)
 		free(bme280);
 		return 1;
 	}
-
+	
+	SLIST_INSERT_HEAD(&g_bme280_list, bme280, link);
 	sensor_create(SENSORS_TYPE_PRESSURE, "bme280", id, &bme280_ops, bme280);
 	sensor_create(SENSORS_TYPE_HUMIDITY, "bme280", id + 1, &bme280_ops, bme280);
 	sensor_create(SENSORS_TYPE_TEMP, "bme280", id + 2, &bme280_ops, bme280);
@@ -237,15 +249,15 @@ bme280_json_parse(json_value* section)
 	return 0;
 }
 
-static const sensor_handler_t bme280_sensor_handler = {
+static sensor_handler_t bme280_sensor_handler = {
 	.name = "bme280",
-	.json_parse = bme280_json_parse
+	.json_parse = bme280_json_parse,
+	.poll = bme280_poll,
 };
 
 void
-
 bme280_init()
 {
-	sensor_handler_register(&bme280_sensor_handler);
+	sensors_register_handler(&bme280_sensor_handler);
 }
 

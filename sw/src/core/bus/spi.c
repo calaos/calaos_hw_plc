@@ -84,8 +84,6 @@ static const module_t spi_module = {
 	.name = "spi",
 	.main_loop = NULL,
 	.json_parse = spi_json_parse,
-	.sensor_created = NULL,
-	.sensor_updated = NULL,
 };
 
 

@@ -71,30 +71,3 @@ void module_main_loop()
 		}
 	}
 }
-
-int module_sensor_created(sensor_t* s)
-{
-	struct registered_module *rmod;
-	
-	TAILQ_FOREACH(rmod, &g_active_module, link) {
-		if (rmod->mod->sensor_created) {
-			rmod->mod->sensor_created(s);
-		}
-	}
-
-	return 0;
-}
-
-int
-module_sensor_updated(sensor_t* s, sensor_value_t new_value)
-{
-	struct registered_module *rmod;
-	
-	TAILQ_FOREACH(rmod, &g_active_module, link) {
-		if (rmod->mod->sensor_updated) {
-			rmod->mod->sensor_updated(s, new_value);
-		}
-	}
-
-	return 0;
-}

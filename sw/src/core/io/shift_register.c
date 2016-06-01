@@ -163,8 +163,6 @@ static const module_t shift_register_module = {
 	.name = "shift_registers",
 	.main_loop = NULL,
 	.json_parse = shift_register_json_parse,
-	.sensor_created = NULL,
-	.sensor_updated = NULL,
 };
 
 static const gen_io_ops_t shift_register_io_ops = {

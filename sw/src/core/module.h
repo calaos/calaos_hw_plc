@@ -2,8 +2,9 @@
 #define _MODULE_H
 
 #include "json.h"
-#include "sensors.h"
+#include "queue.h"
 #include "config.h"
+#include "sensors.h"
 
 #define likely(x)       __builtin_expect((x),1)
 #define unlikely(x)     __builtin_expect((x),0)
@@ -27,9 +28,6 @@ typedef struct module {
 	/* Parse a json section
 	 * return 0 if ok, or a negative value in case of error */
 	int (*json_parse)(json_value* value);
-	/* Sensor related function for modules to listen on sensor events */
-	void (*sensor_created)(sensor_t *s);
-	void (*sensor_updated)(sensor_t *s, sensor_value_t new_value);
 } module_t;
 
 /**
@@ -54,10 +52,5 @@ module_main_loop();
 int
 module_json_parse(json_value* value);
 
-int
-module_sensor_created(sensor_t* s);
-
-int
-module_sensor_updated(sensor_t* s, sensor_value_t new_value);
 
 #endif

@@ -108,11 +108,6 @@ display_json_parse(json_value* section)
 }
 
 
-static void
-display_sensor_updated(__unused__ sensor_t *s, __unused__ sensor_value_t new_value)
-{
-}
-
 /**
  * Module
  */
@@ -120,8 +115,6 @@ static const module_t display_module = {
 	.name = "display",
 	.main_loop = NULL,
 	.json_parse = display_json_parse,
-	.sensor_created = NULL,
-	.sensor_updated = display_sensor_updated,
 };
 
 void
