@@ -8,8 +8,8 @@
 	},
 	"i2c": [{
 		"name": "i2c1",
-		"sda": "PB_15",
-		"scl": "PB_2"
+		"sda": "PB_9",
+		"scl": "PB_8"
 	}, {
 		"name": "i2c3",
 		"sda": "PB_4",
@@ -42,15 +42,15 @@
 			"freq": 20000000
 		}
 	},
-	"net": {
-		"master": "home.automation.server",
+	"network": {
+		"master": "192.168.1.2",
 		"type": "w5100",
 		"mac": "78:ac:c0:97:f2:67",
 		"port": 14987,
 		"data": {
 			"spi": "spi3",
-			"rst": "gpio@PB_3",
-			"cs": "gpio@PA_10",
+			"rst": "gpio@PD_2",
+			"cs": "gpio@PA_13",
 			"freq": 20000000
 		}
 	},
@@ -59,7 +59,7 @@
 		"data": "gpio@PB_15",
 		"clock": "gpio@PB_2",
 		"latch": "gpio@PB_1",
-		"count": 16
+		"count": 32
 	}],
 
 	"sensors": {
