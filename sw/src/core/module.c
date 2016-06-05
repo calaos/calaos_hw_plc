@@ -38,8 +38,9 @@ int module_json_parse(json_value* value)
 	while (!TAILQ_EMPTY(&g_registered_module)) {
 		rmod = TAILQ_FIRST(&g_registered_module);
 		TAILQ_REMOVE(&g_registered_module, rmod, link);
-		if (!rmod->mod->json_parse)
-			continue;
+		if (!rmod->mod->json_parse) {
+			TAILQ_INSERT_TAIL(&g_active_module, rmod, link);
+		}
 
 		section = config_get_section(value, rmod->mod->name);
 		if (!section) {
