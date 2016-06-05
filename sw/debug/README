@@ -1,0 +1,10 @@
+== OpenOCD ==
+
+openocd -f /usr/local/share/openocd/scripts/board/st_nucleo_f4.cfg
+
+== GDB ==
+
+target extended-remote localhost:3333
+file ELF_FILE
+load
+run
