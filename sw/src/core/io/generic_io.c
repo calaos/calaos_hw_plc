@@ -19,7 +19,7 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 	unsigned int i;
 	const gen_io_ops_t *ops;
 	gen_io_t *io;
-	
+
 	debug_puts("Setting generic io for %s\r\n", name);
 	
 	for (i = 0; i < g_gen_io_ops_count; i++) {

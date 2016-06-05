@@ -41,6 +41,18 @@ int
 hal_debug_puts(const char *str);
 
 /**
+ * Enter critical section. Typically, this will disable irq
+ */
+void
+hal_critical_enter();
+
+/**
+ * Exit critical section (reenable irq)
+ */
+void
+hal_critical_exit();
+
+/**
  * Panic the system
  */
 __attribute__((noreturn))

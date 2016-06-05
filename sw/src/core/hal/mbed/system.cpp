@@ -93,3 +93,15 @@ hal_get_filesystem_prefix()
 {
 	return "/sd/";
 }
+
+extern "C" void
+hal_critical_enter()
+{
+	__disable_irq();
+}
+
+extern "C" void
+hal_critical_exit() {
+	__enable_irq();
+}
+

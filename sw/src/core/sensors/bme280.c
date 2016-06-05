@@ -240,7 +240,7 @@ bme280_json_parse(json_value* section)
 		free(bme280);
 		return 1;
 	}
-	
+
 	SLIST_INSERT_HEAD(&g_bme280_list, bme280, link);
 	sensor_create(SENSORS_TYPE_PRESSURE, "bme280", id, &bme280_ops, bme280);
 	sensor_create(SENSORS_TYPE_HUMIDITY, "bme280", id + 1, &bme280_ops, bme280);

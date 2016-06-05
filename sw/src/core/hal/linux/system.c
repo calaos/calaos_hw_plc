@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <sys/poll.h>
 #include <sys/time.h>
 
@@ -73,4 +74,17 @@ const char *
 hal_get_filesystem_prefix()
 {
 	return "./";
+}
+
+static pthread_mutex_t g_crit_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void
+hal_critical_enter()
+{
+	pthread_mutex_lock(&g_crit_mutex);
+}
+
+void
+hal_critical_exit() {
+	pthread_mutex_unlock(&g_crit_mutex);
 }

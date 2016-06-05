@@ -21,6 +21,8 @@ main()
 	spi_bus_init();
 	i2c_bus_init();
 	en_gpio_init();
+	/* Depends on gpio */
+	onewire_bus_init();
 	shift_register_init();
 	pcf8574_init();
 	mysensors_init();

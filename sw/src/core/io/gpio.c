@@ -28,7 +28,6 @@ typedef struct en_gpio en_gpio_t;
 
 SLIST_HEAD( ,en_gpio) g_debounce_gpios = SLIST_HEAD_INITIALIZER();
 
-
 void *
 en_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
 {
@@ -99,12 +98,11 @@ en_gpio_main_loop()
 		/* Probably a bounce */
 		if (value == gpio->debounced_value)
 			gpio->samples = 0;
-		
+
 		/* We have seen enough of the value */
 		if (gpio->samples == DEBOUNCE_SAMPLES_COUNT)
 			gpio->debounced_value = value;
 	}
-	
 }
 
 static const module_t en_gpio_module = {

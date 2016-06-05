@@ -169,7 +169,7 @@ uint8_t onewire_bus_reset(onewire_bus_t *onewire)
     us_delay(410);
     return r;
 }
- 
+
 //
 // Write a bit. Port and bit is used to cut lookup time and provide
 // more certain timing.
@@ -207,7 +207,7 @@ uint8_t onewire_bus_read_bit(onewire_bus_t *onewire)
     us_delay(54);
     return r;
 }
- 
+
 //
 // Write a byte. The writing code uses the active drivers to raise the
 // pin high, if you need power after the write (e.g. DS18S20 in

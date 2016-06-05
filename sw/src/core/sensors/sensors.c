@@ -2,8 +2,8 @@
 #include "queue.h"
 #include "bme280.h"
 #include "module.h"
-#include "switch.h"
 #include "sensors.h"
+#include "digital_io.h"
 
 #include <string.h>
 
@@ -166,6 +166,6 @@ void
 sensors_init()
 {
 	bme280_init();
-	switch_init();
+	digital_io_init();
 	module_register(&sensors_module);
 }

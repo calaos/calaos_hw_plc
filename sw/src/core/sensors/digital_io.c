@@ -13,15 +13,15 @@ typedef struct sensor_switch {
 	int last_state;
 	sensor_t *s;
 	SLIST_ENTRY(sensor_switch) link;
-} switch_t;
+} digital_io_t;
 
-static SLIST_HEAD(, sensor_switch) g_switch_list;
+static SLIST_HEAD(, sensor_switch) g_digital_io_list;
 
 /**
  *  Switch
  */
 static void
-switch_poll_one(switch_t *sw)
+digital_io_poll_one(digital_io_t *sw)
 {
 	sensor_value_t value;
 	int state;
@@ -39,35 +39,35 @@ switch_poll_one(switch_t *sw)
 }
 
 static void
-switch_poll()
+digital_io_poll()
 {
 	struct sensor_switch *sw; 
 	
-	SLIST_FOREACH(sw, &g_switch_list, link) {
-		switch_poll_one(sw);
+	SLIST_FOREACH(sw, &g_digital_io_list, link) {
+		digital_io_poll_one(sw);
 	}
 }
 
 static void
-switch_set(sensor_t * sensor, void *data, sensor_value_t value)
+digital_io_set(sensor_t * sensor, void *data, sensor_value_t value)
 {
-	switch_t *sw = data;
+	digital_io_t *sw = data;
 	int state;
 	if (gen_io_get_dir(sw->io) != GPIO_DIR_OUTPUT)
 		return;
-	
+
 	state = value.val_i;
 	gen_io_write(sw->io, state);
 }
 
-static const sensors_ops_t switch_ops =
+static const sensors_ops_t digital_io_ops =
 {
-	.set = switch_set,
+	.set = digital_io_set,
 	.req = NULL,
 };
 
 static int
-switch_json_parse_one(json_value* sensor)
+digital_io_json_parse_one(json_value* sensor)
 {
 	int length, i;
 	const char *name;
@@ -76,9 +76,9 @@ switch_json_parse_one(json_value* sensor)
 	int s_gpio_dir = GPIO_DIR_OUTPUT, s_reverse = 0;
 	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_ENABLE;
 	json_value *value;
-	switch_t *sw;
+	digital_io_t *sw;
 	
-	sw = malloc(sizeof(switch_t));
+	sw = malloc(sizeof(digital_io_t));
 	PANIC_ON(!sw, "Alloc failed");
 
         length = sensor->u.object.length;
@@ -106,21 +106,21 @@ switch_json_parse_one(json_value* sensor)
 			"Incomplete sensor description");
 	sw->io = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
 	sw->last_state = 0;
-	sw->s = sensor_create(SENSORS_TYPE_SWITCH, s_name, s_id, &switch_ops, sw);
+	sw->s = sensor_create(SENSORS_TYPE_SWITCH, s_name, s_id, &digital_io_ops, sw);
 
-	SLIST_INSERT_HEAD(&g_switch_list, sw, link);
+	SLIST_INSERT_HEAD(&g_digital_io_list, sw, link);
 	return 0;
 }
 
 
 
 static int
-switch_json_parse(json_value* section)
+digital_io_json_parse(json_value* section)
 {
         unsigned int i;
 
 	for (i = 0; i < section->u.array.length; i++) {
-		switch_json_parse_one(section->u.array.values[i]);
+		digital_io_json_parse_one(section->u.array.values[i]);
 	}
 
 	return 0;
@@ -130,14 +130,14 @@ switch_json_parse(json_value* section)
 /**
  * Module
  */
-static sensor_handler_t switch_sensor_handler = {
+static sensor_handler_t digital_io_sensor_handler = {
 	.name = "switch",
-	.json_parse = switch_json_parse,
-	.poll = switch_poll,
+	.json_parse = digital_io_json_parse,
+	.poll = digital_io_poll,
 };
 
 void
-switch_init()
+digital_io_init()
 {
-	sensors_register_handler(&switch_sensor_handler);
+	sensors_register_handler(&digital_io_sensor_handler);
 }
