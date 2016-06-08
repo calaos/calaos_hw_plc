@@ -35,6 +35,7 @@ typedef struct sensor {
  */
 typedef union sensor_value {
 	int val_i;
+	float val_f;
 } sensor_value_t;
 
 
@@ -169,8 +170,11 @@ sensor_set_value(sensor_t *s, sensor_value_t value);
 void
 sensor_get_value(sensor_t *s, sensor_value_t *value);
 
+/**
+ * 
+ */
 int
-sensors_sensor_updated(sensor_t* s, sensor_value_t new_value);
+sensors_sensor_update(sensor_t* s, sensor_value_t new_value);
 
 /**
  * Init sensor module

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+#include "queue.h"
 #include "gpio.h"
 
 #define GEN_IO_MAX_NAME_SIZE	16
@@ -10,6 +11,9 @@
 /**
  * Prototype, public
  */
+
+void
+gen_io_init();
 
 /**
  * Pin state
@@ -35,24 +39,53 @@ typedef enum gpio_debounce {
 	GPIO_DEBOUNCE_ENABLE = 1,
 } gpio_debounce_t;
 
-
 typedef struct gen_io gen_io_t;
 
+/**
+ * Setup a new generic io
+ * @param name IO name
+ * @param reverse 1 if the IO is reversed, 0 if not
+ * @param direction IO direction
+ * @param debounce 1 to debounce input, 0 if not
+ */
 gen_io_t *
 gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce);
 
+/**
+ * Watcher callback when io status changes
+ * @param io The 
+ */
+typedef void (*gen_io_watcher_cb)(gen_io_t *io, int value, void * data);
 
+/**
+ * Add a watcher for an IO
+ * @param gen_io generic IO to watch
+ * @param cb Status update callback
+ * @param data Specific data for the callback
+ */
+void
+gen_io_add_watcher(gen_io_t *gen_io, gen_io_watcher_cb cb, void *data);
+
+/**
+ * Generic IO operations
+ */
 typedef struct gen_io_ops {
 	void (*io_write)(void *io, int state);
 	void (*io_set_dir)(void *io, gpio_dir_t dir);
 	int (*io_read)(void *io);
-	void * (*io_setup)(const char *io_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce);
+	void * (*io_setup)(const char *prefix, const char *io_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce);
 	const char *prefix;
+
+	/* Private */
+	SLIST_ENTRY(gen_io_ops) link;
 } gen_io_ops_t;
 
+/**
+ * Register specific IO operations
+ * @param ops IO operations
+ */
 void
-gen_io_ops_register(const gen_io_ops_t * ops);
-
+gen_io_ops_register(gen_io_ops_t * ops);
 
 /**
  * Implementation, private
@@ -62,8 +95,15 @@ struct gen_io {
 	void *io;
 	gpio_dir_t dir;
 	uint8_t reverse;
-};
+	uint8_t debounce;
+	uint8_t last_state;
+	/* watcher part */
+	gen_io_watcher_cb cb;
+	void *data;
 
+	/* Private */
+	SLIST_ENTRY(gen_io) link;
+};
 
 static inline void
 gen_io_write(gen_io_t *io, int state)

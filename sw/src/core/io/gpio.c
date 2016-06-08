@@ -8,7 +8,6 @@
 #include <string.h>
 
 #define GPIO_PREFIX	"gpio"
-#define GPIO_PREFIX_SEPARATOR	"@"
 
 /**
  * Debounce time in milliseconds
@@ -29,7 +28,7 @@ typedef struct en_gpio en_gpio_t;
 SLIST_HEAD( ,en_gpio) g_debounce_gpios = SLIST_HEAD_INITIALIZER();
 
 void *
-en_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
+en_gpio_setup(const char *prefix, const char *gpio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
 {
 	en_gpio_t *gpio = calloc(1, sizeof(struct en_gpio));
 	if (!gpio)
@@ -38,12 +37,7 @@ en_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_deb
 	debug_puts("Setup gpio %s, reverse: %d, dir: %d, debounce: %d\r\n",
 			gpio_name, reverse, direction, debounce);
 
-	gpio->debounce = debounce;
-	gpio->debounced_value = 0;
-	gpio->hal_gpio = hal_gpio_setup(gpio_name + strlen(GPIO_PREFIX) + strlen(GPIO_PREFIX_SEPARATOR), reverse, direction);
-
-	if (direction == GPIO_DIR_INPUT && debounce)
-		SLIST_INSERT_HEAD(&g_debounce_gpios, gpio, link);
+	gpio->hal_gpio = hal_gpio_setup(gpio_name, reverse, direction);
 
 	debug_puts("GPIO address %p\r\n", gpio);
 	return gpio;
@@ -62,10 +56,7 @@ en_gpio_read(void *io)
 {
 	en_gpio_t *gpio = io;
 
-	if (gpio->debounce)
-		return gpio->debounced_value;
-	else
-		return hal_gpio_read(gpio->hal_gpio);
+	return hal_gpio_read(gpio->hal_gpio);
 }
 
 
@@ -111,7 +102,7 @@ static const module_t en_gpio_module = {
 	.json_parse = NULL,
 };
 
-static const gen_io_ops_t gpio_ops = {
+static gen_io_ops_t gpio_ops = {
 	.io_write = en_gpio_write,
 	.io_read = en_gpio_read,
 	.io_set_dir = en_gpio_set_dir,

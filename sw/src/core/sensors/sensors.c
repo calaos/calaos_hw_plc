@@ -96,7 +96,7 @@ sensors_main_loop()
 }
 
 int
-sensors_sensor_updated(sensor_t* s, sensor_value_t new_value)
+sensors_sensor_update(sensor_t* s, sensor_value_t new_value)
 {
 	struct sensor_watcher *w;
 	
@@ -123,7 +123,6 @@ sensor_get_value(sensor_t *s, sensor_value_t *value)
 	if (s->ops->req)
 		s->ops->req(s, s->data, value);
 }
-
 
 static int
 sensors_json_parse(json_value* section)

@@ -1,5 +1,7 @@
-#include "shift_register.h"
 #include "generic_io.h"
+#include "sensors.h"
+#include "module.h"
+#include "queue.h"
 #include "utils.h"
 #include "gpio.h"
 
@@ -8,30 +10,67 @@
 #include <inttypes.h>
 #include <assert.h>
 
-#define MAX_GENERIC_IO_OPS	3
+static SLIST_HEAD( ,gen_io_ops) g_io_ops_list = SLIST_HEAD_INITIALIZER();
 
-static unsigned int g_gen_io_ops_count = 0;
-static const gen_io_ops_t *g_gen_io_ops[MAX_GENERIC_IO_OPS];
+static SLIST_HEAD(, gen_io) g_debounced_io_list = SLIST_HEAD_INITIALIZER();
+
+static void
+digital_io_poll_one(gen_io_t *gen_io)
+{
+	int state;
+
+	state = gen_io_read(gen_io->io);
+
+	if (state != gen_io->last_state) {
+		gen_io->last_state = state;
+		if (gen_io->cb) {
+			gen_io->cb(gen_io, state, gen_io->data);
+		}
+	}
+}
+
+static void
+digital_io_main_loop()
+{
+	struct gen_io *gen_io; 
+
+	SLIST_FOREACH(gen_io, &g_debounced_io_list, link) {
+		digital_io_poll_one(gen_io);
+	}
+}
 
 gen_io_t *
 gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
 {
-	unsigned int i;
-	const gen_io_ops_t *ops;
+	gen_io_ops_t *ops;
 	gen_io_t *io;
+	char *prefix, *io_name;
+	char name_cpy[GEN_IO_MAX_NAME_SIZE];
 
 	debug_puts("Setting generic io for %s\r\n", name);
-	
-	for (i = 0; i < g_gen_io_ops_count; i++) {
-		ops = g_gen_io_ops[i];
-		if (strncmp(ops->prefix, name, strlen(ops->prefix)) == 0) {
-			io = malloc(sizeof(struct gen_io));
-			io->io = ops->io_setup(name, reverse, direction, debounce);
-			io->ops = ops;
-			io->dir = direction;
-			io->reverse = reverse;
-			return io;
-		}
+
+	PANIC_ON(direction == GPIO_DIR_OUTPUT && debounce, "Can not debounce output pin...");
+
+	SLIST_FOREACH(ops, &g_io_ops_list, link) {
+		if (strncmp(ops->prefix, name, strlen(ops->prefix)) != 0)
+			continue;
+		strcpy(name_cpy, name);
+		
+		prefix = name_cpy;
+		io_name = strchr(name_cpy, '@');
+		PANIC_ON(io_name == NULL, "Could not find @ separator in io name\n");
+
+		io_name[0] = '\0';
+		io_name++;
+
+		io = malloc(sizeof(struct gen_io));
+		io->io = ops->io_setup(prefix, io_name, reverse, direction, debounce);
+		io->ops = ops;
+		io->dir = direction;
+		io->reverse = reverse;
+		io->debounce = debounce;
+
+		return io;
 	}
 
 	PANIC("Could not find io handler for io %s\r\n", name);
@@ -39,12 +78,26 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 }
 
 void
-gen_io_ops_register(const gen_io_ops_t * ops)
+gen_io_ops_register(gen_io_ops_t * ops)
 {
 	PANIC_ON(ops->io_setup == NULL || ops->prefix == NULL,
 		"incomplete io operations");
 
-        PANIC_ON(g_gen_io_ops_count == MAX_GENERIC_IO_OPS, "Too many generic io ops");
-
-	g_gen_io_ops[g_gen_io_ops_count++] = ops;
+	SLIST_INSERT_HEAD(&g_io_ops_list, ops, link);
 }
+
+/**
+ * Module
+ */
+static const module_t gen_io_module = {
+	.name = "gen_io",
+	.main_loop = digital_io_main_loop,
+	.json_parse = NULL,
+};
+
+void
+gen_io_init()
+{
+	module_register(&gen_io_module);
+}
+

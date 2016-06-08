@@ -6,64 +6,40 @@
 #include <string.h>
 
 /**
- * switch specific data
+ * dioitch specific data
  */
-typedef struct sensor_switch {
+typedef struct sensor_dio {
 	gen_io_t *io;
-	int last_state;
 	sensor_t *s;
-	SLIST_ENTRY(sensor_switch) link;
+	SLIST_ENTRY(sensor_dio) link;
 } digital_io_t;
-
-static SLIST_HEAD(, sensor_switch) g_digital_io_list;
-
-/**
- *  Switch
- */
-static void
-digital_io_poll_one(digital_io_t *sw)
-{
-	sensor_value_t value;
-	int state;
-
-	if (gen_io_get_dir(sw->io) != GPIO_DIR_INPUT)
-		return;
-
-	state = gen_io_read(sw->io);
-
-	if (state != sw->last_state) {
-		sw->last_state = state;
-		value.val_i = state;
-		sensors_sensor_updated(sw->s, value);
-	}
-}
-
-static void
-digital_io_poll()
-{
-	struct sensor_switch *sw; 
-	
-	SLIST_FOREACH(sw, &g_digital_io_list, link) {
-		digital_io_poll_one(sw);
-	}
-}
 
 static void
 digital_io_set(sensor_t * sensor, void *data, sensor_value_t value)
 {
-	digital_io_t *sw = data;
+	digital_io_t *dio = data;
 	int state;
-	if (gen_io_get_dir(sw->io) != GPIO_DIR_OUTPUT)
+	if (gen_io_get_dir(dio->io) != GPIO_DIR_OUTPUT)
 		return;
 
 	state = value.val_i;
-	gen_io_write(sw->io, state);
+	gen_io_write(dio->io, state);
+}
+
+static void
+digital_io_req(sensor_t * sensor, void *data, sensor_value_t *value)
+{
+	digital_io_t *dio = data;
+	if (gen_io_get_dir(dio->io) != GPIO_DIR_INPUT)
+		return;
+
+	value->val_i = gen_io_read(dio->io);
 }
 
 static const sensors_ops_t digital_io_ops =
 {
 	.set = digital_io_set,
-	.req = NULL,
+	.req = digital_io_req,
 };
 
 static int
@@ -76,10 +52,10 @@ digital_io_json_parse_one(json_value* sensor)
 	int s_gpio_dir = GPIO_DIR_OUTPUT, s_reverse = 0;
 	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_ENABLE;
 	json_value *value;
-	digital_io_t *sw;
+	digital_io_t *dio;
 	
-	sw = malloc(sizeof(digital_io_t));
-	PANIC_ON(!sw, "Alloc failed");
+	dio = malloc(sizeof(digital_io_t));
+	PANIC_ON(!dio, "Alloc failed");
 
         length = sensor->u.object.length;
         for (i = 0; i < length; i++) {
@@ -104,11 +80,10 @@ digital_io_json_parse_one(json_value* sensor)
 
         PANIC_ON(s_name == NULL || s_gpio_name == NULL,
 			"Incomplete sensor description");
-	sw->io = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
-	sw->last_state = 0;
-	sw->s = sensor_create(SENSORS_TYPE_SWITCH, s_name, s_id, &digital_io_ops, sw);
+	dio->io = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
+	/* FIXME: use gen_io_add_watcher */
+	dio->s = sensor_create(SENSORS_TYPE_SWITCH, s_name, s_id, &digital_io_ops, dio);
 
-	SLIST_INSERT_HEAD(&g_digital_io_list, sw, link);
 	return 0;
 }
 
@@ -131,9 +106,9 @@ digital_io_json_parse(json_value* section)
  * Module
  */
 static sensor_handler_t digital_io_sensor_handler = {
-	.name = "switch",
+	.name = "digital_io",
 	.json_parse = digital_io_json_parse,
-	.poll = digital_io_poll,
+	.poll = NULL,
 };
 
 void

@@ -126,25 +126,18 @@ shift_register_set_output(shift_register_t *sr, int output, int state)
 }
 
 static void *
-shift_register_io_setup(const char *srio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
+shift_register_io_setup(const char *prefix, const char *srio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
 {
-	char name_cpy[GEN_IO_MAX_NAME_SIZE];
-	char *sep;
-
 	shift_register_io_t *srio = calloc(1, sizeof(shift_register_io_t));
 	if (!srio)
 		return NULL;
-	strcpy(name_cpy, srio_name);
+
 	debug_puts("Setup shift register io %s, reverse: %d, dir: %d, debounce: %d\r\n",
 			srio_name, reverse, direction, debounce);
-	/* FIXME: better error handling */
-	sep = strchr(name_cpy, '@');
-	PANIC_ON(sep == NULL, "Could not find @ separator in io name\n");
 
-	sep[0] = '\0';
-	srio->output = atoi(sep + 1);
-	srio->sr = shift_register_get_by_name(name_cpy);
-	PANIC_ON(srio->sr == NULL, "Failed to get shift register %s\n", name_cpy);
+	srio->output = atoi(srio_name);
+	srio->sr = shift_register_get_by_name(prefix);
+	PANIC_ON(srio->sr == NULL, "Failed to get shift register %s\n", prefix);
 
 	return srio;
 }
@@ -165,7 +158,7 @@ static const module_t shift_register_module = {
 	.json_parse = shift_register_json_parse,
 };
 
-static const gen_io_ops_t shift_register_io_ops = {
+static gen_io_ops_t shift_register_io_ops = {
 	.io_write = shift_register_io_write,
 	.io_read = NULL,
 	.io_setup = shift_register_io_setup,

@@ -26,6 +26,10 @@ typedef struct sensor_bme280 {
 	uint16_t dig_H1, dig_H3;
 	int16_t dig_H2, dig_H4, dig_H5, dig_H6;
 	int32_t t_fine;
+	
+	sensor_t *temp_sensor;
+	sensor_t *humidity_sensor;
+	sensor_t *pressure_sensor;
 
 	SLIST_ENTRY(sensor_bme280) link;
 } bme280_t;
@@ -170,7 +174,7 @@ bme280_poll_one(bme280_t *bme280)
 {
 	uint8_t samples[8];
 	uint32_t press_raw, temp_raw, hum_raw;
-	float temp, hum, press;
+	sensor_value_t temp, hum, press;
 
 	unsigned long long time = hal_get_milli();
 	if ((time - bme280->last_refresh) < bme280->refresh_time)
@@ -187,11 +191,15 @@ bme280_poll_one(bme280_t *bme280)
 	temp_raw = (samples[3] << 12) | (samples[4] << 4) | (samples[5] >> 4);
 	hum_raw = (samples[6] << 8) | samples[7];
 
-	temp = bme280_get_temp(bme280, temp_raw);
-	hum = bme280_get_humidity(bme280, hum_raw);
-	press = bme280_get_pressure(bme280, press_raw);
+	temp.val_f = bme280_get_temp(bme280, temp_raw);
+	hum.val_f = bme280_get_humidity(bme280, hum_raw);
+	press.val_f = bme280_get_pressure(bme280, press_raw);
 
 	debug_puts("temp: %f, humidity: %f, pressure:%f\r\n", temp, hum, press);
+	
+	sensors_sensor_update(bme280->pressure_sensor, press);
+	sensors_sensor_update(bme280->humidity_sensor, hum);
+	sensors_sensor_update(bme280->pressure_sensor, press);
 }
 
 
@@ -242,9 +250,9 @@ bme280_json_parse(json_value* section)
 	}
 
 	SLIST_INSERT_HEAD(&g_bme280_list, bme280, link);
-	sensor_create(SENSORS_TYPE_PRESSURE, "bme280", id, &bme280_ops, bme280);
-	sensor_create(SENSORS_TYPE_HUMIDITY, "bme280", id + 1, &bme280_ops, bme280);
-	sensor_create(SENSORS_TYPE_TEMP, "bme280", id + 2, &bme280_ops, bme280);
+	bme280->pressure_sensor = sensor_create(SENSORS_TYPE_PRESSURE, "bme280", id, &bme280_ops, bme280);
+	bme280->humidity_sensor = sensor_create(SENSORS_TYPE_HUMIDITY, "bme280", id + 1, &bme280_ops, bme280);
+	bme280->temp_sensor = sensor_create(SENSORS_TYPE_TEMP, "bme280", id + 2, &bme280_ops, bme280);
 
 	return 0;
 }

@@ -112,25 +112,17 @@ pcf8574_set_output(pcf8574_t *exp, uint8_t output, int state)
 }
 
 static void *
-pcf8574_io_setup(const char *exp_io_name, __unused__ int reverse, 
+pcf8574_io_setup(const char *prefix, const char *exp_io_name, __unused__ int reverse, 
 	__unused__ gpio_dir_t direction, __unused__ gpio_debounce_t debounce)
 {
-	char name_cpy[GEN_IO_MAX_NAME_SIZE];
-	char *sep;
 
 	pcf8574_io_t *exp_io = calloc(1, sizeof(pcf8574_io_t));
 	if (!exp_io)
 		return NULL;
-	strcpy(name_cpy, exp_io_name);
 
-	/* FIXME: better error handling */
-	sep = strchr(name_cpy, '@');
-	PANIC_ON(sep == NULL, "Could not find @ separator in io name\n");
-
-	sep[0] = '\0';
-	exp_io->index = atoi(sep + 1);
-	exp_io->exp = pcf8574_get_by_name(name_cpy);
-	PANIC_ON(exp_io->exp == NULL, "Failed to get exp %s\n", name_cpy);
+	exp_io->index = atoi(exp_io_name);
+	exp_io->exp = pcf8574_get_by_name(prefix);
+	PANIC_ON(exp_io->exp == NULL, "Failed to get exp %s\n", prefix);
 
 	return exp_io;
 }
@@ -165,11 +157,11 @@ static const module_t pcf8574_module = {
 	.json_parse = pcf8574_json_parse,
 };
 
-static const gen_io_ops_t pcf8574_io_ops = {
+static gen_io_ops_t pcf8574_io_ops = {
 	.io_write = pcf8574_io_write,
 	.io_read = pcf8574_io_read,
 	.io_setup = pcf8574_io_setup,
-	.prefix = "sr",
+	.prefix = "pcf",
 };
 
 void

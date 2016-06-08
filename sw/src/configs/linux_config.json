@@ -38,17 +38,6 @@
 			"freq": 20000000
 		}
 	},
-	"net": {
-		"master": "home.automation.server",
-		"type": "w5100",
-		"mac": "78:ac:c0:97:f2:67",
-		"port": 14987,
-		"data": {
-			"rst": "gpio@PD_0",
-			"cs": "gpio@PD_1",
-			"freq": 50000000
-		}
-	},
 	"shift_registers": [{
 		"name": "sr1",
 		"data": "gpio@PB_15",
