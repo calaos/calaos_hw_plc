@@ -10,21 +10,40 @@
 #include <inttypes.h>
 #include <assert.h>
 
+/**
+ * Debounce time in milliseconds
+ */
+#define DEBOUNCE_TIME		2
+
+#define DEBOUNCE_SAMPLES_COUNT	8
+
 static SLIST_HEAD( ,gen_io_ops) g_io_ops_list = SLIST_HEAD_INITIALIZER();
 
 static SLIST_HEAD(, gen_io) g_debounced_io_list = SLIST_HEAD_INITIALIZER();
 
+static unsigned long long g_gpio_last_read_time = 0;
+
+
 static void
 digital_io_poll_one(gen_io_t *gen_io)
 {
-	int state;
+	int value;
 
-	state = gen_io_read(gen_io->io);
+	value = gen_io_read(gen_io);
 
-	if (state != gen_io->last_state) {
-		gen_io->last_state = state;
+	/* Value is still different from the last one */
+	if (value != gen_io->debounced_value)
+		gen_io->samples++;
+
+	/* Probably a bounce */
+	if (value == gen_io->debounced_value)
+		gen_io->samples = 0;
+
+	/* We have seen enough of the value */
+	if (gen_io->samples == DEBOUNCE_SAMPLES_COUNT) {
+		gen_io->debounced_value = value;
 		if (gen_io->cb) {
-			gen_io->cb(gen_io, state, gen_io->data);
+			gen_io->cb(gen_io, value, gen_io->data);
 		}
 	}
 }
@@ -32,7 +51,11 @@ digital_io_poll_one(gen_io_t *gen_io)
 static void
 digital_io_main_loop()
 {
-	struct gen_io *gen_io; 
+	struct gen_io *gen_io;
+	unsigned long long time = hal_get_micro();
+
+	if ((time - g_gpio_last_read_time) < (DEBOUNCE_TIME * 1000))
+		return;
 
 	SLIST_FOREACH(gen_io, &g_debounced_io_list, link) {
 		digital_io_poll_one(gen_io);
@@ -69,6 +92,8 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 		io->dir = direction;
 		io->reverse = reverse;
 		io->debounce = debounce;
+		if (debounce)
+			SLIST_INSERT_HEAD(&g_debounced_io_list, io, link);
 
 		return io;
 	}

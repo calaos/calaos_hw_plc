@@ -96,7 +96,7 @@ struct gen_io {
 	gpio_dir_t dir;
 	uint8_t reverse;
 	uint8_t debounce;
-	uint8_t last_state;
+	uint8_t debounced_value, samples;
 	/* watcher part */
 	gen_io_watcher_cb cb;
 	void *data;
@@ -114,7 +114,10 @@ gen_io_write(gen_io_t *io, int state)
 static inline int
 gen_io_read(gen_io_t *io)
 {
-	return io->ops->io_read(io->io) ^ io->reverse;
+	if (io->debounce)
+		return io->debounced_value ^ io->reverse;
+	else
+		return io->ops->io_read(io->io) ^ io->reverse;
 }
 
 static inline gpio_dir_t

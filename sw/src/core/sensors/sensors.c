@@ -41,7 +41,6 @@ sensors_get_by_id(int id)
 	return g_sensors[id];	
 };
 
-
 static int
 sensors_sensor_created(sensor_t* s)
 {
