@@ -61,7 +61,6 @@
 		"latch": "gpio@PB_1",
 		"count": 32
 	}],
-
 	"sensors": {
 		"switch" : [{
 			"name": "sw1",
@@ -226,11 +225,11 @@
 			"dir": "in",
 			"id": 51
 		}],
-	"bme280": {
-		"i2c": "i2c1",
-		"addr": "0x76",
-		"refresh": 1000,
-		"id": 60
+		"bme280": {
+			"i2c": "i2c1",
+			"addr": "0x76",
+			"refresh": 1000,
+			"id": 60
 		}
 	}
 }
