@@ -25,7 +25,7 @@ static unsigned long long g_gpio_last_read_time = 0;
 
 
 static void
-digital_io_poll_one(gen_io_t *gen_io)
+gen_io_poll_one(gen_io_t *gen_io)
 {
 	int value;
 
@@ -42,14 +42,15 @@ digital_io_poll_one(gen_io_t *gen_io)
 	/* We have seen enough of the value */
 	if (gen_io->samples == DEBOUNCE_SAMPLES_COUNT) {
 		gen_io->debounced_value = value;
+		debug_puts("gen_io: %s changed: %d\r\n", gen_io->name);
 		if (gen_io->cb) {
-			gen_io->cb(gen_io, value, gen_io->data);
+			gen_io->cb(gen_io, value, gen_io->cb_data);
 		}
 	}
 }
 
 static void
-digital_io_main_loop()
+gen_io_main_loop()
 {
 	struct gen_io *gen_io;
 	unsigned long long time = hal_get_micro();
@@ -58,8 +59,15 @@ digital_io_main_loop()
 		return;
 
 	SLIST_FOREACH(gen_io, &g_debounced_io_list, link) {
-		digital_io_poll_one(gen_io);
+		gen_io_poll_one(gen_io);
 	}
+}
+
+void
+gen_io_add_watcher(gen_io_t *gen_io, gen_io_watcher_cb cb, void *cb_data)
+{
+	gen_io->cb_data = cb_data;
+	gen_io->cb = cb;
 }
 
 gen_io_t *
@@ -116,7 +124,7 @@ gen_io_ops_register(gen_io_ops_t * ops)
  */
 static const module_t gen_io_module = {
 	.name = "gen_io",
-	.main_loop = digital_io_main_loop,
+	.main_loop = gen_io_main_loop,
 	.json_parse = NULL,
 };
 

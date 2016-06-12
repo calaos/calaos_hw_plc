@@ -99,7 +99,10 @@ struct gen_io {
 	uint8_t debounced_value, samples;
 	/* watcher part */
 	gen_io_watcher_cb cb;
-	void *data;
+	void *cb_data;
+
+	/* Debug */
+	char *name;
 
 	/* Private */
 	SLIST_ENTRY(gen_io) link;
