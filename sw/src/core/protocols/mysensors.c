@@ -101,9 +101,22 @@ mysensors_send_message_int(uint16_t node_id, uint8_t child_sensor_id, uint16_t m
 }
 
 static void
+mysensors_send_message_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+				uint8_t ack, uint16_t sub_type, float value)
+{
+	serial_puts("%d;%d;%d;%d;%d;%2f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
+}
+
+static void
 mysensors_update_value_int(sensor_t *s, mysensors_datatype_t dt, int value)
 {
 	mysensors_send_message_int(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, dt, value);
+}
+
+static void
+mysensors_update_value_float(sensor_t *s, mysensors_datatype_t dt, float value)
+{
+	mysensors_send_message_float(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, dt, value);
 }
 
 static int
@@ -125,23 +138,38 @@ mysensors_json_parse_section(json_value* section)
 	return 0;
 }
 
+static const unsigned int
+sensor_to_mysensor[SENSORS_TYPE_COUNT] = 
+{
+	[SENSORS_TYPE_SWITCH] = S_LIGHT,
+	[SENSORS_TYPE_HUMIDITY] = S_HUM,
+	[SENSORS_TYPE_TEMP] = S_TEMP,
+	[SENSORS_TYPE_PRESSURE] = S_BARO,
+};
+
 static void
 mysensor_sensor_created(sensor_t *s)
 {
-	mysensors_sensortype_t type;
-	switch (sensor_get_type(s)) {
-		case SENSORS_TYPE_SWITCH:
-			type = S_LIGHT; break;
-		default:
-			return;
-	};
+	mysensors_sensortype_t type = sensor_get_type(s);
+
 	mysensors_send_message_str(g_assigned_node_id, sensor_get_id(s), PRESENTATION, REQUEST, type, sensor_get_name(s));
 }
 
 static void
 mysensor_sensor_updated(sensor_t *s, sensor_value_t value)
 {
-	mysensors_update_value_int(s, V_STATUS, value.val_i);
+	switch (sensor_get_type(s)) {
+		case SENSORS_TYPE_SWITCH:
+			mysensors_update_value_int(s, V_STATUS, value.val_i);
+			break;
+		case SENSORS_TYPE_HUMIDITY:
+		case SENSORS_TYPE_TEMP:
+		case SENSORS_TYPE_PRESSURE:
+			mysensors_update_value_float(s, V_STATUS, value.val_f);
+			break;
+		default:
+			break;
+	}
 }
 
 static sensor_watcher_t mysensor_watcher = {

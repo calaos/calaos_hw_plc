@@ -15,6 +15,7 @@ typedef enum sensors_type {
 	SENSORS_TYPE_HUMIDITY,
 	SENSORS_TYPE_TEMP,
 	SENSORS_TYPE_PRESSURE,
+	SENSORS_TYPE_COUNT,
 } sensors_type_t;
 
 typedef struct sensors_ops sensors_ops_t;

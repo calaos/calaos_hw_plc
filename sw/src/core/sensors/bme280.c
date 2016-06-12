@@ -195,7 +195,7 @@ bme280_poll_one(bme280_t *bme280)
 	hum.val_f = bme280_get_humidity(bme280, hum_raw);
 	press.val_f = bme280_get_pressure(bme280, press_raw);
 
-	debug_puts("temp: %f, humidity: %f, pressure:%f\r\n", temp, hum, press);
+	debug_puts("temp: %f, humidity: %f, pressure:%f\r\n", temp.val_f, hum.val_f, press.val_f);
 	
 	sensors_sensor_update(bme280->pressure_sensor, press);
 	sensors_sensor_update(bme280->humidity_sensor, hum);
