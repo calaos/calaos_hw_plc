@@ -1,10 +1,10 @@
 PROJECT         := CalaosPLC
-DEVICES         := NUCLEO_F411RE
+DEVICES         := NUCLEO_F411RE NUCLEO_F446RE
 GCC4MBED_DIR    := ../gcc4mbed/
 GCC4MBED_TYPE	:= Debug
 GCFLAGS 	:= -Wall -Wextra -Werror -Wno-strict-aliasing
 GPFLAGS 	:= -Wall -Wextra -Werror -Wno-strict-aliasing
-CONFIG		?= mbed_config
+CONFIG		?= stm32_nucleo
 GAFLAGS 	:= -DCONFIG_PATH='"configs/$(CONFIG)_reduced.json"'
 EXCLUDE		:= core/hal/linux
 NO_FLOAT_SCANF	:= 1
@@ -14,6 +14,6 @@ MBED_LIBS	:= fs
 include Makefile.common	
 
 NUCLEO_F411RE/core/incconfig.o: configs/$(CONFIG)_reduced.json
-NUCLEO_L053R8/core/incconfig.o: configs/$(CONFIG)_reduced.json
+NUCLEO_F446RE/core/incconfig.o: configs/$(CONFIG)_reduced.json
 
 include $(GCC4MBED_DIR)/build/gcc4mbed.mk
