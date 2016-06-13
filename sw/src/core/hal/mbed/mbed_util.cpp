@@ -19,8 +19,8 @@ mbed_pinname_from_str(const char *gpio_name)
 	port_num = gpio_name[1] - 'A';
 	gpio_num = atoi(&gpio_name[3]);
 
-	debug_puts("Opening port %d, gpio %d\n", port_num, gpio_num);
-	
+	debug_puts("Opening port %d, gpio %d\r\n", port_num, gpio_num);
+
 	name = (PinName) ((port_num << 4) | gpio_num);
 
 	return name;

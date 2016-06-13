@@ -18,6 +18,9 @@ hal_spi_setup(const char *mosi, const char *miso, const char *sck, uint32_t freq
 		return NULL;
 
 	spi = new SPI(pmosi, pmiso, psck);
+	if (!spi)
+		return NULL;
+
 	spi->format(8, 0);
 	spi->frequency(frequency);
 

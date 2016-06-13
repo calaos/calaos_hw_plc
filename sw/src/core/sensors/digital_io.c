@@ -50,7 +50,7 @@ digital_io_json_parse_one(json_value* sensor)
 	const char *s_name = NULL, *s_gpio_name = NULL;
 	unsigned char s_id = 0;
 	int s_gpio_dir = GPIO_DIR_OUTPUT, s_reverse = 0;
-	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_ENABLE;
+	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_DISABLE;
 	json_value *value;
 	digital_io_t *dio;
 	

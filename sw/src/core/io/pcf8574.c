@@ -52,7 +52,7 @@ pcf8574_json_parse_one(json_value* sensor)
 {
 	int length, i;
 	json_value *value;
-	pcf8574_t *exp;
+	pcf8574_t *exp = NULL;
 	const char *name;
 
         exp = calloc(1, sizeof(struct pcf8574));
@@ -66,10 +66,10 @@ pcf8574_json_parse_one(json_value* sensor)
 		if (strcmp(name, "name") == 0) {
 			exp->name = strdup(value->u.string.ptr);
 		} else if (strcmp(name, "addr") == 0) {
-			exp->addr = value->u.integer;
+			exp->addr = strtol(value->u.string.ptr, NULL, 16);
 		} else if (strcmp(name, "int") == 0) {
 			exp->int_io = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
-		} else if (strcmp(name, "int") == 0) {
+		} else if (strcmp(name, "i2c") == 0) {
 			exp->i2c = i2c_bus_get_by_name(value->u.string.ptr);
 		}
         }
@@ -77,7 +77,14 @@ pcf8574_json_parse_one(json_value* sensor)
 			"Missing info for pcf8574\r\n");
         exp->output_value = 0;
         exp->need_update = 1;
-	debug_puts("Adding pcf8574 %s with %d output\r\n", exp->name, exp->addr);
+	debug_puts("Adding pcf8574 %s with address 0x%x\r\n", exp->name, exp->addr);
+	
+	
+	if (i2c_bus_read(exp->i2c, exp->addr, &exp->input_value, 1) != 0) {
+		debug_puts("pcf8574 %s with address 0x%x did not answer, freeing\r\n", exp->name, exp->addr);
+		free(exp);
+		return 1;
+	}
 
 	SLIST_INSERT_HEAD(&g_pcf8574s, exp, link);
 	return 0;
@@ -88,11 +95,13 @@ static int
 pcf8574_json_parse(json_value* section)
 {
         unsigned int i;
+        int error = 0;
 
 	for (i = 0; i < section->u.array.length; i++) {
-		pcf8574_json_parse_one(section->u.array.values[i]);
+		error |= pcf8574_json_parse_one(section->u.array.values[i]);
 	}
-	return 0;
+
+	return error;
 }
 
 
@@ -126,7 +135,7 @@ pcf8574_io_setup(const char *prefix, const char *exp_io_name, __unused__ int rev
 
 	return exp_io;
 }
- 
+
 static void
 pcf8574_io_write(void *io, int state)
 {

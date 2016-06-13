@@ -30,16 +30,16 @@ struct i2c_bus {
 	SLIST_ENTRY(i2c_bus) link;
 };
 
-static inline void
+static inline int
 i2c_bus_write(i2c_bus_t *i2c, uint8_t addr, const uint8_t *data, unsigned int length)
 {
-	hal_i2c_write(i2c->hal_i2c, addr, data, length);
+	return hal_i2c_write(i2c->hal_i2c, addr, data, length);
 }
 
-static inline void
+static inline int
 i2c_bus_read(i2c_bus_t *i2c, uint8_t addr, uint8_t *data, unsigned int length)
 {
-	hal_i2c_read(i2c->hal_i2c, addr, data, length);
+	return hal_i2c_read(i2c->hal_i2c, addr, data, length);
 }
 
 #ifdef __cplusplus

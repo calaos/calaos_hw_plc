@@ -137,7 +137,7 @@ hal_i2c_setup(const char *sda, const char *scl, uint32_t frequency);
  * @param data Data to send
  * @param length Length of data
  */
-void
+int
 hal_i2c_write(hal_i2c_t *i2c, uint8_t addr, const uint8_t *data, unsigned int length);
 
 /**
@@ -146,13 +146,12 @@ hal_i2c_write(hal_i2c_t *i2c, uint8_t addr, const uint8_t *data, unsigned int le
  * @param data Data read
  * @param length Length of data
  */
-void
+int
 hal_i2c_read(hal_i2c_t *i2c, uint8_t addr, uint8_t *data, unsigned int length);
 
 /**
  * SPI
  */
-
 
 typedef struct hal_spi hal_spi_t;
 

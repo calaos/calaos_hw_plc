@@ -1,3 +1,5 @@
+#define _GNU_SOURCE 1
+
 #include "generic_io.h"
 #include "sensors.h"
 #include "module.h"
@@ -23,13 +25,12 @@ static SLIST_HEAD(, gen_io) g_debounced_io_list = SLIST_HEAD_INITIALIZER();
 
 static unsigned long long g_gpio_last_read_time = 0;
 
-
 static void
 gen_io_poll_one(gen_io_t *gen_io)
 {
 	int value;
 
-	value = gen_io_read(gen_io);
+	value = gen_io->ops->io_read(gen_io->io);
 
 	/* Value is still different from the last one */
 	if (value != gen_io->debounced_value)
@@ -42,7 +43,7 @@ gen_io_poll_one(gen_io_t *gen_io)
 	/* We have seen enough of the value */
 	if (gen_io->samples == DEBOUNCE_SAMPLES_COUNT) {
 		gen_io->debounced_value = value;
-		debug_puts("gen_io: %s changed: %d\r\n", gen_io->name);
+		debug_puts("gen_io: %s changed: %d\r\n", gen_io->name, value);
 		if (gen_io->cb) {
 			gen_io->cb(gen_io, value, gen_io->cb_data);
 		}
@@ -57,6 +58,8 @@ gen_io_main_loop()
 
 	if ((time - g_gpio_last_read_time) < (DEBOUNCE_TIME * 1000))
 		return;
+
+	g_gpio_last_read_time = time;
 
 	SLIST_FOREACH(gen_io, &g_debounced_io_list, link) {
 		gen_io_poll_one(gen_io);
@@ -85,8 +88,9 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 	SLIST_FOREACH(ops, &g_io_ops_list, link) {
 		if (strncmp(ops->prefix, name, strlen(ops->prefix)) != 0)
 			continue;
+
 		strcpy(name_cpy, name);
-		
+
 		prefix = name_cpy;
 		io_name = strchr(name_cpy, '@');
 		PANIC_ON(io_name == NULL, "Could not find @ separator in io name\n");
@@ -94,12 +98,15 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 		io_name[0] = '\0';
 		io_name++;
 
-		io = malloc(sizeof(struct gen_io));
+		io = calloc(1, sizeof(struct gen_io));
+		PANIC_ON(!io, "Failed to allocate data");
+
 		io->io = ops->io_setup(prefix, io_name, reverse, direction, debounce);
 		io->ops = ops;
 		io->dir = direction;
 		io->reverse = reverse;
 		io->debounce = debounce;
+		io->name = strdup(name);
 		if (debounce)
 			SLIST_INSERT_HEAD(&g_debounced_io_list, io, link);
 
@@ -131,6 +138,7 @@ static const module_t gen_io_module = {
 void
 gen_io_init()
 {
+	g_gpio_last_read_time = hal_get_micro();
 	module_register(&gen_io_module);
 }
 

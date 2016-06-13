@@ -9,11 +9,13 @@
 	"i2c": [{
 		"name": "i2c1",
 		"sda": "PB_9",
-		"scl": "PB_8"
+		"scl": "PB_8",
+		"freq": "400000"
 	}, {
 		"name": "i2c3",
 		"sda": "PB_4",
-		"scl": "PA_8"
+		"scl": "PA_8",
+		"freq": "400000"
 	}],
 	"spi": [{
 		"name": "spi1",
@@ -56,17 +58,29 @@
 	},
 	"shift_registers": [{
 		"name": "sr1",
-		"data": "gpio@PB_15",
-		"clock": "gpio@PB_2",
-		"latch": "gpio@PB_1",
+		"data": "gpio@PB_1",
+		"clock": "gpio@PB_12",
+		"latch": "gpio@PB_2",
 		"count": 32
 	}],
+	"pcf8574": [{
+		"name": "pcf1",
+		"addr": "0x38",
+		"int": "gpio@PA_9",
+		"i2c": "i2c3"
+	},{
+		"name": "pcf2",
+		"addr": "0x39",
+		"int": "gpio@PA_9",
+		"i2c": "i2c3"
+	}],
 	"sensors": {
-		"switch" : [{
+		"digital_io" : [{
 			"name": "sw1",
 			"io": "gpio@PC_13",
 			"dir": "in",
 			"active_low": 1,
+			"debounce": 1,
 			"id": 0
 		}, {
 			"name": "out1",
@@ -147,7 +161,7 @@
 			"active_low": 1,
 			"id": 13
 		}, {
-			"name": "out114",
+			"name": "out14",
 			"dir": "out",
 			"io": "sr1@13",
 			"active_low": 1,
@@ -164,66 +178,6 @@
 			"io": "sr1@15",
 			"active_low": 1,
 			"id": 16
-		}, {
-			"name": "24vin1",
-			"io": "gpio@PB_5",
-			"dir": "in",
-			"id": 40
-		}, {
-			"name": "24vin2",
-			"io": "gpio@PB_4",
-			"dir": "in",
-			"id": 41
-		}, {
-			"name": "24vin3",
-			"io": "gpio@PB_10",
-			"dir": "in",
-			"id": 42
-		}, {
-			"name": "24vin4",
-			"io": "gpio@PA_8",
-			"dir": "in",
-			"id": 43
-		}, {
-			"name": "24vin5",
-			"io": "gpio@PA_0",
-			"dir": "in",
-			"id": 44
-		}, {
-			"name": "24vin6",
-			"io": "gpio@PA_1",
-			"dir": "in",
-			"id": 45
-		}, {
-			"name": "24vin7",
-			"io": "gpio@PA_4",
-			"dir": "in",
-			"id": 46
-		}, {
-			"name": "24vin8",
-			"io": "gpio@PB_0",
-			"dir": "in",
-			"id": 47
-		}, {
-			"name": "24vin9",
-			"io": "gpio@PC_11",
-			"dir": "in",
-			"id": 48
-		}, {
-			"name": "24vin10",
-			"io": "gpio@PC_10",
-			"dir": "in",
-			"id": 49
-		}, {
-			"name": "24vin11",
-			"io": "gpio@PD_2",
-			"dir": "in",
-			"id": 50
-		}, {
-			"name": "24vin12",
-			"io": "gpio@PC_12",
-			"dir": "in",
-			"id": 51
 		}],
 		"bme280": {
 			"i2c": "i2c1",
