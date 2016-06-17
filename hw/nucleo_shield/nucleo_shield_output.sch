@@ -920,30 +920,6 @@ F 3 "" H 7600 2100 60  0000 C CNN
 	1    7600 2100
 	1    0    0    -1  
 $EndComp
-$Comp
-L R R34
-U 1 1 57335AE7
-P 7600 2250
-F 0 "R34" V 7680 2250 50  0000 C CNN
-F 1 "R" V 7600 2250 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 7530 2250 30  0001 C CNN
-F 3 "" H 7600 2250 30  0000 C CNN
-	1    7600 2250
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R42
-U 1 1 5737A3B5
-P 7300 2250
-F 0 "R42" V 7380 2250 50  0000 C CNN
-F 1 "R" V 7300 2250 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 7230 2250 30  0001 C CNN
-F 3 "" H 7300 2250 30  0000 C CNN
-	1    7300 2250
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
-	7300 2100 7600 2100
-Wire Wire Line
-	7300 2400 7600 2400
+	7600 2400 7600 2100
 $EndSCHEMATC

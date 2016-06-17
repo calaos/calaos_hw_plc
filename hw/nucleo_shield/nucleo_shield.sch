@@ -505,28 +505,6 @@ $EndComp
 Text GLabel 3850 5550 0    60   Input ~ 0
 SD_CS
 $Comp
-L R R37
-U 1 1 573365D0
-P 6950 2600
-F 0 "R37" V 7030 2600 50  0000 C CNN
-F 1 "R" V 6950 2600 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 6880 2600 30  0001 C CNN
-F 3 "" H 6950 2600 30  0000 C CNN
-	1    6950 2600
-	0    1    1    0   
-$EndComp
-$Comp
-L R R38
-U 1 1 57336EF7
-P 6950 2800
-F 0 "R38" V 7030 2800 50  0000 C CNN
-F 1 "R" V 6950 2800 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 6880 2800 30  0001 C CNN
-F 3 "" H 6950 2800 30  0000 C CNN
-	1    6950 2800
-	0    1    1    0   
-$EndComp
-$Comp
 L CONN_01X05 P17
 U 1 1 5733734C
 P 10500 1850
@@ -578,17 +556,6 @@ Text GLabel 8850 1850 0    60   Input ~ 0
 I2C1_SDA
 Text GLabel 8300 1750 0    60   Input ~ 0
 I2C1_SCL
-$Comp
-L R R40
-U 1 1 5733E4B6
-P 8150 2200
-F 0 "R40" V 7943 2200 50  0000 C CNN
-F 1 "R" V 8034 2200 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 8080 2200 50  0001 C CNN
-F 3 "" H 8150 2200 50  0000 C CNN
-	1    8150 2200
-	0    1    1    0   
-$EndComp
 Text GLabel 3950 3500 0    60   Input ~ 0
 1WIRE_IN
 $Comp
@@ -625,17 +592,6 @@ F 2 "" H 4300 4750 60  0000 C CNN
 F 3 "" H 4300 4750 60  0000 C CNN
 	1    4300 4750
 	1    0    0    -1  
-$EndComp
-$Comp
-L R R39
-U 1 1 5733CEEB
-P 6950 3000
-F 0 "R39" V 7030 3000 50  0000 C CNN
-F 1 "R" V 6950 3000 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM15mm" V 6880 3000 30  0001 C CNN
-F 3 "" H 6950 3000 30  0000 C CNN
-	1    6950 3000
-	0    1    1    0   
 $EndComp
 $Comp
 L CONN_02X03 P15
@@ -702,7 +658,7 @@ Wire Wire Line
 Wire Wire Line
 	4500 2700 4700 2700
 Wire Wire Line
-	5700 2600 6800 2600
+	5700 2600 6900 2600
 Wire Wire Line
 	6000 2600 6000 2550
 Wire Wire Line
@@ -897,17 +853,6 @@ Wire Wire Line
 Wire Wire Line
 	8850 1850 8950 1850
 Wire Wire Line
-	8000 2050 8000 2450
-Connection ~ 8000 2050
-Wire Wire Line
-	8300 2050 8300 2450
-Connection ~ 8300 2050
-Wire Wire Line
-	7100 2000 7100 3000
-Wire Wire Line
-	6800 2600 6800 3000
-Connection ~ 7100 2600
-Wire Wire Line
 	3950 3500 4700 3500
 Wire Wire Line
 	4300 4300 4300 4450
@@ -917,8 +862,6 @@ Wire Wire Line
 	4600 4650 4300 4650
 Wire Wire Line
 	4300 4650 4300 4750
-Connection ~ 6800 2800
-Connection ~ 7100 2800
 Wire Wire Line
 	6600 3500 6600 3200
 Wire Wire Line
@@ -951,19 +894,6 @@ Wire Wire Line
 	5000 6550 4650 6550
 Wire Wire Line
 	4650 6550 4650 6600
-$Comp
-L R R41
-U 1 1 5734C48B
-P 8150 2450
-F 0 "R41" V 7943 2450 50  0000 C CNN
-F 1 "R" V 8034 2450 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 8080 2450 50  0001 C CNN
-F 3 "" H 8150 2450 50  0000 C CNN
-	1    8150 2450
-	0    1    1    0   
-$EndComp
-Connection ~ 8000 2200
-Connection ~ 8300 2200
 $Comp
 L CONN_01X04 P20
 U 1 1 57419091
@@ -1011,4 +941,6 @@ Wire Wire Line
 	4850 750  4850 800 
 Wire Wire Line
 	4850 800  5100 800 
+Wire Wire Line
+	6900 2600 6900 2000
 $EndSCHEMATC
