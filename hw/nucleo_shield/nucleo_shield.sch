@@ -207,13 +207,16 @@ F 3 "" H 3750 2000 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Sheet
-S 1250 6250 600  750 
+S 1250 6250 600  1200
 U 5729DAE6
 F0 "nucleo_shield_output" 60
 F1 "nucleo_shield_output.sch" 60
 F2 "SRDATA" I R 1850 6450 60 
 F3 "SRCLK" I R 1850 6600 60 
 F4 "SRLatch" I R 1850 6750 60 
+F5 "SRDATA2" I R 1850 6900 60 
+F6 "SRCLK2" I R 1850 7050 60 
+F7 "SRLatch2" I R 1850 7200 60 
 $EndSheet
 Text GLabel 2150 6750 2    60   Input ~ 0
 SRLatch
@@ -234,19 +237,22 @@ SPI3_SCK
 Text GLabel 8700 2650 0    60   Input ~ 0
 IO_INT
 $Sheet
-S 950  4800 900  800 
+S 950  4350 900  1500
 U 572B2301
 F0 "nucleo_shield_input_exp" 60
 F1 "nucleo_shield_input_exp.sch" 60
-F2 "I2C_SCL" I R 1850 5000 60 
-F3 "I2C_SDA" I R 1850 5200 60 
-F4 "INT" I R 1850 5400 60 
+F2 "I2C_SCL" I R 1850 4550 60 
+F3 "I2C_SDA" I R 1850 4750 60 
+F4 "INT" I R 1850 4950 60 
+F5 "I2C2_SCL" I R 1850 5150 60 
+F6 "I2C2_SDA" I R 1850 5350 60 
+F7 "INT2" I R 1850 5550 60 
 $EndSheet
-Text GLabel 2300 5400 2    60   Input ~ 0
+Text GLabel 2300 4950 2    60   Input ~ 0
 IO_INT
-Text GLabel 2300 5000 2    60   Input ~ 0
+Text GLabel 2300 4550 2    60   Input ~ 0
 I2C3_SCL
-Text GLabel 2300 5200 2    60   Input ~ 0
+Text GLabel 2300 4750 2    60   Input ~ 0
 I2C3_SDA
 $Comp
 L CONN_02X04 P6
@@ -505,17 +511,6 @@ $EndComp
 Text GLabel 3850 5550 0    60   Input ~ 0
 SD_CS
 $Comp
-L CONN_01X05 P17
-U 1 1 5733734C
-P 10500 1850
-F 0 "P17" H 10500 2150 50  0000 C CNN
-F 1 "CONN_EXT" V 10600 1850 50  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x05" H 10500 1850 60  0001 C CNN
-F 3 "" H 10500 1850 60  0000 C CNN
-	1    10500 1850
-	1    0    0    -1  
-$EndComp
-$Comp
 L CONN_01X05 P16
 U 1 1 57337E5A
 P 3050 1300
@@ -651,6 +646,55 @@ F 3 "" H 4650 6600 60  0000 C CNN
 	1    4650 6600
 	1    0    0    -1  
 $EndComp
+$Comp
+L CONN_01X04 P20
+U 1 1 57419091
+P 5300 950
+F 0 "P20" H 5378 991 50  0000 L CNN
+F 1 "CON_BME" H 5378 900 50  0000 L CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x04" H 5300 950 50  0001 C CNN
+F 3 "" H 5300 950 50  0000 C CNN
+	1    5300 950 
+	1    0    0    -1  
+$EndComp
+Text GLabel 5050 1000 0    60   Input ~ 0
+I2C1_SCL
+Text GLabel 4550 1100 0    60   Input ~ 0
+I2C1_SDA
+$Comp
+L GND #PWR027
+U 1 1 5741922D
+P 3950 900
+F 0 "#PWR027" H 3950 650 50  0001 C CNN
+F 1 "GND" H 3950 750 50  0000 C CNN
+F 2 "" H 3950 900 60  0000 C CNN
+F 3 "" H 3950 900 60  0000 C CNN
+	1    3950 900 
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR028
+U 1 1 57419326
+P 4850 750
+F 0 "#PWR028" H 4850 600 50  0001 C CNN
+F 1 "+5V" H 4850 890 50  0000 C CNN
+F 2 "" H 4850 750 60  0000 C CNN
+F 3 "" H 4850 750 60  0000 C CNN
+	1    4850 750 
+	1    0    0    -1  
+$EndComp
+Text GLabel 10500 2250 2    60   Input ~ 0
+SRDATA2
+Text GLabel 10000 2150 2    60   Input ~ 0
+SRLatch2
+Text GLabel 10200 1850 2    60   Input ~ 0
+SRCLK2
+Text GLabel 2100 6900 2    60   Input ~ 0
+SRDATA2
+Text GLabel 2100 7050 2    60   Input ~ 0
+SRLatch2
+Text GLabel 2100 7200 2    60   Input ~ 0
+SRCLK2
 Wire Wire Line
 	9950 2350 9900 2350
 Wire Wire Line
@@ -705,11 +749,11 @@ Wire Wire Line
 Wire Wire Line
 	8950 2950 8850 2950
 Wire Wire Line
-	1850 5000 2300 5000
+	1850 4550 2300 4550
 Wire Wire Line
-	2300 5200 1850 5200
+	2300 4750 1850 4750
 Wire Wire Line
-	1850 5400 2300 5400
+	1850 4950 2300 4950
 Wire Wire Line
 	8300 5300 8000 5300
 Wire Wire Line
@@ -821,24 +865,6 @@ Wire Wire Line
 Connection ~ 6000 2600
 Connection ~ 6900 2000
 Wire Wire Line
-	9900 1650 10300 1650
-Wire Wire Line
-	9900 1750 10300 1750
-Wire Wire Line
-	9900 1850 10300 1850
-Wire Wire Line
-	9900 2150 10100 2150
-Wire Wire Line
-	10100 2150 10100 1950
-Wire Wire Line
-	10100 1950 10300 1950
-Wire Wire Line
-	9900 2250 10200 2250
-Wire Wire Line
-	10200 2250 10200 2050
-Wire Wire Line
-	10200 2050 10300 2050
-Wire Wire Line
 	2750 1500 2850 1500
 Wire Wire Line
 	2850 1400 2150 1400
@@ -894,53 +920,72 @@ Wire Wire Line
 	5000 6550 4650 6550
 Wire Wire Line
 	4650 6550 4650 6600
-$Comp
-L CONN_01X04 P20
-U 1 1 57419091
-P 5300 950
-F 0 "P20" H 5378 991 50  0000 L CNN
-F 1 "CON_BME" H 5378 900 50  0000 L CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x04" H 5300 950 50  0001 C CNN
-F 3 "" H 5300 950 50  0000 C CNN
-	1    5300 950 
-	1    0    0    -1  
-$EndComp
-Text GLabel 5050 1000 0    60   Input ~ 0
-I2C1_SCL
-Text GLabel 4550 1100 0    60   Input ~ 0
-I2C1_SDA
 Wire Wire Line
 	4550 1100 5100 1100
 Wire Wire Line
 	5100 1000 5050 1000
-$Comp
-L GND #PWR027
-U 1 1 5741922D
-P 3950 900
-F 0 "#PWR027" H 3950 650 50  0001 C CNN
-F 1 "GND" H 3950 750 50  0000 C CNN
-F 2 "" H 3950 900 60  0000 C CNN
-F 3 "" H 3950 900 60  0000 C CNN
-	1    3950 900 
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5100 900  3950 900 
-$Comp
-L +5V #PWR028
-U 1 1 57419326
-P 4850 750
-F 0 "#PWR028" H 4850 600 50  0001 C CNN
-F 1 "+5V" H 4850 890 50  0000 C CNN
-F 2 "" H 4850 750 60  0000 C CNN
-F 3 "" H 4850 750 60  0000 C CNN
-	1    4850 750 
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4850 750  4850 800 
 Wire Wire Line
 	4850 800  5100 800 
 Wire Wire Line
 	6900 2600 6900 2000
+Wire Wire Line
+	9900 2250 10500 2250
+Wire Wire Line
+	10000 2150 9900 2150
+Wire Wire Line
+	9900 1850 10200 1850
+Wire Wire Line
+	1850 6900 2100 6900
+Wire Wire Line
+	2100 7050 1850 7050
+Wire Wire Line
+	1850 7200 2100 7200
+$Comp
+L CONN_01X02 P3
+U 1 1 5768580D
+P 8300 850
+F 0 "P3" H 8300 1000 50  0000 C CNN
+F 1 "POWER_24V_CON" V 8400 850 50  0000 C CNN
+F 2 "w_conn_screw:mors_2p" H 8300 850 60  0001 C CNN
+F 3 "" H 8300 850 60  0000 C CNN
+	1    8300 850 
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	8350 1050 8450 1050
+Wire Wire Line
+	8250 1050 8100 1050
+$Comp
+L +24V #PWR029
+U 1 1 57685F0E
+P 8450 1050
+F 0 "#PWR029" H 8450 900 50  0001 C CNN
+F 1 "+24V" H 8450 1190 50  0000 C CNN
+F 2 "" H 8450 1050 60  0000 C CNN
+F 3 "" H 8450 1050 60  0000 C CNN
+	1    8450 1050
+	0    1    1    0   
+$EndComp
+Text GLabel 8100 1050 0    60   Input ~ 0
+GND_24V
+Text GLabel 2250 5150 2    60   Input ~ 0
+I2C1_SCL
+Text GLabel 2250 5350 2    60   Input ~ 0
+I2C1_SDA
+Text GLabel 10150 1650 2    60   Input ~ 0
+I2C1_GPIO
+Wire Wire Line
+	10150 1650 9900 1650
+Text GLabel 2250 5550 2    60   Input ~ 0
+I2C1_GPIO
+Wire Wire Line
+	1850 5150 2250 5150
+Wire Wire Line
+	2250 5350 1850 5350
+Wire Wire Line
+	2250 5550 1850 5550
 $EndSCHEMATC

@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Thu 12 May 2016 01:30:43 PM CEST
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Mon 20 Jun 2016 05:45:24 PM CEST
 
 BeginCmp
 TimeStamp = /572F38F4;
@@ -25,21 +25,21 @@ BeginCmp
 TimeStamp = /572B2301/5729E588/5728E764;
 Reference = P1;
 ValeurCmp = CONN_INH1;
-IdModule  = w_conn_screw:mors_10p;
+IdModule  = w_conn_screw:mors_8p;
 EndCmp
 
 BeginCmp
 TimeStamp = /5729DAE6/57326C94;
 Reference = P2;
 ValeurCmp = CONN_OUT3;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x08;
 EndCmp
 
 BeginCmp
-TimeStamp = /5729DAE6/5732DAA1;
+TimeStamp = /5768580D;
 Reference = P3;
-ValeurCmp = CONN_OUT1;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
+ValeurCmp = POWER_24V_CON;
+IdModule  = w_conn_screw:mors_2p;
 EndCmp
 
 BeginCmp
@@ -53,7 +53,7 @@ BeginCmp
 TimeStamp = /572B2301/5729E588/5728E770;
 Reference = P5;
 ValeurCmp = CONN_INH2;
-IdModule  = w_conn_screw:mors_10p;
+IdModule  = w_conn_screw:mors_8p;
 EndCmp
 
 BeginCmp
@@ -74,7 +74,7 @@ BeginCmp
 TimeStamp = /5729DAE6/57331532;
 Reference = P8;
 ValeurCmp = CONN_OUT4;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x08;
 EndCmp
 
 BeginCmp
@@ -88,14 +88,14 @@ BeginCmp
 TimeStamp = /5729DAE6/5730818B;
 Reference = P10;
 ValeurCmp = CONN_OUTH1;
-IdModule  = w_conn_screw:mors_10p;
+IdModule  = w_conn_screw:mors_8p;
 EndCmp
 
 BeginCmp
 TimeStamp = /5729DAE6/573081DD;
 Reference = P11;
 ValeurCmp = CONN_OUTH2;
-IdModule  = w_conn_screw:mors_10p;
+IdModule  = w_conn_screw:mors_8p;
 EndCmp
 
 BeginCmp
@@ -113,10 +113,10 @@ IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
 EndCmp
 
 BeginCmp
-TimeStamp = /5729DAE6/5732E015;
+TimeStamp = /572B2301/5768F994;
 Reference = P14;
-ValeurCmp = CONN_OUT2;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
+ValeurCmp = CONN_IN4;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x08;
 EndCmp
 
 BeginCmp
@@ -134,10 +134,10 @@ IdModule  = Pin_Headers:Pin_Header_Straight_1x05;
 EndCmp
 
 BeginCmp
-TimeStamp = /5733734C;
+TimeStamp = /572B2301/5729E588/5768B004;
 Reference = P17;
-ValeurCmp = CONN_EXT;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x05;
+ValeurCmp = CONN_INH3;
+IdModule  = w_conn_screw:mors_8p;
 EndCmp
 
 BeginCmp
@@ -152,6 +152,13 @@ TimeStamp = /5734A2DB;
 Reference = P19;
 ValeurCmp = CONN_EXT_SPI;
 IdModule  = Pin_Headers:Pin_Header_Straight_1x06;
+EndCmp
+
+BeginCmp
+TimeStamp = /57419091;
+Reference = P20;
+ValeurCmp = CON_BME;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
 EndCmp
 
 BeginCmp
@@ -386,7 +393,7 @@ IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
-TimeStamp = /5729DAE6/57335AE7;
+TimeStamp = /572B2301/5729E588/57690D62;
 Reference = R34;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
@@ -407,38 +414,108 @@ IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /573365D0;
+TimeStamp = /572B2301/5729E588/57690D68;
 Reference = R37;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /57336EF7;
+TimeStamp = /572B2301/5729E588/57690D6E;
 Reference = R38;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /5733CEEB;
+TimeStamp = /572B2301/5729E588/57690D74;
 Reference = R39;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM15mm;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /5733E4B6;
+TimeStamp = /572B2301/5729E588/5768DC57;
 Reference = R40;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
 EndCmp
 
 BeginCmp
-TimeStamp = /5734C48B;
+TimeStamp = /572B2301/5729E588/5768DC5D;
 Reference = R41;
 ValeurCmp = R;
 IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/5768DC63;
+Reference = R42;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/5768DC69;
+Reference = R43;
+ValeurCmp = R;
+IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/57690DA2;
+Reference = R44;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/5768DC97;
+Reference = R45;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/57690DA8;
+Reference = R46;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/5768DC9D;
+Reference = R47;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/57690DAE;
+Reference = R48;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/5768DCA3;
+Reference = R49;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/57690DB4;
+Reference = R50;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/5768DCA9;
+Reference = R51;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
@@ -522,6 +599,34 @@ BeginCmp
 TimeStamp = /5729DAE6/57331448;
 Reference = U12;
 ValeurCmp = 74HC595;
+IdModule  = Housings_DIP:DIP-16__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5768ED7B;
+Reference = U13;
+ValeurCmp = PCF8574A;
+IdModule  = Housings_DIP:DIP-16__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5767DB40;
+Reference = U14;
+ValeurCmp = PCF8574A;
+IdModule  = Housings_DIP:DIP-16__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/57690D5C;
+Reference = U15;
+ValeurCmp = LTV-847;
+IdModule  = Housings_DIP:DIP-16__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /572B2301/5729E588/5768DC4F;
+Reference = U16;
+ValeurCmp = LTV-847;
 IdModule  = Housings_DIP:DIP-16__300;
 EndCmp
 
