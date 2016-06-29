@@ -34,6 +34,12 @@ network_main_loop(void)
 	mysensors_parse_message(buf);
 }
 
+void
+network_send_to_master(uint8_t *buffer, unsigned int length)
+{
+	wiznet_udp_send_to(g_udp_socket, g_net_send_ep, (char *) buffer, length);
+}
+
 static int
 network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
 {

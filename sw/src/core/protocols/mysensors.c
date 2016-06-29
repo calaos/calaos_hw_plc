@@ -3,13 +3,27 @@
 #include "debug.h"
 #include "utils.h"
 #include "module.h"
-#include "mysensors.h"
 #include "sensors.h"
+#include "network.h"
+#include "mysensors.h"
 
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+
+static int g_mysensor_medium = -1;
+
+enum mysensors_medium {
+	MYSENSORS_MEDIUM_SERIAL = 0,
+	MYSENSORS_MEDIUM_ETHERNET,
+	MYSENSORS_MEDIUM_COUNT,
+};
+
+static const char *medium_to_str[MYSENSORS_MEDIUM_COUNT] = {
+	[MYSENSORS_MEDIUM_SERIAL] = "serial",
+	[MYSENSORS_MEDIUM_ETHERNET] = "ethernet",
+};
 
 /**
  * Node id requested from controller
@@ -83,55 +97,79 @@ int mysensors_parse_message(char *query)
 	return 1;
 }
 
+
+#define MYSENSORS_MSG_FORMAT	"%d;%d;%d;%d;%d;"
+
+static void mysensor_send_message(char *str)
+{
+	if (g_mysensor_medium == MYSENSORS_MEDIUM_ETHERNET) {
+		network_send_to_master((uint8_t *) str, strlen(str));
+	} else {
+		serial_puts(str);
+	}
+}
+
 /**
- * FIXME: generate these functions
+ * FIXME: generate or make these function generic
  */
 static void
-mysensors_send_message_str(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+mysensors_serial_send_str(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
 				uint8_t ack, uint16_t sub_type, char *payload)
 {
-	serial_puts("%d;%d;%d;%d;%d;%s\n", node_id, child_sensor_id, message_type, ack, sub_type, payload);
+	char buffer[MYSENSOR_MAX_MSG_LENGTH];
+
+	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%s\n", node_id, child_sensor_id, message_type, ack, sub_type, payload);
+	mysensor_send_message(buffer);
 }
 
 static void
-mysensors_send_message_int(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+mysensors_send_int(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
 				uint8_t ack, uint16_t sub_type, int value)
 {
-	serial_puts("%d;%d;%d;%d;%d;%d\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
+	char buffer[MYSENSOR_MAX_MSG_LENGTH];
+
+	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%d\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
+	mysensor_send_message(buffer);
 }
 
 static void
-mysensors_send_message_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+mysensors_send_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
 				uint8_t ack, uint16_t sub_type, float value)
 {
-	serial_puts("%d;%d;%d;%d;%d;%2f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
-}
+	char buffer[MYSENSOR_MAX_MSG_LENGTH];
 
-static void
-mysensors_update_value_int(sensor_t *s, mysensors_datatype_t dt, int value)
-{
-	mysensors_send_message_int(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, dt, value);
-}
-
-static void
-mysensors_update_value_float(sensor_t *s, mysensors_datatype_t dt, float value)
-{
-	mysensors_send_message_float(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, dt, value);
+	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%.2f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
+	mysensor_send_message(buffer);
 }
 
 static int
 mysensors_json_parse_section(json_value* section)
 {
-	unsigned int i;
+	unsigned int i, j;
 	json_value* entry;
+	char *name;
 	if (section->type != json_object)
 		return -1;
 
         for (i = 0; i < section->u.object.length; i++) {
 		entry = section->u.object.values[i].value;
-		if (strcmp(section->u.object.values[i].name, "node_id") == 0) {
+		name = section->u.object.values[i].name;
+		if (strcmp(name, "node_id") == 0) {
 			g_assigned_node_id = entry->u.integer;
 			debug_puts("Node id: %d\r\n", g_assigned_node_id);
+		} else if (strcmp(name, "medium") == 0) {
+			for (j = 0; j < ARRAY_SIZE(medium_to_str); j++) {
+				if (strcmp(entry->u.string.ptr, medium_to_str[j]) == 0) {
+					g_mysensor_medium = j;
+					debug_puts("Using medium %s for mysensors\n", medium_to_str[j]);
+					break;
+				}
+			}
+
+		        if (g_mysensor_medium == -1) {
+				debug_puts("Invalid medium: %s, defaulting to serial\r\n", entry->u.string.ptr);
+				g_mysensor_medium = MYSENSORS_MEDIUM_SERIAL;
+			}
 		}
         }
 
@@ -152,7 +190,7 @@ mysensor_sensor_created(sensor_t *s)
 {
 	mysensors_sensortype_t type = sensor_get_type(s);
 
-	mysensors_send_message_str(g_assigned_node_id, sensor_get_id(s), PRESENTATION, REQUEST, type, sensor_get_name(s));
+	mysensors_serial_send_str(g_assigned_node_id, sensor_get_id(s), PRESENTATION, REQUEST, type, sensor_get_name(s));
 }
 
 static void
@@ -160,12 +198,12 @@ mysensor_sensor_updated(sensor_t *s, sensor_value_t value)
 {
 	switch (sensor_get_type(s)) {
 		case SENSORS_TYPE_SWITCH:
-			mysensors_update_value_int(s, V_STATUS, value.val_i);
+			mysensors_send_int(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, V_STATUS, value.val_i);
 			break;
 		case SENSORS_TYPE_HUMIDITY:
 		case SENSORS_TYPE_TEMP:
 		case SENSORS_TYPE_PRESSURE:
-			mysensors_update_value_float(s, V_STATUS, value.val_f);
+			mysensors_send_float(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, V_STATUS, value.val_f);
 			break;
 		default:
 			break;
@@ -180,10 +218,11 @@ static sensor_watcher_t mysensor_watcher = {
 static int
 mysensors_json_parse(json_value* value)
 {
-	mysensors_json_parse_section(value);
+	if (mysensors_json_parse_section(value) != 0)
+		return 1;
 
 	if (g_assigned_node_id == 0) {
-		mysensors_send_message_str(0, 0, INTERNAL, REQUEST, I_ID_REQUEST, "1.0");
+		mysensors_serial_send_str(0, 0, INTERNAL, REQUEST, I_ID_REQUEST, "1.0");
 		/* FIXME: Wait message */
 		g_assigned_node_id = 1;
 	}

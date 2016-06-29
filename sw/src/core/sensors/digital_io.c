@@ -42,6 +42,14 @@ static const sensors_ops_t digital_io_ops =
 	.req = digital_io_req,
 };
 
+void digital_io_watcher_cb(gen_io_t *io, int value, void * data)
+{
+	sensor_value_t val = {.val_i = value};
+	digital_io_t *dio = data;
+
+	sensors_sensor_update(dio->s, val);
+}
+
 static int
 digital_io_json_parse_one(json_value* sensor)
 {
@@ -81,8 +89,9 @@ digital_io_json_parse_one(json_value* sensor)
         PANIC_ON(s_name == NULL || s_gpio_name == NULL,
 			"Incomplete sensor description");
 	dio->io = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
-	/* FIXME: use gen_io_add_watcher */
 	dio->s = sensor_create(SENSORS_TYPE_SWITCH, s_name, s_id, &digital_io_ops, dio);
+
+	gen_io_add_watcher(dio->io, digital_io_watcher_cb, dio);
 
 	return 0;
 }

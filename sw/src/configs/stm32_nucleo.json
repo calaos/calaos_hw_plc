@@ -1,32 +1,35 @@
 {
 	"global": {
 		"baudrate": 115200,
-		"debug": true
+		"debug": true,
 	},
 	"mysensors": {
-		"node_id": 42
+		"node_id": 42,
+		"medium": "serial"
 	},
 	"i2c": [{
 		"name": "i2c1",
 		"sda": "PB_9",
 		"scl": "PB_8",
-		"freq": "400000"
+		"freq": 400000
 	}, {
 		"name": "i2c3",
 		"sda": "PB_4",
 		"scl": "PA_8",
-		"freq": "400000"
+		"freq": 400000
 	}],
 	"spi": [{
 		"name": "spi1",
 		"mosi": "PB_15",
 		"miso": "PB_14",
-		"sck": "PB_13"
+		"sck": "PB_13",
+		"freq": 20000000
 	}, {
 		"name": "spi3",
 		"mosi": "PC_12",
 		"miso": "PC_11",
-		"sck": "PC_10"
+		"sck": "PC_10",
+		"freq": 20000000
 	}],
 	"1w": [{
 		"name": "1w1",
@@ -40,11 +43,10 @@
 			"spi": "spi1",
 			"rst": "gpio@PC_0",
 			"cs": "gpio@PC_3",
-			"dc": "gpio@PC_1",
-			"freq": 20000000
+			"dc": "gpio@PC_1"
 		}
 	},
-	"network": {
+	"#network": {
 		"master": "192.168.1.2",
 		"type": "w5100",
 		"mac": "78:ac:c0:97:f2:67",
@@ -52,8 +54,7 @@
 		"data": {
 			"spi": "spi3",
 			"rst": "gpio@PD_2",
-			"cs": "gpio@PA_13",
-			"freq": 20000000
+			"cs": "gpio@PA_13"
 		}
 	},
 	"shift_registers": [{
