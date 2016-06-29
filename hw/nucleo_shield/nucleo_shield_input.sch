@@ -90,7 +90,7 @@ U 1 1 5728E427
 P 1150 3200
 F 0 "R5" V 1230 3200 50  0000 C CNN
 F 1 "R" V 1150 3200 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1080 3200 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1080 3200 30  0001 C CNN
 F 3 "" H 1150 3200 30  0000 C CNN
 	1    1150 3200
 	0    1    1    0   
@@ -101,7 +101,7 @@ U 1 1 5728E42E
 P 1150 3500
 F 0 "R6" V 1230 3500 50  0000 C CNN
 F 1 "R" V 1150 3500 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1080 3500 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1080 3500 30  0001 C CNN
 F 3 "" H 1150 3500 30  0000 C CNN
 	1    1150 3500
 	0    1    1    0   
@@ -112,7 +112,7 @@ U 1 1 5728E435
 P 1150 3800
 F 0 "R7" V 1230 3800 50  0000 C CNN
 F 1 "R" V 1150 3800 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1080 3800 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1080 3800 30  0001 C CNN
 F 3 "" H 1150 3800 30  0000 C CNN
 	1    1150 3800
 	0    1    1    0   
@@ -123,7 +123,7 @@ U 1 1 5728E43C
 P 1150 4100
 F 0 "R8" V 1230 4100 50  0000 C CNN
 F 1 "R" V 1150 4100 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1080 4100 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1080 4100 30  0001 C CNN
 F 3 "" H 1150 4100 30  0000 C CNN
 	1    1150 4100
 	0    1    1    0   
@@ -134,7 +134,7 @@ U 1 1 5728E443
 P 1200 1700
 F 0 "R4" V 1280 1700 50  0000 C CNN
 F 1 "R" V 1200 1700 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1130 1700 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1130 1700 30  0001 C CNN
 F 3 "" H 1200 1700 30  0000 C CNN
 	1    1200 1700
 	0    1    1    0   
@@ -145,7 +145,7 @@ U 1 1 5728E44A
 P 1200 1400
 F 0 "R3" V 1280 1400 50  0000 C CNN
 F 1 "R" V 1200 1400 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1130 1400 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1130 1400 30  0001 C CNN
 F 3 "" H 1200 1400 30  0000 C CNN
 	1    1200 1400
 	0    1    1    0   
@@ -156,7 +156,7 @@ U 1 1 5728E451
 P 1200 1100
 F 0 "R2" V 1280 1100 50  0000 C CNN
 F 1 "R" V 1200 1100 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1130 1100 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1130 1100 30  0001 C CNN
 F 3 "" H 1200 1100 30  0000 C CNN
 	1    1200 1100
 	0    1    1    0   
@@ -167,7 +167,7 @@ U 1 1 5728E458
 P 1200 800
 F 0 "R1" V 1280 800 50  0000 C CNN
 F 1 "R" V 1200 800 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1130 800 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1130 800 30  0001 C CNN
 F 3 "" H 1200 800 30  0000 C CNN
 	1    1200 800 
 	0    1    1    0   
@@ -177,10 +177,10 @@ GND_24V
 Text GLabel 1350 4650 0    60   Input ~ 0
 GND_24V
 $Comp
-L +3.3V #PWR061
+L +3.3V #PWR040
 U 1 1 5728E4BD
 P 2600 3200
-F 0 "#PWR061" H 2600 3050 50  0001 C CNN
+F 0 "#PWR040" H 2600 3050 50  0001 C CNN
 F 1 "+3.3V" H 2600 3340 50  0000 C CNN
 F 2 "" H 2600 3200 60  0000 C CNN
 F 3 "" H 2600 3200 60  0000 C CNN
@@ -188,10 +188,10 @@ F 3 "" H 2600 3200 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR062
+L +3.3V #PWR041
 U 1 1 5728E4C3
 P 2650 800
-F 0 "#PWR062" H 2650 650 50  0001 C CNN
+F 0 "#PWR041" H 2650 650 50  0001 C CNN
 F 1 "+3.3V" H 2650 940 50  0000 C CNN
 F 2 "" H 2650 800 60  0000 C CNN
 F 3 "" H 2650 800 60  0000 C CNN
@@ -223,7 +223,7 @@ U 1 1 5728E4FA
 P 1150 5600
 F 0 "R17" V 1230 5600 50  0000 C CNN
 F 1 "R" V 1150 5600 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1080 5600 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1080 5600 30  0001 C CNN
 F 3 "" H 1150 5600 30  0000 C CNN
 	1    1150 5600
 	0    1    1    0   
@@ -234,7 +234,7 @@ U 1 1 5728E501
 P 1150 5900
 F 0 "R18" V 1230 5900 50  0000 C CNN
 F 1 "R" V 1150 5900 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1080 5900 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1080 5900 30  0001 C CNN
 F 3 "" H 1150 5900 30  0000 C CNN
 	1    1150 5900
 	0    1    1    0   
@@ -245,7 +245,7 @@ U 1 1 5728E508
 P 1150 6200
 F 0 "R19" V 1230 6200 50  0000 C CNN
 F 1 "R" V 1150 6200 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1080 6200 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1080 6200 30  0001 C CNN
 F 3 "" H 1150 6200 30  0000 C CNN
 	1    1150 6200
 	0    1    1    0   
@@ -256,7 +256,7 @@ U 1 1 5728E50F
 P 1150 6500
 F 0 "R20" V 1230 6500 50  0000 C CNN
 F 1 "R" V 1150 6500 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 1080 6500 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 1080 6500 30  0001 C CNN
 F 3 "" H 1150 6500 30  0000 C CNN
 	1    1150 6500
 	0    1    1    0   
@@ -264,10 +264,10 @@ $EndComp
 Text GLabel 1350 7050 0    60   Input ~ 0
 GND_24V
 $Comp
-L +3.3V #PWR063
+L +3.3V #PWR042
 U 1 1 5728E545
 P 2600 5600
-F 0 "#PWR063" H 2600 5450 50  0001 C CNN
+F 0 "#PWR042" H 2600 5450 50  0001 C CNN
 F 1 "+3.3V" H 2600 5740 50  0000 C CNN
 F 2 "" H 2600 5600 60  0000 C CNN
 F 3 "" H 2600 5600 60  0000 C CNN
@@ -377,7 +377,7 @@ U 1 1 572A10AB
 P 4400 5550
 F 0 "R25" V 4480 5550 50  0000 C CNN
 F 1 "R" V 4400 5550 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4330 5550 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4330 5550 30  0001 C CNN
 F 3 "" H 4400 5550 30  0000 C CNN
 	1    4400 5550
 	0    1    1    0   
@@ -388,7 +388,7 @@ U 1 1 572A10B1
 P 4400 5850
 F 0 "R26" V 4480 5850 50  0000 C CNN
 F 1 "R" V 4400 5850 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4330 5850 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4330 5850 30  0001 C CNN
 F 3 "" H 4400 5850 30  0000 C CNN
 	1    4400 5850
 	0    1    1    0   
@@ -399,7 +399,7 @@ U 1 1 572A10B7
 P 4400 6150
 F 0 "R27" V 4480 6150 50  0000 C CNN
 F 1 "R" V 4400 6150 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4330 6150 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4330 6150 30  0001 C CNN
 F 3 "" H 4400 6150 30  0000 C CNN
 	1    4400 6150
 	0    1    1    0   
@@ -410,7 +410,7 @@ U 1 1 572A10BD
 P 4400 6450
 F 0 "R28" V 4480 6450 50  0000 C CNN
 F 1 "R" V 4400 6450 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4330 6450 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4330 6450 30  0001 C CNN
 F 3 "" H 4400 6450 30  0000 C CNN
 	1    4400 6450
 	0    1    1    0   
@@ -418,10 +418,10 @@ $EndComp
 Text GLabel 4600 7000 0    60   Input ~ 0
 GND_24V
 $Comp
-L +3.3V #PWR064
+L +3.3V #PWR043
 U 1 1 572A10F2
 P 5850 5550
-F 0 "#PWR064" H 5850 5400 50  0001 C CNN
+F 0 "#PWR043" H 5850 5400 50  0001 C CNN
 F 1 "+3.3V" H 5850 5690 50  0000 C CNN
 F 2 "" H 5850 5550 60  0000 C CNN
 F 3 "" H 5850 5550 60  0000 C CNN
@@ -481,10 +481,10 @@ F 3 "" H 3050 2300 30  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR065
+L GND #PWR044
 U 1 1 57319FB5
 P 2750 2700
-F 0 "#PWR065" H 2750 2450 50  0001 C CNN
+F 0 "#PWR044" H 2750 2450 50  0001 C CNN
 F 1 "GND" H 2750 2550 50  0000 C CNN
 F 2 "" H 2750 2700 60  0000 C CNN
 F 3 "" H 2750 2700 60  0000 C CNN
@@ -536,10 +536,10 @@ F 3 "" H 3050 4700 30  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR066
+L GND #PWR045
 U 1 1 5731A44E
 P 2750 5100
-F 0 "#PWR066" H 2750 4850 50  0001 C CNN
+F 0 "#PWR045" H 2750 4850 50  0001 C CNN
 F 1 "GND" H 2750 4950 50  0000 C CNN
 F 2 "" H 2750 5100 60  0000 C CNN
 F 3 "" H 2750 5100 60  0000 C CNN
@@ -939,10 +939,10 @@ F 3 "" H 6300 7050 30  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR067
+L GND #PWR046
 U 1 1 5731ACFF
 P 6000 7650
-F 0 "#PWR067" H 6000 7400 50  0001 C CNN
+F 0 "#PWR046" H 6000 7400 50  0001 C CNN
 F 1 "GND" H 6000 7500 50  0000 C CNN
 F 2 "" H 6000 7650 60  0000 C CNN
 F 3 "" H 6000 7650 60  0000 C CNN
@@ -985,10 +985,10 @@ Wire Wire Line
 	2750 5100 2750 5000
 Connection ~ 2750 5000
 $Comp
-L GND #PWR068
+L GND #PWR047
 U 1 1 57320D19
 P 2750 7500
-F 0 "#PWR068" H 2750 7250 50  0001 C CNN
+F 0 "#PWR047" H 2750 7250 50  0001 C CNN
 F 1 "GND" H 2750 7350 50  0000 C CNN
 F 2 "" H 2750 7500 60  0000 C CNN
 F 3 "" H 2750 7500 60  0000 C CNN
@@ -1064,7 +1064,7 @@ U 1 1 5768DC57
 P 4700 800
 F 0 "R40" V 4780 800 50  0000 C CNN
 F 1 "R" V 4700 800 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4630 800 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4630 800 30  0001 C CNN
 F 3 "" H 4700 800 30  0000 C CNN
 	1    4700 800 
 	0    1    1    0   
@@ -1075,7 +1075,7 @@ U 1 1 5768DC5D
 P 4700 1100
 F 0 "R41" V 4780 1100 50  0000 C CNN
 F 1 "R" V 4700 1100 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4630 1100 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4630 1100 30  0001 C CNN
 F 3 "" H 4700 1100 30  0000 C CNN
 	1    4700 1100
 	0    1    1    0   
@@ -1086,7 +1086,7 @@ U 1 1 5768DC63
 P 4700 1400
 F 0 "R42" V 4780 1400 50  0000 C CNN
 F 1 "R" V 4700 1400 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4630 1400 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4630 1400 30  0001 C CNN
 F 3 "" H 4700 1400 30  0000 C CNN
 	1    4700 1400
 	0    1    1    0   
@@ -1097,7 +1097,7 @@ U 1 1 5768DC69
 P 4700 1700
 F 0 "R43" V 4780 1700 50  0000 C CNN
 F 1 "R" V 4700 1700 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4630 1700 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4630 1700 30  0001 C CNN
 F 3 "" H 4700 1700 30  0000 C CNN
 	1    4700 1700
 	0    1    1    0   
@@ -1105,23 +1105,23 @@ $EndComp
 Text GLabel 4900 2250 0    60   Input ~ 0
 GND_24V
 $Comp
-L +3.3V #PWR069
+L +3.3V #PWR048
 U 1 1 5768DC70
 P 6150 800
-F 0 "#PWR069" H 6150 650 50  0001 C CNN
+F 0 "#PWR048" H 6150 650 50  0001 C CNN
 F 1 "+3.3V" H 6150 940 50  0000 C CNN
 F 2 "" H 6150 800 60  0000 C CNN
 F 3 "" H 6150 800 60  0000 C CNN
 	1    6150 800 
 	1    0    0    -1  
 $EndComp
-Text HLabel 6850 1000 2    60   Input ~ 0
+Text HLabel 6700 4250 2    60   Input ~ 0
 in17
-Text HLabel 6850 1300 2    60   Input ~ 0
+Text HLabel 6700 3950 2    60   Input ~ 0
 in18
-Text HLabel 6850 1600 2    60   Input ~ 0
+Text HLabel 6700 3650 2    60   Input ~ 0
 in19
-Text HLabel 6850 1900 2    60   Input ~ 0
+Text HLabel 6700 3350 2    60   Input ~ 0
 in20
 Wire Wire Line
 	5700 1000 6850 1000
@@ -1220,10 +1220,10 @@ F 3 "" H 6600 2300 30  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR070
+L GND #PWR049
 U 1 1 5768DCAF
 P 6300 2900
-F 0 "#PWR070" H 6300 2650 50  0001 C CNN
+F 0 "#PWR049" H 6300 2650 50  0001 C CNN
 F 1 "GND" H 6300 2750 50  0000 C CNN
 F 2 "" H 6300 2900 60  0000 C CNN
 F 3 "" H 6300 2900 60  0000 C CNN
@@ -1257,13 +1257,13 @@ Connection ~ 6000 1900
 Wire Wire Line
 	6300 2900 6300 2600
 Connection ~ 6300 2600
-Text GLabel 4400 800  0    60   Input ~ 0
-inh17
-Text GLabel 4400 1100 0    60   Input ~ 0
-inh18
-Text GLabel 4400 1400 0    60   Input ~ 0
-inh19
 Text GLabel 4400 1700 0    60   Input ~ 0
+inh17
+Text GLabel 4400 1400 0    60   Input ~ 0
+inh18
+Text GLabel 4400 1100 0    60   Input ~ 0
+inh19
+Text GLabel 4400 800  0    60   Input ~ 0
 inh20
 $Comp
 L LTV-847 U15
@@ -1282,7 +1282,7 @@ U 1 1 57690D62
 P 4550 3150
 F 0 "R34" V 4630 3150 50  0000 C CNN
 F 1 "R" V 4550 3150 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4480 3150 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4480 3150 30  0001 C CNN
 F 3 "" H 4550 3150 30  0000 C CNN
 	1    4550 3150
 	0    1    1    0   
@@ -1293,7 +1293,7 @@ U 1 1 57690D68
 P 4550 3450
 F 0 "R37" V 4630 3450 50  0000 C CNN
 F 1 "R" V 4550 3450 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4480 3450 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4480 3450 30  0001 C CNN
 F 3 "" H 4550 3450 30  0000 C CNN
 	1    4550 3450
 	0    1    1    0   
@@ -1304,7 +1304,7 @@ U 1 1 57690D6E
 P 4550 3750
 F 0 "R38" V 4630 3750 50  0000 C CNN
 F 1 "R" V 4550 3750 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4480 3750 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4480 3750 30  0001 C CNN
 F 3 "" H 4550 3750 30  0000 C CNN
 	1    4550 3750
 	0    1    1    0   
@@ -1315,7 +1315,7 @@ U 1 1 57690D74
 P 4550 4050
 F 0 "R39" V 4630 4050 50  0000 C CNN
 F 1 "R" V 4550 4050 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM10mm" V 4480 4050 30  0001 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4480 4050 30  0001 C CNN
 F 3 "" H 4550 4050 30  0000 C CNN
 	1    4550 4050
 	0    1    1    0   
@@ -1323,23 +1323,23 @@ $EndComp
 Text GLabel 4750 4600 0    60   Input ~ 0
 GND_24V
 $Comp
-L +3.3V #PWR071
+L +3.3V #PWR050
 U 1 1 57690D7B
 P 6000 3150
-F 0 "#PWR071" H 6000 3000 50  0001 C CNN
+F 0 "#PWR050" H 6000 3000 50  0001 C CNN
 F 1 "+3.3V" H 6000 3290 50  0000 C CNN
 F 2 "" H 6000 3150 60  0000 C CNN
 F 3 "" H 6000 3150 60  0000 C CNN
 	1    6000 3150
 	1    0    0    -1  
 $EndComp
-Text HLabel 6700 3350 2    60   Input ~ 0
+Text HLabel 6850 1000 2    60   Input ~ 0
 in21
-Text HLabel 6700 3650 2    60   Input ~ 0
+Text HLabel 6850 1300 2    60   Input ~ 0
 in22
-Text HLabel 6700 3950 2    60   Input ~ 0
+Text HLabel 6850 1600 2    60   Input ~ 0
 in23
-Text HLabel 6700 4250 2    60   Input ~ 0
+Text HLabel 6850 1900 2    60   Input ~ 0
 in24
 Wire Wire Line
 	5550 3350 6700 3350
@@ -1438,10 +1438,10 @@ F 3 "" H 6450 4650 30  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR072
+L GND #PWR051
 U 1 1 57690DBA
 P 6150 5250
-F 0 "#PWR072" H 6150 5000 50  0001 C CNN
+F 0 "#PWR051" H 6150 5000 50  0001 C CNN
 F 1 "GND" H 6150 5100 50  0000 C CNN
 F 2 "" H 6150 5250 60  0000 C CNN
 F 3 "" H 6150 5250 60  0000 C CNN
@@ -1475,12 +1475,12 @@ Connection ~ 5850 4250
 Wire Wire Line
 	6150 5250 6150 4950
 Connection ~ 6150 4950
-Text GLabel 4250 3150 0    60   Input ~ 0
-inh21
-Text GLabel 4250 3450 0    60   Input ~ 0
-inh22
-Text GLabel 4250 3750 0    60   Input ~ 0
-inh23
 Text GLabel 4250 4050 0    60   Input ~ 0
+inh21
+Text GLabel 4250 3750 0    60   Input ~ 0
+inh22
+Text GLabel 4250 3450 0    60   Input ~ 0
+inh23
+Text GLabel 4250 3150 0    60   Input ~ 0
 inh24
 $EndSCHEMATC

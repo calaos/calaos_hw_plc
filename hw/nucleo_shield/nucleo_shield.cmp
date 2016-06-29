@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Mon 20 Jun 2016 05:45:24 PM CEST
+Cmp-Mod V01 Created by Cvpcb (after 2015-mar-04 BZR unknown)-product   date = Wed 22 Jun 2016 04:51:53 PM CEST
 
 BeginCmp
 TimeStamp = /572F38F4;
@@ -32,7 +32,7 @@ BeginCmp
 TimeStamp = /5729DAE6/57326C94;
 Reference = P2;
 ValeurCmp = CONN_OUT3;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x08;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
 EndCmp
 
 BeginCmp
@@ -74,7 +74,7 @@ BeginCmp
 TimeStamp = /5729DAE6/57331532;
 Reference = P8;
 ValeurCmp = CONN_OUT4;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x08;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x10;
 EndCmp
 
 BeginCmp
@@ -113,10 +113,10 @@ IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
 EndCmp
 
 BeginCmp
-TimeStamp = /572B2301/5768F994;
+TimeStamp = /576B1D03;
 Reference = P14;
-ValeurCmp = CONN_IN4;
-IdModule  = Pin_Headers:Pin_Header_Straight_1x08;
+ValeurCmp = CONN_02X06;
+IdModule  = Pin_Headers:Pin_Header_Straight_2x06;
 EndCmp
 
 BeginCmp
@@ -165,56 +165,56 @@ BeginCmp
 TimeStamp = /572B2301/5729E588/5728E458;
 Reference = R1;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5728E451;
 Reference = R2;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5728E44A;
 Reference = R3;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5728E443;
 Reference = R4;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5728E427;
 Reference = R5;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5728E42E;
 Reference = R6;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5728E435;
 Reference = R7;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5728E43C;
 Reference = R8;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
@@ -277,28 +277,28 @@ BeginCmp
 TimeStamp = /572B2301/5729E588/5728E4FA;
 Reference = R17;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5728E501;
 Reference = R18;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5728E508;
 Reference = R19;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5728E50F;
 Reference = R20;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
@@ -333,28 +333,28 @@ BeginCmp
 TimeStamp = /572B2301/5729E588/572A10AB;
 Reference = R25;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/572A10B1;
 Reference = R26;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/572A10B7;
 Reference = R27;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/572A10BD;
 Reference = R28;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
@@ -396,70 +396,70 @@ BeginCmp
 TimeStamp = /572B2301/5729E588/57690D62;
 Reference = R34;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572F34DE;
 Reference = R35;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572F35F4;
 Reference = R36;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/57690D68;
 Reference = R37;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/57690D6E;
 Reference = R38;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/57690D74;
 Reference = R39;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5768DC57;
 Reference = R40;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5768DC5D;
 Reference = R41;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5768DC63;
 Reference = R42;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
 TimeStamp = /572B2301/5729E588/5768DC69;
 Reference = R43;
 ValeurCmp = R;
-IdModule  = Resistors_ThroughHole:Resistor_Horizontal_RM10mm;
+IdModule  = Resistors_SMD:R_0805_HandSoldering;
 EndCmp
 
 BeginCmp
@@ -599,13 +599,6 @@ BeginCmp
 TimeStamp = /5729DAE6/57331448;
 Reference = U12;
 ValeurCmp = 74HC595;
-IdModule  = Housings_DIP:DIP-16__300;
-EndCmp
-
-BeginCmp
-TimeStamp = /572B2301/5768ED7B;
-Reference = U13;
-ValeurCmp = PCF8574A;
 IdModule  = Housings_DIP:DIP-16__300;
 EndCmp
 
