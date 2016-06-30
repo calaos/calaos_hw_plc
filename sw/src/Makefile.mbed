@@ -1,7 +1,7 @@
 PROJECT         := CalaosPLC
 DEVICES         := NUCLEO_F411RE NUCLEO_F446RE
 GCC4MBED_DIR    := ../gcc4mbed/
-GCC4MBED_TYPE	:= Debug
+GCC4MBED_TYPE	:= Release
 GCFLAGS 	:= -Wall -Wextra -Werror -Wno-strict-aliasing
 GPFLAGS 	:= -Wall -Wextra -Werror -Wno-strict-aliasing
 CONFIG		?= stm32_nucleo
