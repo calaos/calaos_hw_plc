@@ -44,6 +44,7 @@ typedef struct bh1750_sensor {
 	sensor_t *light_sensor;
 	uint8_t addr;
 	i2c_bus_t *i2c;
+	uint16_t max_value;
 	unsigned long long refresh_time;
 	unsigned long long last_refresh;
 
@@ -99,14 +100,19 @@ static void
 bh1750_poll_one(bh1750_sensor_t *bh1750)
 {
 	sensor_value_t light;
+	uint16_t val;
 
 	unsigned long long time = hal_get_milli();
 	if ((time - bh1750->last_refresh) < bh1750->refresh_time)
 		return;
 
 	bh1750->last_refresh =time;
-	
-	light.val_i = bh1750_read(bh1750);
+
+	val = bh1750_read(bh1750);
+	if (val > bh1750->max_value)
+		val = bh1750->max_value;
+
+	light.val_i = val * 100 / bh1750->max_value;
 	sensors_sensor_update(bh1750->light_sensor, light);
 }
 
@@ -138,6 +144,8 @@ bh1750_json_parse_one(json_value* section)
 
 	bh1750 = calloc(1, sizeof(bh1750_sensor_t));
 	PANIC_ON(!bh1750, "Alloc failed");
+	/* Default maximum value */
+	bh1750->max_value = 65535;
 
         length = section->u.object.length;
         for (i = 0; i < length; i++) {
@@ -152,6 +160,8 @@ bh1750_json_parse_one(json_value* section)
 			bh1750->refresh_time = value->u.integer;
 		} else if (strcmp(name, "id") == 0) {
 			id = value->u.integer;
+		} else if (strcmp(name, "max_value") == 0) {
+			bh1750->max_value = value->u.integer;
 		}
         }
 
