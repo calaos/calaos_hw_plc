@@ -1,6 +1,7 @@
 #include "utils.h"
 #include "queue.h"
 #include "bme280.h"
+#include "bh1750.h"
 #include "module.h"
 #include "sensors.h"
 #include "digital_io.h"
@@ -164,6 +165,7 @@ void
 sensors_init()
 {
 	bme280_init();
+	bh1750_init();
 	digital_io_init();
 	module_register(&sensors_module);
 }

@@ -44,7 +44,7 @@ static int bme280_init_hardware(bme280_t *bme280)
 	cmd[0] = 0xD0;
 	i2c_bus_write(bme280->i2c, bme280->addr, cmd, 1);
 	i2c_bus_read(bme280->i2c, bme280->addr, cmd, 1);
-	
+
 	if (cmd[0] != BME180_CHIPID) {
 		debug_puts("Device is not a BME180\r\n");
 		return 1;
@@ -219,14 +219,14 @@ static const sensors_ops_t bme280_ops =
 };
 
 static int
-bme280_json_parse(json_value* section)
+bme280_json_parse_one(json_value* section)
 {
 	int length, i, id = 0;
 	json_value *value;
 	const char *name;
 	bme280_t *bme280;
 
-	bme280 = malloc(sizeof(bme280_t));
+	bme280 = calloc(1, sizeof(bme280_t));
 	PANIC_ON(!bme280, "Alloc failed");
 
         length = section->u.object.length;
@@ -253,6 +253,21 @@ bme280_json_parse(json_value* section)
 	bme280->pressure_sensor = sensor_create(SENSORS_TYPE_PRESSURE, "bme280", id, &bme280_ops, bme280);
 	bme280->humidity_sensor = sensor_create(SENSORS_TYPE_HUMIDITY, "bme280", id + 1, &bme280_ops, bme280);
 	bme280->temp_sensor = sensor_create(SENSORS_TYPE_TEMP, "bme280", id + 2, &bme280_ops, bme280);
+
+	return 0;
+}
+
+static int
+bme280_json_parse(json_value* section)
+{
+	unsigned int i;
+
+	if (section->type != json_array)
+		return 1;
+
+	for (i = 0; i < section->u.array.length; i++) {
+		bme280_json_parse_one(section->u.array.values[i]);
+	}
 
 	return 0;
 }

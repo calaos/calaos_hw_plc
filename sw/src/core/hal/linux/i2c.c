@@ -24,6 +24,7 @@ int
 hal_i2c_write(hal_i2c_t *i2c, uint8_t addr, const uint8_t *data, unsigned int length)
 {
 	debug_puts("I2C write at addr %x\r\n", addr);
+	return 1;
 }
 
 /**
@@ -37,4 +38,5 @@ int
 hal_i2c_read(hal_i2c_t *i2c, uint8_t addr, uint8_t *data, unsigned int length)
 {	
 	debug_puts("I2C read at addr %x\r\n", addr);
+	return 1;
 }
