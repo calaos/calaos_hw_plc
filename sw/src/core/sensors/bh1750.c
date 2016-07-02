@@ -45,6 +45,8 @@ typedef struct bh1750_sensor {
 	uint8_t addr;
 	i2c_bus_t *i2c;
 	uint16_t max_value;
+	uint16_t min_value;
+	uint8_t autolevel;
 	unsigned long long refresh_time;
 	unsigned long long last_refresh;
 
@@ -109,10 +111,18 @@ bh1750_poll_one(bh1750_sensor_t *bh1750)
 	bh1750->last_refresh =time;
 
 	val = bh1750_read(bh1750);
-	if (val > bh1750->max_value)
-		val = bh1750->max_value;
+	
+	if (bh1750->autolevel) {
+		if (val > bh1750->max_value)
+			bh1750->max_value = val;
+		if (val < bh1750->min_value)
+			bh1750->min_value = val;
+	}
+	
+	
 
-	light.val_i = val * 100 / bh1750->max_value;
+	light.val_i = (val - bh1750->min_value)  * 100 / (bh1750->max_value - bh1750->min_value);
+
 	sensors_sensor_update(bh1750->light_sensor, light);
 }
 
@@ -145,7 +155,8 @@ bh1750_json_parse_one(json_value* section)
 	bh1750 = calloc(1, sizeof(bh1750_sensor_t));
 	PANIC_ON(!bh1750, "Alloc failed");
 	/* Default maximum value */
-	bh1750->max_value = 65535;
+	bh1750->max_value = (uint16_t) -1;
+	bh1750->min_value = 0;
 
         length = section->u.object.length;
         for (i = 0; i < length; i++) {
@@ -160,10 +171,20 @@ bh1750_json_parse_one(json_value* section)
 			bh1750->refresh_time = value->u.integer;
 		} else if (strcmp(name, "id") == 0) {
 			id = value->u.integer;
-		} else if (strcmp(name, "max_value") == 0) {
+		} else if (strcmp(name, "max") == 0) {
 			bh1750->max_value = value->u.integer;
+		} else if (strcmp(name, "min") == 0) {
+			bh1750->min_value = value->u.integer;
+		} else if (strcmp(name, "auto") == 0) {
+			bh1750->autolevel = value->u.integer;
 		}
         }
+        
+        if (bh1750->autolevel) {
+		bh1750->max_value = 0;
+		bh1750->min_value = (uint16_t) -1;
+		debug_puts("Using autolevel for bh1750 \r\n");
+	}
 
         if (bh1750_configure(bh1750, BH1750_CONTINUOUS_HIGH_RES_MODE)) {
 		free(bh1750);
