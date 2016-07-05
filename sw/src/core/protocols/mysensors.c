@@ -161,7 +161,7 @@ mysensors_json_parse_section(json_value* section)
 			for (j = 0; j < ARRAY_SIZE(medium_to_str); j++) {
 				if (strcmp(entry->u.string.ptr, medium_to_str[j]) == 0) {
 					g_mysensor_medium = j;
-					debug_puts("Using medium %s for mysensors\n", medium_to_str[j]);
+					debug_puts("Using medium %s for mysensors\r\n", medium_to_str[j]);
 					break;
 				}
 			}
@@ -199,13 +199,19 @@ mysensor_sensor_updated(sensor_t *s, sensor_value_t value)
 {
 	switch (sensor_get_type(s)) {
 		case SENSORS_TYPE_SWITCH:
-		case SENSORS_TYPE_LIGHT:
 			mysensors_send_int(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, V_STATUS, value.val_i);
 			break;
+		case SENSORS_TYPE_LIGHT:
+			mysensors_send_int(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, V_LIGHT_LEVEL, value.val_i);
+			break;
 		case SENSORS_TYPE_HUMIDITY:
+			mysensors_send_float(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, V_HUM, value.val_f);
+			break;
 		case SENSORS_TYPE_TEMP:
+			mysensors_send_float(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, V_TEMP, value.val_f);
+			break;
 		case SENSORS_TYPE_PRESSURE:
-			mysensors_send_float(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, V_STATUS, value.val_f);
+			mysensors_send_float(g_assigned_node_id, sensor_get_id(s), SET_VARIABLE, REQUEST, V_PRESSURE, value.val_f);
 			break;
 		default:
 			break;
