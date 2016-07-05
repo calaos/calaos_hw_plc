@@ -1,11 +1,11 @@
 {
 	"global": {
 		"baudrate": 115200,
-		"debug": true,
+		"debug": 0,
 	},
 	"mysensors": {
 		"node_id": 42,
-		"medium": "serial"
+		"medium": "ethernet"
 	},
 	"i2c": [{
 		"name": "i2c1",
@@ -46,7 +46,7 @@
 			"dc": "gpio@PC_1"
 		}
 	},
-	"#network": {
+	"network": {
 		"master": "192.168.1.2",
 		"type": "w5100",
 		"mac": "78:ac:c0:97:f2:67",
