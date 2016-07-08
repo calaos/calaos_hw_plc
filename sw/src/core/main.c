@@ -1,6 +1,9 @@
+#include <string.h>
+
 #include "HAL.h"
 #include "spi.h"
 #include "i2c.h"
+#include "utils.h"
 #include "debug.h"
 #include "config.h"
 #include "module.h"
@@ -12,12 +15,48 @@
 #include "mysensors.h"
 #include "shift_register.h"
 
+unsigned int g_debug_enabled = 0;
+
+static int
+global_json_parse(json_value* section)
+{
+        unsigned int i, length;
+	json_value *value;
+	char *name;
+
+	length = section->u.object.length;
+	for (i = 0; i < length; i++) {
+		value = section->u.object.values[i].value;
+		name = section->u.object.values[i].name;
+
+		if (strcmp(name, "debug") == 0) {
+			g_debug_enabled = value->u.integer;
+		}
+	}
+
+	serial_puts("Debug enabled: %d\r\n", g_debug_enabled);
+
+	return 0;
+}
+
+/**
+ * Module
+ */
+static const module_t global_module = {
+	.name = "global",
+	.main_loop = NULL,
+	.json_parse = global_json_parse,
+};
+
 int
 main()
 {
 	hal_system_init();
 
 	/* TODO: need some initcall mecanism */
+	/* Register global first */
+	module_register(&global_module);
+
 	gen_io_init();
 	spi_bus_init();
 	i2c_bus_init();
