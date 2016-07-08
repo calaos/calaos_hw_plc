@@ -8,15 +8,18 @@
 typedef struct display_ops {
 	const char *name;
 	void (*init)(int width, int height);
-	void (*draw_pixel)(int x, int y, uint16_t value);
-	void (*fill_rect)(int x, int y, int w, int h, uint16_t color);
-	uint16_t (*color_from_rgb)(uint8_t r, uint8_t g, uint8_t b);
+	void (*draw_pixel)(int x, int y, uint32_t value);
+	void (*fill_rect)(int x, int y, int w, int h, uint32_t color);
+	uint32_t (*color_from_rgb)(uint8_t r, uint8_t g, uint8_t b);
 	void (*disp)(void);
 	void (*parse_json)(json_value *value);
 } display_ops_t;
 
 void
 display_init();
+
+#define DISP_FONT_WIDTH		5
+#define DISP_FONT_HEIGHT	8
 
 static const unsigned char g_display_font[] = {
 	0x00, 0x00, 0x00, 0x00, 0x00,
@@ -275,6 +278,47 @@ static const unsigned char g_display_font[] = {
 	0x00, 0x19, 0x1D, 0x17, 0x12,
 	0x00, 0x3C, 0x3C, 0x3C, 0x3C,
 	0x00, 0x00, 0x00, 0x00, 0x00  // #255 NBSP
+};
+
+enum disp_color {
+	COLOR_WHITE = 0,
+	COLOR_GRAY,
+	COLOR_SILVER,
+	COLOR_BLACK,
+	COLOR_MAROON,
+	COLOR_RED,
+	COLOR_PURPLE,
+	COLOR_FUSCHIA,
+	COLOR_GREEN,
+	COLOR_LIME,
+	COLOR_OLIVE,
+	COLOR_YELLOW,
+	COLOR_NAVY,
+	COLOR_BLUE,
+	COLOR_TEAL,
+	COLOR_AQUA,
+	COLOR_ORANGE,
+	COLOR_COUNT,
+} disp_color_t;
+
+static const uint8_t rgb_colors [COLOR_COUNT][3] = {
+	[COLOR_WHITE] = {255, 255, 255},
+	[COLOR_GRAY] = {128, 128, 128},
+	[COLOR_SILVER] = {192, 192, 192},
+	[COLOR_BLACK] = {0, 0, 0},
+	[COLOR_MAROON] = {128, 0, 0},
+	[COLOR_RED] = {255, 0, 0},
+	[COLOR_PURPLE] = {128, 0, 128},
+	[COLOR_FUSCHIA] = {255, 0, 255},
+	[COLOR_GREEN] = {0, 128, 0},
+	[COLOR_LIME] = {0, 255, 0},
+	[COLOR_OLIVE] = {128, 128, 0},
+	[COLOR_YELLOW] = {255, 255, 0},
+	[COLOR_NAVY] = {0, 0, 128},
+	[COLOR_BLUE] = {0, 0, 255},
+	[COLOR_TEAL] = {0, 128, 128},
+	[COLOR_AQUA] = {255, 255, 255},
+	[COLOR_ORANGE] = {255, 165, 0},
 };
 
 

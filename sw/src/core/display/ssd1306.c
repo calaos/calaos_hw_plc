@@ -71,7 +71,7 @@ ssd1306_invert(uint8_t inverted) {
 }
 
 static void
-ssd1306_draw_pixel(int x, int y, uint16_t color)
+ssd1306_draw_pixel(int x, int y, uint32_t color)
 {
 	uint8_t shift = y % 8;
 
@@ -92,7 +92,7 @@ static const uint8_t ssd1306_pre_send_buffer_data[] = {
 
 
 // Pass 8-bit (each) R,G,B, get back 16-bit packed color
-static uint16_t
+static uint32_t
 ssd1306_color_from_rgb(uint8_t r, uint8_t g, uint8_t b)
 {
 	return (r || g || b);

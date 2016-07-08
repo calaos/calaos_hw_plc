@@ -98,7 +98,7 @@ static const uint8_t ili9341_init_cmds[] =
 };
 
 static void
-ili9341_fill_rect(int x, int y, int w, int h, uint16_t color);
+ili9341_fill_rect(int x, int y, int w, int h, uint32_t color);
 
 static void
 ili9341_init(int width, int height)
@@ -139,12 +139,12 @@ ili9341_set_addr_window(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 }
 
 static void
-ili9341_fill_rect(int x, int y, int w, int h, uint16_t color)
+ili9341_fill_rect(int x, int y, int w, int h, uint32_t color)
 {
 	uint8_t data[2] = {color >> 8, color & 0xFF};
 
 	ili9341_set_addr_window(x, y, x + w - 1, y + h - 1);
-	
+
 	for(y = h; y > 0; y--) {
 		for(x = w; x > 0; x--) {
 			ili9341_send_data(data, 2);
@@ -154,7 +154,7 @@ ili9341_fill_rect(int x, int y, int w, int h, uint16_t color)
 
 
 static void
-ili9341_draw_pixel(int x, int y, uint16_t color)
+ili9341_draw_pixel(int x, int y, uint32_t color)
 {
 	uint8_t data[2] = {color >> 8, color & 0xFF};
 
@@ -163,7 +163,7 @@ ili9341_draw_pixel(int x, int y, uint16_t color)
 }
 
 // Pass 8-bit (each) R,G,B, get back 16-bit packed color
-static uint16_t
+static uint32_t
 ili9341_color_from_rgb(uint8_t r, uint8_t g, uint8_t b)
 {
 	return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
