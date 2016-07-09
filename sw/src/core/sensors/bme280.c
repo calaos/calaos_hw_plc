@@ -197,7 +197,7 @@ bme280_poll_one(bme280_t *bme280)
 
 	debug_puts("temp: %.2f, humidity: %.2f, pressure:%.2f\r\n", temp.val_f, hum.val_f, press.val_f);
 	
-	sensors_sensor_update(bme280->pressure_sensor, press);
+	sensors_sensor_update(bme280->temp_sensor, temp);
 	sensors_sensor_update(bme280->humidity_sensor, hum);
 	sensors_sensor_update(bme280->pressure_sensor, press);
 }
