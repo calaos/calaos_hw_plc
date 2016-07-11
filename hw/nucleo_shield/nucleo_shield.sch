@@ -10,7 +10,6 @@ LIBS:cmos4000
 LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
-LIBS:special
 LIBS:microcontrollers
 LIBS:dsp
 LIBS:microchip
@@ -201,7 +200,7 @@ Text GLabel 2150 6450 2    60   Input ~ 0
 SRDATA
 Text GLabel 8300 2750 0    60   Input ~ 0
 I2C3_SCL
-Text GLabel 8850 2950 0    60   Input ~ 0
+Text GLabel 8350 2950 0    60   Input ~ 0
 I2C3_SDA
 Text GLabel 6450 1800 2    60   Input ~ 0
 SPI3_MISO
@@ -295,7 +294,7 @@ F 3 "" H 4150 5650 60  0000 C CNN
 	1    4150 5650
 	1    0    0    -1  
 $EndComp
-Text GLabel 8800 3450 0    60   Input ~ 0
+Text GLabel 10200 3250 2    60   Input ~ 0
 LCD_CS
 Text GLabel 4400 5250 0    60   Input ~ 0
 LCD_CS
@@ -303,9 +302,9 @@ Text GLabel 3900 5350 0    60   Input ~ 0
 LCD_RST
 Text GLabel 4400 5450 0    60   Input ~ 0
 LCD_DC
-Text GLabel 8350 3350 0    60   Input ~ 0
-LCD_RST
 Text GLabel 8800 3250 0    60   Input ~ 0
+LCD_RST
+Text GLabel 8250 3150 0    60   Input ~ 0
 LCD_DC
 $Comp
 L R R33
@@ -317,17 +316,6 @@ F 2 "Resistors_SMD:R_0805_HandSoldering" V 5530 5650 50  0001 C CNN
 F 3 "" H 5600 5650 50  0000 C CNN
 	1    5600 5650
 	0    1    -1   0   
-$EndComp
-$Comp
-L +5V #PWR014
-U 1 1 572B3B9C
-P 6750 5450
-F 0 "#PWR014" H 6750 5300 50  0001 C CNN
-F 1 "+5V" H 6750 5590 50  0000 C CNN
-F 2 "" H 6750 5450 60  0000 C CNN
-F 3 "" H 6750 5450 60  0000 C CNN
-	1    6750 5450
-	-1   0    0    -1  
 $EndComp
 $Comp
 L CONN_01X02 P9
@@ -459,7 +447,7 @@ Text GLabel 5950 1900 2    60   Input ~ 0
 ETH_RST
 Text GLabel 4100 2400 0    60   Input ~ 0
 ETH_CS
-Text GLabel 8250 3150 0    60   Input ~ 0
+Text GLabel 8750 3050 0    60   Input ~ 0
 SD_CS
 $Comp
 L CONN_02X05 P7
@@ -773,7 +761,7 @@ Wire Wire Line
 Wire Wire Line
 	8700 2650 8950 2650
 Wire Wire Line
-	8950 2950 8850 2950
+	8950 2950 8350 2950
 Wire Wire Line
 	1850 4550 2300 4550
 Wire Wire Line
@@ -807,8 +795,6 @@ Wire Wire Line
 Wire Wire Line
 	4600 5250 4400 5250
 Wire Wire Line
-	8950 3350 8350 3350
-Wire Wire Line
 	4600 5350 3900 5350
 Wire Wire Line
 	4400 5450 4600 5450
@@ -834,8 +820,6 @@ Wire Wire Line
 	7500 4150 7500 4350
 Wire Wire Line
 	7500 4350 7800 4350
-Wire Wire Line
-	8950 3450 8800 3450
 Wire Wire Line
 	4100 2600 4700 2600
 Wire Wire Line
@@ -1072,4 +1056,19 @@ Wire Wire Line
 	10150 700  10150 750 
 Wire Wire Line
 	10150 750  10400 750 
+Wire Wire Line
+	10200 3250 9900 3250
+Wire Wire Line
+	8950 3050 8750 3050
+$Comp
+L +3.3V #PWR?
+U 1 1 57806DD3
+P 6750 5450
+F 0 "#PWR?" H 6750 5300 50  0001 C CNN
+F 1 "+3.3V" H 6750 5590 50  0000 C CNN
+F 2 "" H 6750 5450 60  0000 C CNN
+F 3 "" H 6750 5450 60  0000 C CNN
+	1    6750 5450
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

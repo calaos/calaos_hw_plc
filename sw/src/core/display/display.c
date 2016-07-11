@@ -77,7 +77,6 @@ display_init_screen()
 
 	g_display.ops->init(g_display.width, g_display.height);
 	display_print(0, 0, "Calaos PLC", g_display.colors[COLOR_NAVY], g_display.colors[COLOR_BLACK]);
-	display_print(0, 10, "Up & running !", g_display.colors[COLOR_RED], g_display.colors[COLOR_BLACK]);
 	g_display.ops->disp();
 
 	return 0;
@@ -146,7 +145,7 @@ display_main_loop()
 	qr = div(qr.rem, 1000);
 	s = qr.quot;
 
-	snprintf(buffer, 10, "%d:%d:%d\r\n", h, m, s);
+	snprintf(buffer, 10, "%02d:%02d:%02d\r\n", h, m, s);
 	debug_puts("Uptime: %s\r\n", buffer);
 
 	display_print(0, 0, "Uptime:   ", g_display.colors[COLOR_NAVY], g_display.colors[COLOR_BLACK]);
