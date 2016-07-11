@@ -16,7 +16,7 @@
 		"name": "i2c3",
 		"sda": "PB_4",
 		"scl": "PA_8",
-		"freq": 400000
+		"freq": 100000
 	}],
 	"spi": [{
 		"name": "spi1",
