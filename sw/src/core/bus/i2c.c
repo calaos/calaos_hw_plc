@@ -33,7 +33,7 @@ i2c_json_parse_one(json_value* json_i2c)
 	i2c_bus_t *i2cstruct;
 	const char *name;
 	char sda[10], scl[10];
-	int freq = 1000000;
+	int freq = 100000;
 
 	i2cstruct = calloc(1, sizeof(struct i2c_bus));
 
@@ -54,8 +54,9 @@ i2c_json_parse_one(json_value* json_i2c)
 	}
 
 	i2cstruct->hal_i2c = hal_i2c_setup(sda, scl, freq);
+	PANIC_ON(!i2cstruct->hal_i2c, "Failed to setup I2C bus");
 
-	debug_puts("Adding i2c bus %s\r\n", i2cstruct->name);
+	debug_puts("Adding i2c bus %s, speed %d, sda %s, scl %s\r\n", i2cstruct->name, freq, sda, scl);
 	SLIST_INSERT_HEAD(&g_i2cs, i2cstruct, link);
 
 	return 0;

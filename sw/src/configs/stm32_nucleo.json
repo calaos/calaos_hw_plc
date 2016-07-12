@@ -66,12 +66,7 @@
 	}],
 	"pcf8574": [{
 		"name": "pcf1",
-		"addr": "0x38",
-		"int": "gpio@PA_9",
-		"i2c": "i2c3"
-	},{
-		"name": "pcf2",
-		"addr": "0x39",
+		"addr": "0x20",
 		"int": "gpio@PA_9",
 		"i2c": "i2c3"
 	}],
@@ -179,6 +174,13 @@
 			"io": "sr1@15",
 			"active_low": 1,
 			"id": 16
+		}, {
+			"name": "intest",
+			"dir": "in",
+			"io": "pcf1@0",
+			"active_low": 0,
+			"debounce": 1,
+			"id": 17
 		}],
 		"bme280": [{
 			"i2c": "i2c1",

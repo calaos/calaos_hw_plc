@@ -21,6 +21,7 @@ struct pcf8574 {
 	uint8_t input_value;		/* Cached input value */
 	uint8_t addr;			/* I2C address of this expander */
 	uint8_t need_update;
+	uint8_t inputs;
 	SLIST_ENTRY(pcf8574) link;
 };
 
@@ -68,7 +69,7 @@ pcf8574_json_parse_one(json_value* sensor)
 		} else if (strcmp(name, "addr") == 0) {
 			exp->addr = strtol(value->u.string.ptr, NULL, 16);
 		} else if (strcmp(name, "int") == 0) {
-			exp->int_io = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+			exp->int_io = gen_io_setup(value->u.string.ptr, 1, GPIO_DIR_INPUT, 0);
 		} else if (strcmp(name, "i2c") == 0) {
 			exp->i2c = i2c_bus_get_by_name(value->u.string.ptr);
 		}
@@ -78,8 +79,7 @@ pcf8574_json_parse_one(json_value* sensor)
         exp->output_value = 0;
         exp->need_update = 1;
 	debug_puts("Adding pcf8574 %s with address 0x%x\r\n", exp->name, exp->addr);
-	
-	
+
 	if (i2c_bus_read(exp->i2c, exp->addr, &exp->input_value, 1) != 0) {
 		debug_puts("pcf8574 %s with address 0x%x did not answer, freeing\r\n", exp->name, exp->addr);
 		free(exp);
@@ -114,6 +114,9 @@ pcf8574_set_output(pcf8574_t *exp, uint8_t output, int state)
 	else
 		exp->output_value |= (1 << output);
 
+	/* We must set input as high when writing output */
+	exp->output_value |= exp->inputs;
+
 	exp->need_update = 1;
 	i2c_bus_write(exp->i2c, exp->addr, &exp->output_value, 1);
 
@@ -132,6 +135,8 @@ pcf8574_io_setup(const char *prefix, const char *exp_io_name, __unused__ int rev
 	exp_io->index = atoi(exp_io_name);
 	exp_io->exp = pcf8574_get_by_name(prefix);
 	PANIC_ON(exp_io->exp == NULL, "Failed to get exp %s\n", prefix);
+	
+	exp_io->exp->inputs |= (1 << exp_io->index);
 
 	return exp_io;
 }
@@ -149,12 +154,17 @@ pcf8574_io_read(void *io)
 {
 	pcf8574_io_t *exp_io = io;
 	pcf8574_t *exp = exp_io->exp;
+	int ret;
 
 	/* if there was an interrupt, read the new value */
-	if (gen_io_read(exp->int_io) || exp->need_update)
-		i2c_bus_read(exp->i2c, exp->addr, &exp->input_value, 1);
+	if (gen_io_read(exp->int_io) || exp->need_update) {
+		ret = i2c_bus_read(exp->i2c, exp->addr, &exp->input_value, 1);
+		PANIC_ON(ret != 0, "Failed to read PCF");
+		debug_puts("PCF8574 new value ! %x\r\n", exp->input_value);
+		exp->need_update = 0;
+	}
 
-	return exp->input_value & (1 << exp_io->index);
+	return (exp->input_value >> exp_io->index) & 0x1;
 }
 
 /**
