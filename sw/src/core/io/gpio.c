@@ -17,7 +17,8 @@ struct en_gpio {
 typedef struct en_gpio en_gpio_t;
 
 void *
-en_gpio_setup(const char *prefix, const char *gpio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
+en_gpio_setup(const char *prefix, const char *gpio_name, int reverse,
+		gpio_dir_t direction, gpio_debounce_t debounce, gpio_pin_mode_t mode)
 {
 	en_gpio_t *gpio = calloc(1, sizeof(struct en_gpio));
 	if (!gpio)
@@ -26,7 +27,7 @@ en_gpio_setup(const char *prefix, const char *gpio_name, int reverse, gpio_dir_t
 	debug_puts("Setup gpio %s, reverse: %d, dir: %d, debounce: %d\r\n",
 			gpio_name, reverse, direction, debounce);
 
-	gpio->hal_gpio = hal_gpio_setup(gpio_name, reverse, direction);
+	gpio->hal_gpio = hal_gpio_setup(gpio_name, reverse, direction, mode);
 
 	debug_puts("GPIO address %p\r\n", gpio);
 	return gpio;

@@ -10,7 +10,7 @@ struct hal_gpio {
 };
 
 hal_gpio_t *
-hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
+hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_pin_mode_t mode)
 {
 	hal_gpio_t *gpio = calloc(1, sizeof(struct hal_gpio));
 	if (!gpio)

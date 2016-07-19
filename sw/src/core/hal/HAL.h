@@ -86,7 +86,7 @@ typedef struct hal_gpio hal_gpio_t;
  * @param direction GPIO direction (input/output)
  */
 hal_gpio_t *
-hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction);
+hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_pin_mode_t mode);
 
 /**
  * Set a gpio state

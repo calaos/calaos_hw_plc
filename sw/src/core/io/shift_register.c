@@ -64,11 +64,11 @@ shift_register_json_parse_one(json_value* sensor)
 		if (strcmp(name, "name") == 0) {
 			sr->name = strdup(value->u.string.ptr);
 		} else if (strcmp(name, "data") == 0) {
-			sr->data = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+			sr->data = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, GPIO_DEBOUNCE_DISABLE, GPIO_MODE_PULL_NONE);
 		} else if (strcmp(name, "latch") == 0) {
-			sr->latch = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+			sr->latch = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, GPIO_DEBOUNCE_DISABLE, GPIO_MODE_PULL_NONE);
 		} else if (strcmp(name, "clock") == 0) {
-			sr->clock = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+			sr->clock = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, GPIO_DEBOUNCE_DISABLE, GPIO_MODE_PULL_NONE);
 		} else if (strcmp(name, "count") == 0) {
 			sr->count = value->u.integer;
 		}
@@ -126,7 +126,7 @@ shift_register_set_output(shift_register_t *sr, int output, int state)
 }
 
 static void *
-shift_register_io_setup(const char *prefix, const char *srio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
+shift_register_io_setup(const char *prefix, const char *srio_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce, gpio_pin_mode_t mode)
 {
 	shift_register_io_t *srio = calloc(1, sizeof(shift_register_io_t));
 	if (!srio)

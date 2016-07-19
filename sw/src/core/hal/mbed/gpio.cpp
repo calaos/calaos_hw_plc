@@ -13,8 +13,9 @@ struct hal_gpio {
 };
 
 extern "C"  hal_gpio_t *
-hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
+hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_pin_mode_t mode)
 {
+	PinMode pinmode = PullNone;
 	hal_gpio_t *gpio = (hal_gpio_t *) calloc(1, sizeof(struct hal_gpio));
 	if (!gpio)
 		return NULL;
@@ -24,9 +25,15 @@ hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction)
 		return NULL;
 	
 	if (direction == GPIO_DIR_OUTPUT) {
-		gpio->io = new DigitalInOut(gpio->gpio_name, PIN_OUTPUT, PullNone, 0 ^ reverse);
+		if (mode == GPIO_MODE_OPEN_DRAIN)
+			pinmode = OpenDrain;
+		gpio->io = new DigitalInOut(gpio->gpio_name, PIN_OUTPUT, pinmode, 0 ^ reverse);
 	} else {
-		gpio->io = new DigitalInOut(gpio->gpio_name, PIN_INPUT, PullNone, 0);
+		if (mode == GPIO_MODE_PULL_UP)
+			pinmode = PullUp;
+		else if (mode == GPIO_MODE_PULL_DOWN)
+			pinmode = PullDown;
+		gpio->io = new DigitalInOut(gpio->gpio_name, PIN_INPUT, pinmode, 0);
 	}
 
 	return gpio;

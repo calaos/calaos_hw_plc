@@ -24,6 +24,16 @@ typedef enum gpio_state {
 } gpio_state_t;
 
 /**
+ * GPIO pull up state
+ */
+typedef enum gpio_pin_mode {
+	GPIO_MODE_PULL_NONE = 0,
+	GPIO_MODE_PULL_DOWN,
+	GPIO_MODE_PULL_UP,
+	GPIO_MODE_OPEN_DRAIN,
+} gpio_pin_mode_t;
+
+/**
  * Pin direction
  */
 typedef enum gpio_dir {
@@ -49,7 +59,7 @@ typedef struct gen_io gen_io_t;
  * @param debounce 1 to debounce input, 0 if not
  */
 gen_io_t *
-gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce);
+gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce, gpio_pin_mode_t pull);
 
 /**
  * Watcher callback when io status changes
@@ -73,7 +83,8 @@ typedef struct gen_io_ops {
 	void (*io_write)(void *io, int state);
 	void (*io_set_dir)(void *io, gpio_dir_t dir);
 	int (*io_read)(void *io);
-	void * (*io_setup)(const char *prefix, const char *io_name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce);
+	void * (*io_setup)(const char *prefix, const char *io_name, int reverse,
+		gpio_dir_t direction, gpio_debounce_t debounce, gpio_pin_mode_t mode);
 	const char *prefix;
 
 	/* Private */
@@ -105,6 +116,7 @@ struct gen_io {
 	char *name;
 
 	/* Private */
+	SLIST_ENTRY(gen_io) deb_link;
 	SLIST_ENTRY(gen_io) link;
 };
 

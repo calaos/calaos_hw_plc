@@ -69,7 +69,7 @@ pcf8574_json_parse_one(json_value* sensor)
 		} else if (strcmp(name, "addr") == 0) {
 			exp->addr = strtol(value->u.string.ptr, NULL, 16);
 		} else if (strcmp(name, "int") == 0) {
-			exp->int_io = gen_io_setup(value->u.string.ptr, 1, GPIO_DIR_INPUT, 0);
+			exp->int_io = gen_io_setup(value->u.string.ptr, 1, GPIO_DIR_INPUT, GPIO_DEBOUNCE_DISABLE, GPIO_MODE_PULL_UP);
 		} else if (strcmp(name, "i2c") == 0) {
 			exp->i2c = i2c_bus_get_by_name(value->u.string.ptr);
 		}
@@ -125,7 +125,7 @@ pcf8574_set_output(pcf8574_t *exp, uint8_t output, int state)
 
 static void *
 pcf8574_io_setup(const char *prefix, const char *exp_io_name, __unused__ int reverse, 
-	__unused__ gpio_dir_t direction, __unused__ gpio_debounce_t debounce)
+	__unused__ gpio_dir_t direction, __unused__ gpio_debounce_t debounce, __unused__ gpio_pin_mode_t mode)
 {
 
 	pcf8574_io_t *exp_io = calloc(1, sizeof(pcf8574_io_t));

@@ -21,7 +21,15 @@
 
 static SLIST_HEAD( ,gen_io_ops) g_io_ops_list = SLIST_HEAD_INITIALIZER();
 
+/**
+ * List of debounced IOs
+ */
 static SLIST_HEAD(, gen_io) g_debounced_io_list = SLIST_HEAD_INITIALIZER();
+
+/**
+ * List of IOs
+ */
+static SLIST_HEAD(, gen_io) g_gen_io_list = SLIST_HEAD_INITIALIZER();
 
 static unsigned long long g_gpio_last_read_time = 0;
 
@@ -61,7 +69,7 @@ gen_io_main_loop()
 
 	g_gpio_last_read_time = time;
 
-	SLIST_FOREACH(gen_io, &g_debounced_io_list, link) {
+	SLIST_FOREACH(gen_io, &g_debounced_io_list, deb_link) {
 		gen_io_poll_one(gen_io);
 	}
 }
@@ -73,8 +81,23 @@ gen_io_add_watcher(gen_io_t *gen_io, gen_io_watcher_cb cb, void *cb_data)
 	gen_io->cb = cb;
 }
 
+static gen_io_t *
+gen_io_get_by_name(const char *name)
+{
+	struct gen_io *gen_io;
+
+	SLIST_FOREACH(gen_io, &g_gen_io_list, link) {
+		if (strcmp(name, gen_io->name) == 0) {
+			return gen_io;
+		}
+	}
+	
+	return NULL;
+}
+
+
 gen_io_t *
-gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce)
+gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_t debounce, gpio_pin_mode_t mode)
 {
 	gen_io_ops_t *ops;
 	gen_io_t *io;
@@ -84,6 +107,15 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 	debug_puts("Setting generic io for %s\r\n", name);
 
 	PANIC_ON(direction == GPIO_DIR_OUTPUT && debounce, "Can not debounce output pin...");
+	
+	io = gen_io_get_by_name(name);
+	if (io) {
+		PANIC_ON(io->dir != direction || io->debounce != debounce || io->reverse != reverse,
+			"IO required already setup with different parameters");
+
+		debug_puts("Retrieving already existing io %s\r\n", name);
+		return io;
+	}
 
 	SLIST_FOREACH(ops, &g_io_ops_list, link) {
 		if (strncmp(ops->prefix, name, strlen(ops->prefix)) != 0)
@@ -101,14 +133,17 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 		io = calloc(1, sizeof(struct gen_io));
 		PANIC_ON(!io, "Failed to allocate data");
 
-		io->io = ops->io_setup(prefix, io_name, reverse, direction, debounce);
+		io->io = ops->io_setup(prefix, io_name, reverse, direction, debounce, mode);
 		io->ops = ops;
 		io->dir = direction;
 		io->reverse = reverse;
 		io->debounce = debounce;
 		io->name = strdup(name);
+
+		SLIST_INSERT_HEAD(&g_debounced_io_list, io, deb_link);
+		
 		if (debounce)
-			SLIST_INSERT_HEAD(&g_debounced_io_list, io, link);
+			SLIST_INSERT_HEAD(&g_debounced_io_list, io, deb_link);
 
 		return io;
 	}

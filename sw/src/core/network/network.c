@@ -68,7 +68,7 @@ network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
 	debug_puts("Network initialized: ip %s, listening on udp port %d\r\n",
 		wiznet_iface_get_ip(g_net_iface),
 		g_port);
-		
+
 	g_net_recv_ep = wiznet_ep_create();
 	PANIC_ON(!g_net_recv_ep, "Failed create recv endpoint");
 
@@ -113,9 +113,9 @@ wiznet_parse_json(json_value* net_data)
 		name = net_data->u.object.values[i].name;
 
 		if (strcmp(name, "cs") == 0) {
-			cs = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+			cs = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, GPIO_DEBOUNCE_DISABLE, GPIO_MODE_PULL_NONE);
 		} else if (strcmp(name, "rst") == 0) {
-			rst = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+			rst = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, GPIO_DEBOUNCE_DISABLE, GPIO_MODE_PULL_NONE);
 		} else if (strcmp(name, "spi") == 0) {
 			spi_bus = spi_bus_get_by_name(value->u.string.ptr);
 		}

@@ -498,7 +498,7 @@ onewire_json_parse_one(json_value* json_onewire)
 		if (strcmp(name, "name") == 0) {
 			onewire_bus->name = strdup(value->u.string.ptr);
 		} else if (strcmp(name, "1w") == 0) {
-			onewire_bus->wire = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+			onewire_bus->wire = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, GPIO_DEBOUNCE_DISABLE, GPIO_MODE_PULL_NONE);
 		}
 	}
 

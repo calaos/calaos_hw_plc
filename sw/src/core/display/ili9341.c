@@ -188,11 +188,11 @@ ili9341_parse_json(json_value *disp_data)
 		name = disp_data->u.object.values[i].name;
 
 		if (strcmp(name, "cs") == 0) {
-			g_ili9341_cs = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+			g_ili9341_cs = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, GPIO_DEBOUNCE_DISABLE, GPIO_MODE_PULL_NONE);
 		} else if (strcmp(name, "dc") == 0) {
-			g_ili9341_dc = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+			g_ili9341_dc = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, GPIO_DEBOUNCE_DISABLE, GPIO_MODE_PULL_NONE);
 		} else if (strcmp(name, "rst") == 0) {
-			g_ili9341_rst = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, 0);
+			g_ili9341_rst = gen_io_setup(value->u.string.ptr, 0, GPIO_DIR_OUTPUT, GPIO_DEBOUNCE_DISABLE, GPIO_MODE_PULL_NONE);
 		} else if (strcmp(name, "spi") == 0) {
 			g_ili9341_spi = spi_bus_get_by_name(value->u.string.ptr);
 		}

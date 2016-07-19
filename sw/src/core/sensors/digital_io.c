@@ -61,6 +61,8 @@ digital_io_json_parse_one(json_value* sensor)
 	gpio_debounce_t s_debounce = GPIO_DEBOUNCE_DISABLE;
 	json_value *value;
 	digital_io_t *dio;
+	char c_mode;
+	gpio_pin_mode_t s_mode = GPIO_MODE_PULL_NONE;
 	
 	dio = malloc(sizeof(digital_io_t));
 	PANIC_ON(!dio, "Alloc failed");
@@ -83,12 +85,19 @@ digital_io_json_parse_one(json_value* sensor)
 			s_id = value->u.integer;
 		} else if (strcmp(name, "debounce") == 0) {
 			s_debounce = value->u.integer;
+		} else if (strcmp(name, "mode") == 0) {
+			c_mode = value->u.string.ptr[0];
+			switch (c_mode) {
+				case 'v': s_mode = GPIO_MODE_PULL_DOWN; break;
+				case '^': s_mode = GPIO_MODE_PULL_UP; break;
+				case 'o': s_mode = GPIO_MODE_OPEN_DRAIN; break;
+			}
 		}
         }
 
         PANIC_ON(s_name == NULL || s_gpio_name == NULL,
 			"Incomplete sensor description");
-	dio->io = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce);
+	dio->io = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce, s_mode);
 	dio->s = sensor_create(SENSORS_TYPE_SWITCH, s_name, s_id, &digital_io_ops, dio);
 
 	gen_io_add_watcher(dio->io, digital_io_watcher_cb, dio);
