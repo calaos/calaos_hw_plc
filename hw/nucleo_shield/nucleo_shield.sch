@@ -10,6 +10,7 @@ LIBS:cmos4000
 LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
+LIBS:special
 LIBS:microcontrollers
 LIBS:dsp
 LIBS:microchip
@@ -1149,10 +1150,10 @@ Wire Wire Line
 	5550 5500 5550 5300
 Connection ~ 5550 5500
 $Comp
-L +5V #PWR?
+L +5V #PWR031
 U 1 1 5785E3F0
 P 5550 5300
-F 0 "#PWR?" H 5550 5150 50  0001 C CNN
+F 0 "#PWR031" H 5550 5150 50  0001 C CNN
 F 1 "+5V" H 5550 5440 50  0000 C CNN
 F 2 "" H 5550 5300 60  0000 C CNN
 F 3 "" H 5550 5300 60  0000 C CNN
