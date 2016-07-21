@@ -140,7 +140,7 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 		io->debounce = debounce;
 		io->name = strdup(name);
 
-		SLIST_INSERT_HEAD(&g_debounced_io_list, io, deb_link);
+		SLIST_INSERT_HEAD(&g_gen_io_list, io, link);
 		
 		if (debounce)
 			SLIST_INSERT_HEAD(&g_debounced_io_list, io, deb_link);
