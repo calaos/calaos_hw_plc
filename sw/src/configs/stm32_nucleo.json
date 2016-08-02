@@ -1,11 +1,10 @@
 {
-	"global": {
+	"communication": {
 		"baudrate": 115200,
 		"debug": 1,
 	},
 	"mysensors": {
 		"node_id": 42,
-		"medium": "ethernet"
 	},
 	"i2c": [{
 		"name": "i2c1",

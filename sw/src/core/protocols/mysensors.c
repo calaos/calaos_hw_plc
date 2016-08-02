@@ -6,24 +6,12 @@
 #include "sensors.h"
 #include "network.h"
 #include "mysensors.h"
+#include "communication.h"
 
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-
-static int g_mysensor_medium = -1;
-
-enum mysensors_medium {
-	MYSENSORS_MEDIUM_SERIAL = 0,
-	MYSENSORS_MEDIUM_ETHERNET,
-	MYSENSORS_MEDIUM_COUNT,
-};
-
-static const char *medium_to_str[MYSENSORS_MEDIUM_COUNT] = {
-	[MYSENSORS_MEDIUM_SERIAL] = "serial",
-	[MYSENSORS_MEDIUM_ETHERNET] = "ethernet",
-};
 
 /**
  * Node id requested from controller
@@ -102,11 +90,7 @@ int mysensors_parse_message(char *query)
 
 static void mysensor_send_message(char *str)
 {
-	if (g_mysensor_medium == MYSENSORS_MEDIUM_ETHERNET) {
-		network_send_to_master((uint8_t *) str, strlen(str));
-	} else {
-		serial_puts(str);
-	}
+	std_puts(str);
 }
 
 /**
@@ -145,7 +129,7 @@ mysensors_send_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message
 static int
 mysensors_json_parse_section(json_value* section)
 {
-	unsigned int i, j;
+	unsigned int i;
 	json_value* entry;
 	char *name;
 	if (section->type != json_object)
@@ -157,19 +141,6 @@ mysensors_json_parse_section(json_value* section)
 		if (strcmp(name, "node_id") == 0) {
 			g_assigned_node_id = entry->u.integer;
 			debug_puts("Node id: %d\r\n", g_assigned_node_id);
-		} else if (strcmp(name, "medium") == 0) {
-			for (j = 0; j < ARRAY_SIZE(medium_to_str); j++) {
-				if (strcmp(entry->u.string.ptr, medium_to_str[j]) == 0) {
-					g_mysensor_medium = j;
-					debug_puts("Using medium %s for mysensors\r\n", medium_to_str[j]);
-					break;
-				}
-			}
-
-		        if (g_mysensor_medium == -1) {
-				debug_puts("Invalid medium: %s, defaulting to serial\r\n", entry->u.string.ptr);
-				g_mysensor_medium = MYSENSORS_MEDIUM_SERIAL;
-			}
 		}
         }
 

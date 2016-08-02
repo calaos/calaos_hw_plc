@@ -25,6 +25,13 @@ int
 hal_serial_puts(const char *format, ...);
 
 /**
+ * Set the serial baudrate
+ * @param baudrate The baudrate to set
+ */
+void
+hal_serial_set_baudrate(int baudrate)
+
+/**
  * Get a char from the serial port
  * @param c Pointer to store the char
  * @return 0 if a char was received, a positive value if not.

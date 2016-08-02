@@ -1,19 +1,21 @@
 {
-	"global": {
+	"communication": {
 		"baudrate": 115200,
-		"debug": 0
+		"debug": 1
 	},
 	"mysensors": {
 		"node_id": 42
 	},
 	"i2c": [{
 		"name": "i2c1",
-		"sda": "PB_15",
-		"scl": "PB_2"
+		"sda": "PB_9",
+		"scl": "PB_8",
+		"freq": 400000
 	}, {
 		"name": "i2c3",
 		"sda": "PB_4",
-		"scl": "PA_8"
+		"scl": "PA_8",
+		"freq": 100000
 	}],
 	"spi": [{
 		"name": "spi1",

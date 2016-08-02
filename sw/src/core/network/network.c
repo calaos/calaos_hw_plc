@@ -40,6 +40,12 @@ network_send_to_master(uint8_t *buffer, unsigned int length)
 	wiznet_udp_send_to(g_udp_socket, g_net_send_ep, (char *) buffer, length);
 }
 
+	void (*put_std_str)(const char *str);
+	/**
+	 * Output a debug string
+	 */
+	void (*put_dbg_str)(const char *str);
+
 static int
 network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
 {

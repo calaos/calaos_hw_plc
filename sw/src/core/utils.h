@@ -12,9 +12,6 @@
 
 #define PANIC_ON(test, format, ...) do { if (test) {PANIC(format, ##__VA_ARGS__);} } while(0);
 
-void
-serial_puts(const char *format, ...);
-
 static inline void ms_delay(unsigned long long ms)
 {
 	ms *= 1000;

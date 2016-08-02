@@ -10,7 +10,7 @@ hal_i2c_t *
 hal_i2c_setup(const char *sda, const char *scl, uint32_t frequency)
 {
 	debug_puts("Init i2c freq %d\n", frequency);
-	return NULL;
+	return (hal_i2c_t *) 1;
 }
 
 /**

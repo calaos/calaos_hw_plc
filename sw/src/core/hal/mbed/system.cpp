@@ -31,6 +31,12 @@ hal_system_init()
 	pc_serial.baud(115200);
 }
 
+extern "C" void
+hal_serial_set_baudrate(int baudrate)
+{
+	pc_serial.baud(baudrate);
+}
+
 
 extern "C" int
 hal_serial_puts(const char *str)

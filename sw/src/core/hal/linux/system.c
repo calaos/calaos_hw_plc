@@ -10,6 +10,12 @@ hal_system_init()
 	
 }
 
+void
+hal_serial_set_baudrate(int baudrate)
+{
+	
+}
+
 int
 hal_serial_puts(const char *str)
 {
