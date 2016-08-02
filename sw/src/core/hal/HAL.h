@@ -29,7 +29,7 @@ hal_serial_puts(const char *format, ...);
  * @param baudrate The baudrate to set
  */
 void
-hal_serial_set_baudrate(int baudrate)
+hal_serial_set_baudrate(int baudrate);
 
 /**
  * Get a char from the serial port

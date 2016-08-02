@@ -10,7 +10,7 @@
 		"name": "i2c1",
 		"sda": "PB_9",
 		"scl": "PB_8",
-		"freq": 400000
+		"freq": 100000
 	}, {
 		"name": "i2c3",
 		"sda": "PB_4",
@@ -34,7 +34,7 @@
 		"name": "1w1",
 		"pin": "gpio@PC_10"
 	}],
-	"display": {
+	"#display": {
 		"type": "ili9341",
 		"width": 240,
 		"height": 320,
@@ -46,7 +46,7 @@
 		}
 	},
 	"network": {
-		"master": "192.168.1.2",
+		"master": "192.168.1.12",
 		"type": "w5100",
 		"mac": "78:ac:c0:97:f2:67",
 		"port": 14987,
@@ -59,7 +59,7 @@
 	"shift_registers": [{
 		"name": "sr1",
 		"data": "gpio@PB_1",
-		"clock": "gpio@PB_12",
+		"clock": "gpio@PB_6",
 		"latch": "gpio@PB_2",
 		"count": 32
 	}],
@@ -68,6 +68,16 @@
 		"addr": "0x20",
 		"int": "gpio@PA_9",
 		"i2c": "i2c3"
+	}, {
+		"name": "pcf2",
+		"addr": "0x21",
+		"int": "gpio@PA_9",
+		"i2c": "i2c3"
+	}, {
+		"name": "pcf3",
+		"addr": "0x20",
+		"int": "gpio@PC_9",
+		"i2c": "i2c1"
 	}],
 	"sensors": {
 		"digital_io" : [{
