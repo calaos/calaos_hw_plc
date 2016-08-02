@@ -1,6 +1,7 @@
 #define _GNU_SOURCE 1
 
 #include "wiznet_iface.h"
+#include "communication.h"
 #include "mysensors.h"
 #include "network.h"
 #include "module.h"
@@ -34,17 +35,24 @@ network_main_loop(void)
 	mysensors_parse_message(buf);
 }
 
-void
-network_send_to_master(uint8_t *buffer, unsigned int length)
+static void
+network_std_puts(const char *str)
 {
-	wiznet_udp_send_to(g_udp_socket, g_net_send_ep, (char *) buffer, length);
+	unsigned int length = strlen(str);
+	wiznet_udp_send_to(g_udp_socket, g_net_send_ep, (char *) str, length);
 }
 
-	void (*put_std_str)(const char *str);
-	/**
-	 * Output a debug string
-	 */
-	void (*put_dbg_str)(const char *str);
+static void
+network_dbg_puts(const char *str)
+{
+	unsigned int length = strlen(str);
+	wiznet_udp_send_to(g_udp_socket, g_net_send_ep, (char *) str, length);
+}
+
+static com_handler_t network_com_hdler = {
+	.put_std_str = network_std_puts,
+	.put_dbg_str = network_dbg_puts,
+};
 
 static int
 network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
@@ -83,6 +91,8 @@ network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
 	
 	ret = wiznet_ep_set_address(g_net_send_ep, g_master_server, g_port);
 	PANIC_ON(ret, "Master adress does not exists");
+	
+	communication_register(&network_com_hdler);
 
 	return 0;
 }
