@@ -62,9 +62,7 @@ sensor_create(sensors_type_t type, const char *name, unsigned char id, const sen
 	sensor_t *s;
 
 	PANIC_ON(id >= MAX_SENSOR_COUNT, "Id is too big");
-
-	if (g_sensors[id] != NULL)
-		return NULL;
+	PANIC_ON(g_sensors[id] != NULL, "Duplicated sensors id");
 
 	s = calloc(1, sizeof(*s));
 	if (!s)
@@ -75,7 +73,6 @@ sensor_create(sensors_type_t type, const char *name, unsigned char id, const sen
 	s->type = type;
 	s->ops = ops;
 	s->data = data;
-	PANIC_ON(g_sensors[id] != NULL, "Duplicated sensors id");
 	g_sensors[id] = s;
 
 	sensors_sensor_created(s);

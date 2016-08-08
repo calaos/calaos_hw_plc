@@ -76,8 +76,9 @@ com_json_parse(json_value* section)
 		}
 	}
 
-	std_puts("Debug enabled: %d\r\n", g_debug_enabled);
+	std_puts("Debug enabled: %d, setting serial baudrate to %d\r\n", g_debug_enabled, baudrate);
 	hal_serial_set_baudrate(baudrate);
+
 	return 0;
 }
 
