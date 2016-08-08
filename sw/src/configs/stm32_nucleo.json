@@ -1,10 +1,10 @@
 {
 	"communication": {
 		"baudrate": 115200,
-		"debug": 1,
+		"debug": 1
 	},
 	"mysensors": {
-		"node_id": 42,
+		"node_id": 42
 	},
 	"i2c": [{
 		"name": "i2c1",
@@ -34,22 +34,23 @@
 		"name": "1w1",
 		"pin": "gpio@PC_10"
 	}],
-	"#display": {
-		"type": "ili9341",
-		"width": 240,
-		"height": 320,
-		"data": {
-			"spi": "spi1",
-			"rst": "gpio@PA_10",
-			"cs": "gpio@PC_4",
-			"dc": "gpio@PB_3"
-		}
-	},
+#~ 	"display": {
+#~ 		"type": "ili9341",
+#~ 		"width": 240,
+#~ 		"height": 320,
+#~ 		"data": {
+#~ 			"spi": "spi1",
+#~ 			"rst": "gpio@PA_10",
+#~ 			"cs": "gpio@PC_4",
+#~ 			"dc": "gpio@PB_3"
+#~ 		}
+#~ 	},
 	"network": {
 		"master": "192.168.1.12",
 		"type": "w5100",
 		"mac": "78:ac:c0:97:f2:67",
 		"port": 14987,
+		"dbg_port": 14988,
 		"data": {
 			"spi": "spi3",
 			"rst": "gpio@PD_2",
@@ -80,129 +81,421 @@
 		"i2c": "i2c1"
 	}],
 	"sensors": {
-		"digital_io" : [{
-			"name": "sw1",
-			"io": "gpio@PC_13",
-			"dir": "in",
-			"active_low": 1,
-			"debounce": 1,
-			"id": 0
-		}, {
-			"name": "out1",
-			"dir": "out",
-			"io": "sr1@0",
-			"active_low": 1,
-			"id": 1
-		}, {
-			"name": "out2",
-			"dir": "out",
-			"io": "sr1@1",
-			"active_low": 1,
-			"id": 2
-		}, {
-			"name": "out3",
-			"dir": "out",
-			"io": "sr1@2",
-			"active_low": 1,
-			"id": 3
-		}, {
-			"name": "out4",
-			"dir": "out",
-			"io": "sr1@3",
-			"active_low": 1,
-			"id": 4
-		}, {
-			"name": "out5",
-			"dir": "out",
-			"io": "sr1@4",
-			"active_low": 1,
-			"id": 5
-		}, {
-			"name": "out6",
-			"dir": "out",
-			"io": "sr1@5",
-			"active_low": 1,
-			"id": 6
-		}, {
-			"name": "out7",
-			"dir": "out",
-			"io": "sr1@6",
-			"active_low": 1,
-			"id": 7
-		}, {
-			"name": "out8",
-			"dir": "out",
-			"io": "sr1@7",
-			"active_low": 1,
-			"id": 8
-		}, {
-			"name": "out9",
-			"dir": "out",
-			"io": "sr1@8",
-			"active_low": 1,
-			"id": 9
-		}, {
-			"name": "out10",
-			"dir": "out",
-			"io": "sr1@9",
-			"active_low": 1,
-			"id": 10
-		}, {
-			"name": "out11",
-			"dir": "out",
-			"io": "sr1@10",
-			"active_low": 1,
-			"id": 11
-		}, {
-			"name": "out12",
-			"dir": "out",
-			"io": "sr1@11",
-			"active_low": 1,
-			"id": 12
-		}, {
-			"name": "out13",
-			"dir": "out",
-			"io": "sr1@12",
-			"active_low": 1,
-			"id": 13
-		}, {
-			"name": "out14",
-			"dir": "out",
-			"io": "sr1@13",
-			"active_low": 1,
-			"id": 14
-		}, {
-			"name": "out15",
-			"dir": "out",
-			"io": "sr1@14",
-			"active_low": 1,
-			"id": 15
-		}, {
-			"name": "out16",
-			"dir": "out",
-			"io": "sr1@15",
-			"active_low": 1,
-			"id": 16
-		}, {
-			"name": "intest",
-			"dir": "in",
-			"io": "pcf1@0",
-			"active_low": 0,
-			"debounce": 1,
-			"id": 17
-		}],
-		"bme280": [{
-			"i2c": "i2c1",
-			"addr": "0x76",
-			"refresh": 1000,
-			"id": 60
-		}],
-		"bh1750": [{
-			"i2c": "i2c1",
-			"addr": "0x23",
-			"refresh": 1000,
-			"id": 63,
-			"auto": 1
-		}]
+		"digital_io" : [
+			{
+				"name": "sw1",
+				"io": "gpio@PC_13",
+				"dir": "in",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 0
+			},
+		###################################
+		# Outputs for shift register 1 (24V)
+		###################################
+			{
+				"name": "outh1",
+				"dir": "out",
+				"io": "sr1@0",
+				"active_low": 0,
+				"id": 1
+			}, {
+				"name": "outh2",
+				"dir": "out",
+				"io": "sr1@1",
+				"active_low": 0,
+				"id": 2
+			}, {
+				"name": "outh3",
+				"dir": "out",
+				"io": "sr1@2",
+				"active_low": 0,
+				"id": 3
+			}, {
+				"name": "outh4",
+				"dir": "out",
+				"io": "sr1@3",
+				"active_low": 0,
+				"id": 4
+			}, {
+				"name": "outh5",
+				"dir": "out",
+				"io": "sr1@4",
+				"active_low": 0,
+				"id": 5
+			}, {
+				"name": "outh6",
+				"dir": "out",
+				"io": "sr1@5",
+				"active_low": 0,
+				"id": 6
+			}, {
+				"name": "outh7",
+				"dir": "out",
+				"io": "sr1@6",
+				"active_low": 0,
+				"id": 7
+			}, {
+				"name": "outh8",
+				"dir": "out",
+				"io": "sr1@7",
+				"active_low": 0,
+				"id": 8
+			}, 
+		###################################
+		# Outputs for shift register 2 (5V)
+		###################################
+			{
+				"name": "out9",
+				"dir": "out",
+				"io": "sr1@8",
+				"active_low": 0,
+				"id": 9
+			}, {
+				"name": "out10",
+				"dir": "out",
+				"io": "sr1@9",
+				"active_low": 0,
+				"id": 10
+			}, {
+				"name": "out11",
+				"dir": "out",
+				"io": "sr1@10",
+				"active_low": 0,
+				"id": 11
+			}, {
+				"name": "out12",
+				"dir": "out",
+				"io": "sr1@11",
+				"active_low": 0,
+				"id": 12
+			}, {
+				"name": "out13",
+				"dir": "out",
+				"io": "sr1@12",
+				"active_low": 0,
+				"id": 13
+			}, {
+				"name": "out14",
+				"dir": "out",
+				"io": "sr1@13",
+				"active_low": 0,
+				"id": 14
+			}, {
+				"name": "out15",
+				"dir": "out",
+				"io": "sr1@14",
+				"active_low": 0,
+				"id": 15
+			}, {
+				"name": "out16",
+				"dir": "out",
+				"io": "sr1@15",
+				"active_low": 0,
+				"id": 16
+			},
+		###################################
+		# Outputs for shift register 3 (24V)
+		###################################
+			{
+				"name": "outh17",
+				"dir": "out",
+				"io": "sr1@16",
+				"active_low": 0,
+				"id": 17
+			}, {
+				"name": "outh18",
+				"dir": "out",
+				"io": "sr1@17",
+				"active_low": 0,
+				"id": 18
+			}, {
+				"name": "outh19",
+				"dir": "out",
+				"io": "sr1@18",
+				"active_low": 0,
+				"id": 19
+			}, {
+				"name": "outh20",
+				"dir": "out",
+				"io": "sr1@19",
+				"active_low": 0,
+				"id": 20
+			}, {
+				"name": "outh21",
+				"dir": "out",
+				"io": "sr1@20",
+				"active_low": 0,
+				"id": 21
+			}, {
+				"name": "outh22",
+				"dir": "out",
+				"io": "sr1@21",
+				"active_low": 0,
+				"id": 22
+			}, {
+				"name": "outh23",
+				"dir": "out",
+				"io": "sr1@22",
+				"active_low": 0,
+				"id": 23
+			}, {
+				"name": "outh24",
+				"dir": "out",
+				"io": "sr1@23",
+				"active_low": 0,
+				"id": 24
+			},
+
+		###################################
+		# Outputs for shift register 4 (5V)
+		###################################
+			{
+				"name": "out25",
+				"dir": "out",
+				"io": "sr1@24",
+				"active_low": 0,
+				"id": 25
+			}, {
+				"name": "out26",
+				"dir": "out",
+				"io": "sr1@25",
+				"active_low": 0,
+				"id": 26
+			}, {
+				"name": "out27",
+				"dir": "out",
+				"io": "sr1@26",
+				"active_low": 0,
+				"id": 27
+			}, {
+				"name": "out28",
+				"dir": "out",
+				"io": "sr1@27",
+				"active_low": 0,
+				"id": 28
+			}, {
+				"name": "out29",
+				"dir": "out",
+				"io": "sr1@28",
+				"active_low": 0,
+				"id": 29
+			}, {
+				"name": "out30",
+				"dir": "out",
+				"io": "sr1@29",
+				"active_low": 0,
+				"id": 30
+			}, {
+				"name": "out31",
+				"dir": "out",
+				"io": "sr1@30",
+				"active_low": 0,
+				"id": 31
+			}, {
+				"name": "out32",
+				"dir": "out",
+				"io": "sr1@31",
+				"active_low": 0,
+				"id": 32
+			},
+		#########################
+		# Inputs from PCF1
+		#########################
+			{
+				"name": "in1_1",
+				"dir": "in",
+				"io": "pcf1@0",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 33
+			},{
+				"name": "in1_2",
+				"dir": "in",
+				"io": "pcf1@1",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 34
+			},{
+				"name": "in1_3",
+				"dir": "in",
+				"io": "pcf1@2",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 35
+			},{
+				"name": "in1_4",
+				"dir": "in",
+				"io": "pcf1@3",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 36
+			},{
+				"name": "in1_5",
+				"dir": "in",
+				"io": "pcf1@4",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 37
+			},{
+				"name": "in1_6",
+				"dir": "in",
+				"io": "pcf1@5",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 38
+			},{
+				"name": "in1_7",
+				"dir": "in",
+				"io": "pcf1@6",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 39
+			},{
+				"name": "in1_8",
+				"dir": "in",
+				"io": "pcf1@7",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 40
+			},
+		#########################
+		# Inputs from PCF2	
+		#########################	
+			{
+				"name": "in2_1",
+				"dir": "in",
+				"io": "pcf2@0",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 41
+			},{
+				"name": "in2_2",
+				"dir": "in",
+				"io": "pcf2@1",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 42
+			},{
+				"name": "in2_3",
+				"dir": "in",
+				"io": "pcf2@2",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 43
+			},{
+				"name": "in2_4",
+				"dir": "in",
+				"io": "pcf2@3",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 44
+			},{
+				"name": "in2_5",
+				"dir": "in",
+				"io": "pcf2@4",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 45
+			},{
+				"name": "in2_6",
+				"dir": "in",
+				"io": "pcf2@5",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 46
+			},{
+				"name": "in2_7",
+				"dir": "in",
+				"io": "pcf2@6",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 47
+			},{
+				"name": "in2_8",
+				"dir": "in",
+				"io": "pcf2@7",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 48
+			},
+		#########################
+		# Inputs from PCF3
+		#########################
+			{
+				"name": "in3_1",
+				"dir": "in",
+				"io": "pcf3@0",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 49
+			},{
+				"name": "in3_2",
+				"dir": "in",
+				"io": "pcf3@1",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 50
+			},{
+				"name": "in3_3",
+				"dir": "in",
+				"io": "pcf3@2",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 51
+			},{
+				"name": "in3_4",
+				"dir": "in",
+				"io": "pcf3@3",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 52
+			},{
+				"name": "in3_5",
+				"dir": "in",
+				"io": "pcf3@4",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 53
+			},{
+				"name": "in3_6",
+				"dir": "in",
+				"io": "pcf3@5",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 54
+			},{
+				"name": "in3_7",
+				"dir": "in",
+				"io": "pcf3@6",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 55
+			},{
+				"name": "in3_8",
+				"dir": "in",
+				"io": "pcf3@7",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 56
+			}
+		],
+		"bme280": [
+			{
+				"i2c": "i2c1",
+				"addr": "0x76",
+				"refresh": 1000,
+				"id": 60
+			}
+		],
+		"bh1750": [
+			{
+				"i2c": "i2c1",
+				"addr": "0x23",
+				"refresh": 1000,
+				"id": 63,
+				"auto": 1
+			}
+		]
 	}
 }

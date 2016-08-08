@@ -1,4 +1,4 @@
 
 %_reduced.json: %.json
-	cat $< | tr -d "[:space:]" > $@
+	cat $< | egrep -v "^[[:blank:]]*#" | tr -d "[:space:]" > $@
 	
