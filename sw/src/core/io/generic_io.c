@@ -51,9 +51,10 @@ gen_io_poll_one(gen_io_t *gen_io)
 	/* We have seen enough of the value */
 	if (gen_io->samples == DEBOUNCE_SAMPLES_COUNT) {
 		gen_io->debounced_value = value;
+
 		debug_puts("gen_io: %s changed: %d\r\n", gen_io->name, value);
 		if (gen_io->cb) {
-			gen_io->cb(gen_io, value, gen_io->cb_data);
+			gen_io->cb(gen_io, value ^ gen_io->reverse, gen_io->cb_data);
 		}
 	}
 }
