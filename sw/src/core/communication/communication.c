@@ -17,38 +17,48 @@ static SLIST_HEAD( ,com_handler) g_com_handlers = SLIST_HEAD_INITIALIZER();
 
 static char g_io_buffer[MAX_BUF_SIZE];
 
+
+
 void
-dbg_puts(const char *format, ...)
+generic_send(com_type_t com_type, const char *str)
+{
+	struct com_handler *hdler;
+
+	if (com_type == COM_TYPE_STD)
+		hal_serial_puts(g_io_buffer);
+	else if (com_type == COM_TYPE_DBG)
+		hal_debug_puts(g_io_buffer);
+
+	SLIST_FOREACH(hdler, &g_com_handlers, link) {
+		hdler->put_str(com_type, g_io_buffer);
+	}
+}
+
+
+void
+generic_puts(com_type_t com_type, const char *format, ...)
 {
 	va_list args;
-	struct com_handler *hdler;
 
 	va_start(args, format);
 	vsnprintf(g_io_buffer, sizeof(g_io_buffer), format, args);
 	va_end(args);
 	
-	hal_debug_puts(g_io_buffer);
-	SLIST_FOREACH(hdler, &g_com_handlers, link) {
-		hdler->put_dbg_str(g_io_buffer);
-	}
+	generic_send(com_type, g_io_buffer);
 }
 
 void
-std_puts(const char *format, ...)
+dbg_puts(const char *format, ...)
 {
 	va_list args;
-	struct com_handler *hdler;
 
 	va_start(args, format);
 	vsnprintf(g_io_buffer, sizeof(g_io_buffer), format, args);
 	va_end(args);
 
-	hal_serial_puts(g_io_buffer);
-
-	SLIST_FOREACH(hdler, &g_com_handlers, link) {
-		hdler->put_std_str(g_io_buffer);
-	}
+	generic_send(COM_TYPE_DBG, g_io_buffer);
 }
+
 
 void
 communication_register(com_handler_t *hdler)

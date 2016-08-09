@@ -46,11 +46,13 @@
 #~ 		}
 #~ 	},
 	"network": {
-		"master": "192.168.1.12",
 		"type": "w5100",
 		"mac": "78:ac:c0:97:f2:67",
 		"port": 14987,
 		"dbg_port": 14988,
+		"proto": "tcp",
+		# not needed when using proto tcp
+		"master": "192.168.1.12",
 		"data": {
 			"spi": "spi3",
 			"rst": "gpio@PD_2",
