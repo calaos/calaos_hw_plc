@@ -46,22 +46,22 @@ network_proto_t g_net_proto = NET_PROTO_TCP;
 
 
 static int
-network_udp_main_loop(com_type_t com_type, char *buf)
+network_udp_main_loop(com_type_t com_type, char *buf, unsigned int size)
 {
-	int size;
+	int ret_size;
 
-	size = wiznet_udp_sock_recv_from(g_net_con[com_type].udp_sock, g_net_con[com_type].recv_ep, buf, MYSENSOR_MAX_MSG_LENGTH);
-	if (size < 0)
+	ret_size = wiznet_udp_sock_recv_from(g_net_con[com_type].udp_sock, g_net_con[com_type].recv_ep, buf, MYSENSOR_MAX_MSG_LENGTH);
+	if (ret_size < 0)
 		return 0;
 
-	return size;
+	return ret_size;
 }
 
 static int
-network_tcp_main_loop(com_type_t com_type, char *buf)
+network_tcp_main_loop(com_type_t com_type, char *buf, unsigned int size)
 {
 	net_if_con_t *con = &g_net_con[com_type];
-	int ret;
+	int ret, ret_size;
 	
 	if (wiznet_tcp_sock_is_fin_received(con->tcp_sock)){
 		debug_puts("Closing socket for com %d\r\n", com_type);
@@ -86,11 +86,15 @@ network_tcp_main_loop(com_type_t com_type, char *buf)
 
 	if (com_type == COM_TYPE_DBG)
 		return 0;
+	
+	ret_size = wiznet_tcp_sock_receive_all(con->tcp_sock, buf, size);
+	if (ret_size < 0)
+		return 0; 
 
-	return 0;
+	return ret_size;
 }
 
-static int (* proto_main_loop[])(com_type_t /* com_type*/, char * /* buf */) = {
+static int (* proto_main_loop[])(com_type_t /* com_type*/, char * /* buf */, unsigned int /* size */) = {
 	[NET_PROTO_UDP] = network_udp_main_loop,
 	[NET_PROTO_TCP] = network_tcp_main_loop,
 };
@@ -100,10 +104,10 @@ network_main_loop(void)
 {
 	char buf[MYSENSOR_MAX_MSG_LENGTH];
 	int size;
-	
-	proto_main_loop[g_net_proto](COM_TYPE_DBG, buf);
 
-	size = proto_main_loop[g_net_proto](COM_TYPE_STD, buf);
+	proto_main_loop[g_net_proto](COM_TYPE_DBG, buf, MYSENSOR_MAX_MSG_LENGTH);
+
+	size = proto_main_loop[g_net_proto](COM_TYPE_STD, buf, MYSENSOR_MAX_MSG_LENGTH);
 	if (size == 0)
 		return;
 
