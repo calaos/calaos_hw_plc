@@ -19,18 +19,14 @@ static char g_io_buffer[MAX_BUF_SIZE];
 
 
 
+
 void
 generic_send(com_type_t com_type, const char *str)
 {
 	struct com_handler *hdler;
 
-	if (com_type == COM_TYPE_STD)
-		hal_serial_puts(g_io_buffer);
-	else if (com_type == COM_TYPE_DBG)
-		hal_debug_puts(g_io_buffer);
-
 	SLIST_FOREACH(hdler, &g_com_handlers, link) {
-		hdler->put_str(com_type, g_io_buffer);
+		hdler->put_str(com_type, str);
 	}
 }
 
@@ -92,6 +88,22 @@ com_json_parse(json_value* section)
 	return 0;
 }
 
+static void
+uart_put_str(com_type_t com_type, const char *str)
+{
+	if (com_type == COM_TYPE_STD)
+		hal_serial_puts(str);
+	else if (com_type == COM_TYPE_DBG)
+		hal_debug_puts(str);
+
+}
+
+static com_handler_t uart_com_hdler = {
+	.name = "uart",
+	.put_str = uart_put_str,
+};
+
+
 /**
  * Module
  */
@@ -106,6 +118,8 @@ void
 communication_init()
 {
 	module_register(&com_module);
+	
+	communication_register(&uart_com_hdler);
 }
 
 

@@ -52,7 +52,7 @@
 		"dbg_port": 14988,
 		"proto": "tcp",
 		# not needed when using proto tcp
-		"master": "192.168.1.12",
+		"master": "192.168.1.10",
 		"data": {
 			"spi": "spi3",
 			"rst": "gpio@PD_2",

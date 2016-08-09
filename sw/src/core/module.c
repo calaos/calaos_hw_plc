@@ -72,3 +72,18 @@ void module_main_loop()
 		}
 	}
 }
+
+
+void module_handle_message(com_type_t com_type, char *buf, unsigned int len)
+{
+	struct registered_module *rmod;
+	int ret;
+	
+	TAILQ_FOREACH(rmod, &g_active_module, link) {
+		if (rmod->mod->handle_message) {
+			ret = rmod->mod->handle_message(com_type, buf, len);
+			if (ret == MESSAGE_STOP_PROCESSING)
+				return;
+		}
+	}
+}

@@ -85,14 +85,12 @@ int TCPSocketServer::accept(TCPSocketConnection& connection)
     _sock_fd = -1; // want to assign new available _sock_fd.
     if(bind(listen_port) < 0) {
         // modified by Patrick Pollet
-        hal_panic();
-        return -1;
+        return -2;
     } else {
         //return -1;
         if(listen(1) < 0) {
             // modified by Patrick Pollet
-            hal_panic();
-            return -1;
+            return -2;
         }
     }
 

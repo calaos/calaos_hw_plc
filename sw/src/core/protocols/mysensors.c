@@ -194,6 +194,18 @@ static sensor_watcher_t mysensor_watcher = {
 	.sensor_updated = mysensor_sensor_updated,
 };
 
+
+int mysensor_handle_message(com_type_t com_type, char *buf, unsigned int len)
+{
+	if (com_type == COM_TYPE_STD) {
+		if (mysensors_parse_message(buf) == 1) {
+			return MESSAGE_STOP_PROCESSING;
+		}
+	}
+	
+	return MESSAGE_IGNORED;		
+}
+
 static int
 mysensors_json_parse(json_value* value)
 {
@@ -215,6 +227,7 @@ static const module_t mysensors_module = {
 	.name = "mysensors",
 	.main_loop = NULL,
 	.json_parse = mysensors_json_parse,
+	.handle_message = mysensor_handle_message,
 };
 
 void

@@ -107,6 +107,11 @@ int wiznet_tcp_sock_receive_all(wiznet_tcp_sock_t *sock, char* data, int length)
 
 void wiznet_tcp_sock_set_blocking(wiznet_tcp_sock_t *sock, bool blocking, int timeout);
 
+void wiznet_tcp_sock_close(wiznet_tcp_sock_t *sock);
+
+char* wiznet_tcp_sock_get_address(wiznet_tcp_sock_t *sock);
+
+int wiznet_tcp_sock_get_port(wiznet_tcp_sock_t *sock);
 
 
 #ifdef __cplusplus

@@ -206,4 +206,19 @@ void wiznet_tcp_sock_set_blocking(wiznet_tcp_sock_t *sock, bool blocking, int ti
 	reinterpret_cast<TCPSocketConnection*>(sock)->set_blocking(blocking, timeout);
 }
 
+void wiznet_tcp_sock_close(wiznet_tcp_sock_t *sock)
+{
+	reinterpret_cast<TCPSocketConnection*>(sock)->close();	
+}
+
+char* wiznet_tcp_sock_get_address(wiznet_tcp_sock_t *sock)
+{
+	return reinterpret_cast<TCPSocketConnection*>(sock)->get_address();
+}
+
+int wiznet_tcp_sock_get_port(wiznet_tcp_sock_t *sock)
+{
+	return reinterpret_cast<TCPSocketConnection*>(sock)->get_port();
+}
+
 }

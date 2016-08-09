@@ -5,9 +5,16 @@
 #include "queue.h"
 #include "config.h"
 #include "sensors.h"
+#include "communication.h"
 
 #define likely(x)       __builtin_expect((x),1)
 #define unlikely(x)     __builtin_expect((x),0)
+
+enum handle_message_ret {
+	MESSAGE_HANDLED = 0,
+	MESSAGE_STOP_PROCESSING,
+	MESSAGE_IGNORED,
+};
 
 /**
  *  Module struct
@@ -25,6 +32,11 @@ typedef struct module {
 	 * Module main loop hook
 	 */
 	void (*main_loop)(void);
+	/**
+	 * Handle message callback
+	 * Allow the module to catch some specific message and handle them
+	 */
+	int (*handle_message)(com_type_t type, char *buf, unsigned int len);
 	/* Parse a json section
 	 * return 0 if ok, or a negative value in case of error */
 	int (*json_parse)(json_value* value);
@@ -52,5 +64,8 @@ module_main_loop();
 int
 module_json_parse(json_value* value);
 
+
+void
+module_handle_message(com_type_t com_type, char *buf, unsigned int len);
 
 #endif

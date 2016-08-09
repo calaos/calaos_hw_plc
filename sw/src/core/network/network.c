@@ -13,13 +13,17 @@
 enum default_prot {
 	NET_STD_PORT = 13489,
 	NET_DBG_PORT,
-	NET_SHELL_PORT,
 };
 
 typedef enum network_proto {
 	NET_PROTO_UDP = 0,
 	NET_PROTO_TCP,
 } network_proto_t;
+
+static const char * net_proto_to_str[] = {
+	[NET_PROTO_UDP] = "UDP",
+	[NET_PROTO_TCP] = "TCP",
+};
 
 typedef struct net_if_con {
 	uint16_t port;
@@ -37,26 +41,76 @@ static wiznet_iface_t *g_net_iface;
 static uint8_t g_mac[6];
 static char *g_master_server;
 
-net_if_con_t g_net_con[COM_TYPE_COUNT] = {{.port = NET_STD_PORT}, {.port = NET_DBG_PORT}, {.port = NET_DBG_PORT}};
+net_if_con_t g_net_con[COM_TYPE_COUNT] = {{.port = NET_STD_PORT}, {.port = NET_DBG_PORT}};
 network_proto_t g_net_proto = NET_PROTO_TCP;
+
+
+static int
+network_udp_main_loop(com_type_t com_type, char *buf)
+{
+	int size;
+
+	size = wiznet_udp_sock_recv_from(g_net_con[com_type].udp_sock, g_net_con[com_type].recv_ep, buf, MYSENSOR_MAX_MSG_LENGTH);
+	if (size < 0)
+		return 0;
+
+	return size;
+}
+
+static int
+network_tcp_main_loop(com_type_t com_type, char *buf)
+{
+	net_if_con_t *con = &g_net_con[com_type];
+	int ret;
+	
+	if (wiznet_tcp_sock_is_fin_received(con->tcp_sock)){
+		debug_puts("Closing socket for com %d\r\n", com_type);
+		wiznet_tcp_sock_close(con->tcp_sock);
+	}
+
+	if (!wiznet_tcp_sock_is_connected(con->tcp_sock)) {
+
+		ret = wiznet_tcp_server_accept(con->tcp_serv, con->tcp_sock); 
+		if (ret != 0) {
+			if (ret == -2) {
+				debug_puts("Failed to accept connection: too many socket opened\r\n");
+				wiznet_tcp_sock_close(con->tcp_sock);
+			}
+			return 0;
+		}
+
+		debug_puts("Incoming connection from %s: com %d\r\n",
+			wiznet_tcp_sock_get_address(con->tcp_sock),
+			com_type);
+	}
+
+	if (com_type == COM_TYPE_DBG)
+		return 0;
+
+	return 0;
+}
+
+static int (* proto_main_loop[])(com_type_t /* com_type*/, char * /* buf */) = {
+	[NET_PROTO_UDP] = network_udp_main_loop,
+	[NET_PROTO_TCP] = network_tcp_main_loop,
+};
 
 static void
 network_main_loop(void)
 {
 	char buf[MYSENSOR_MAX_MSG_LENGTH];
 	int size;
+	
+	proto_main_loop[g_net_proto](COM_TYPE_DBG, buf);
 
-	if (g_net_proto == NET_PROTO_UDP) { 
-		size = wiznet_udp_sock_recv_from(g_net_con[COM_TYPE_STD].udp_sock, g_net_con[COM_TYPE_STD].recv_ep, buf, MYSENSOR_MAX_MSG_LENGTH);
-		if (size < 0)
-			return;
+	size = proto_main_loop[g_net_proto](COM_TYPE_STD, buf);
+	if (size == 0)
+		return;
 
-		buf[size] = '\0';
-		debug_puts("Parsing message packet received from udp\r\n");
-		mysensors_parse_message(buf);
-	} else {
-		
-	}
+	buf[size] = '\0';
+	debug_puts("Parsing message packet received from network\r\n");
+
+	module_handle_message(COM_TYPE_STD, buf, size);
 }
 
 static void
@@ -76,6 +130,7 @@ network_puts(com_type_t com_type, const char *str)
 }
 
 static com_handler_t network_com_hdler = {
+	.name = "network",
 	.put_str = network_puts,
 };
 
@@ -216,19 +271,22 @@ network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
 		return 1;
 	}
 	
-	if (g_net_proto == NET_PROTO_UDP)
+	if (g_net_proto == NET_PROTO_UDP) {
 		ret = network_init_udp_socks();
-	else 
+	} else {
 		ret = network_init_tcp_socks();
-		
+	}
+	
 	if (ret) {
 		debug_puts("Failed to init sockets");
 		return 1;
 	}
 
-	debug_puts("Network initialized: ip %s, listening on port %d, dbg port: %d\r\n",
+	debug_puts("Network initialized: ip %s, listening on port %d, dbg port: %d, type: %s\r\n",
 		wiznet_iface_get_ip(g_net_iface),
-		g_net_con[COM_TYPE_STD].port, g_net_con[COM_TYPE_DBG].port);
+		g_net_con[COM_TYPE_STD].port,
+		g_net_con[COM_TYPE_DBG].port,
+		net_proto_to_str[g_net_proto]);
 
 	communication_register(&network_com_hdler);
 

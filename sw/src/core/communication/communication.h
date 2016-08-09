@@ -9,7 +9,6 @@
 typedef enum com_type {
 	COM_TYPE_STD = 0,
 	COM_TYPE_DBG,
-	COM_TYPE_SHELL,
 	COM_TYPE_COUNT,
 } com_type_t;
 
