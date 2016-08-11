@@ -18,6 +18,11 @@ static sensor_t *g_sensors[MAX_SENSOR_COUNT] = {NULL};
 
 static SLIST_HEAD(,sensor_handler) g_sensors_handler_list = SLIST_HEAD_INITIALIZER(g_sensors_handler_list);
 static SLIST_HEAD(,sensor_watcher) g_sensors_watcher_list = SLIST_HEAD_INITIALIZER(g_sensors_watcher_list);
+static SLIST_HEAD(,sensor_constraint) g_sensors_constraint_list = SLIST_HEAD_INITIALIZER(g_sensors_constraint_list);
+
+static const char *constraint_type_to_str[] = {
+	[SENSORS_CST_TYPE_NOR] = "NOR",
+};
 
 int
 sensors_register_handler(sensor_handler_t *sensor_handler)
@@ -68,6 +73,7 @@ sensor_create(sensors_type_t type, const char *name, unsigned char id, const sen
 	if (!s)
 		return NULL;
 
+	SLIST_INIT(&s->constraints);
 	strncpy(s->name, name, SENSOR_MAX_NAME_LENGTH);
 	s->id = id;
 	s->type = type;
@@ -121,6 +127,70 @@ sensor_get_value(sensor_t *s, sensor_value_t *value)
 		s->ops->req(s, s->data, value);
 }
 
+static void
+sensors_add_constraint(sensor_constraint_t *cst, sensor_t *s)
+{
+	sensor_constraint_ptr_t *cst_ptr = malloc(sizeof(sensor_constraint_ptr_t));
+	PANIC_ON(!cst_ptr, "Failed to alloc constraint ptr");
+
+	cst_ptr->cst = cst;
+	SLIST_INSERT_HEAD(&s->constraints, cst_ptr, link);
+}
+
+static int
+constraint_json_parse_one(json_value* section)
+{
+	int length, i;
+	json_value *value;
+	const char *name;
+	sensor_constraint_t *cst;
+
+	cst = calloc(1, sizeof(sensor_constraint_t));
+	PANIC_ON(!cst, "Failed to alloc constraint");
+
+        length = section->u.object.length;
+        for (i = 0; i < length; i++) {
+		value = section->u.object.values[i].value;
+		name = section->u.object.values[i].name;
+
+		if (strcmp(name, "type") == 0) {
+			if (strcmp(value->u.string.ptr,"NOR"))
+				cst->type = SENSORS_CST_TYPE_NOR;
+		} else if (strcmp(name, "io1") == 0) {
+			cst->data.nor.s1 = sensors_get_by_id(value->u.integer);
+		} else if (strcmp(name, "io2") == 0) {
+			cst->data.nor.s2 = sensors_get_by_id(value->u.integer);
+		}
+        }
+
+	dbg_log("Adding constraint type %s, to sensor %s and %s\r\n", 
+			constraint_type_to_str,
+			sensor_get_name(cst->data.nor.s1),
+			sensor_get_name(cst->data.nor.s2));
+	SLIST_INSERT_HEAD(&g_sensors_constraint_list, cst, link);
+	sensors_add_constraint(cst, cst->data.nor.s1);
+	sensors_add_constraint(cst, cst->data.nor.s2);
+
+	return 0;
+}
+
+
+static int
+constraint_json_parse(json_value* section)
+{
+	unsigned int i;
+
+	if (section->type != json_array)
+		return 1;
+
+	for (i = 0; i < section->u.array.length; i++) {
+		constraint_json_parse_one(section->u.array.values[i]);
+	}
+
+	return 0;
+}
+
+
 static int
 sensors_json_parse(json_value* section)
 {
@@ -128,7 +198,7 @@ sensors_json_parse(json_value* section)
 	json_value *value;
 	const char *name;
 	struct sensor_handler *handler;
-	//~ json_value *constraints = NULL;
+	json_value *constraints = NULL;
 
         length = section->u.object.length;
 
@@ -138,10 +208,10 @@ sensors_json_parse(json_value* section)
 		name = section->u.object.values[i].name;
 		dbg_log("Adding section %s\r\n", name);
 
-		//~ if (strcmp(name, "constraints") == 0) {
-			//~ constraints = value;
-			//~ continue;
-		//~ }
+		if (strcmp(name, "constraints") == 0) {
+			constraints = value;
+			continue;
+		}
 	
 		SLIST_FOREACH(handler, &g_sensors_handler_list, link) {
 			if (strcmp(name, handler->name))
@@ -152,8 +222,8 @@ sensors_json_parse(json_value* section)
 		}
         }
         
-        //~ if (constraints != NULL)
-		//~ constraint_parse_json(constraints);
+        if (constraints != NULL)
+		constraint_json_parse(constraints);
 
 	return 0;
 }

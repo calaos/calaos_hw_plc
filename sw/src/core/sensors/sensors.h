@@ -7,6 +7,8 @@
 
 #define SENSOR_MAX_NAME_LENGTH	32
 
+typedef struct sensor sensor_t;
+
 /**
  * Sensor types
  */
@@ -19,18 +21,53 @@ typedef enum sensors_type {
 	SENSORS_TYPE_COUNT,
 } sensors_type_t;
 
+/**
+ * Constraint types
+ */
+typedef enum sensors_constraint_type {
+	SENSORS_CST_TYPE_NOR = 0,
+} sensors_constraint_type_t;
+
+/**
+ * NOR constraint
+ */
+typedef struct sensors_constraint_nor {
+	sensor_t *s1;
+	sensor_t *s2;
+} sensors_constraint_nor_t;
+
+/**
+ * Constraint union
+ */
+typedef struct sensor_constraint {
+	sensors_constraint_type_t type;
+	union {
+		sensors_constraint_nor_t nor;
+	} data;
+
+	/* Link list link */
+	SLIST_ENTRY(sensor_constraint) link;
+} sensor_constraint_t;
+
+typedef struct sensor_constraint_ptr {
+	sensor_constraint_t *cst;
+	SLIST_ENTRY(sensor_constraint_ptr) link;
+} sensor_constraint_ptr_t;
+
 typedef struct sensors_ops sensors_ops_t;
 
 /**
  * Sensor struct
  */
-typedef struct sensor {
+struct sensor {
 	char name[SENSOR_MAX_NAME_LENGTH];
 	const sensors_ops_t *ops;
 	unsigned int id;
 	sensors_type_t type;
 	void *data;
-} sensor_t;
+
+	SLIST_HEAD(,sensor_constraint_ptr) constraints;
+};
 
 /**
  * Sensor value for callbacks

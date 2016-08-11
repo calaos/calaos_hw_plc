@@ -147,6 +147,15 @@ shift_register_io_write(void *io, int state)
 {
 	shift_register_io_t *sr_io = io;
 	shift_register_set_output(sr_io->sr, sr_io->output, state);
+}
+
+static int
+shift_register_io_read(void *io)
+{
+	shift_register_io_t *sr_io = io;
+	shift_register_t *sr = sr_io->sr;
+	
+	return (sr->current_value >> sr_io->output) & 1;
 }	
 
 /**
@@ -160,7 +169,7 @@ static const module_t shift_register_module = {
 
 static gen_io_ops_t shift_register_io_ops = {
 	.io_write = shift_register_io_write,
-	.io_read = NULL,
+	.io_read = shift_register_io_read,
 	.io_setup = shift_register_io_setup,
 	.prefix = "sr",
 };
