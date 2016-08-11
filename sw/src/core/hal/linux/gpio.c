@@ -16,7 +16,7 @@ hal_gpio_setup(const char *gpio_name, int reverse, gpio_dir_t direction, gpio_pi
 	if (!gpio)
 		return NULL;
 
-	debug_puts("Creating linux gpio %s, reverse: %d, direction: %d\n", gpio_name, reverse, direction);
+	dbg_log("Creating linux gpio %s, reverse: %d, direction: %d\n", gpio_name, reverse, direction);
 	gpio->gpio_num = atoi(gpio_name);
 
 	return gpio;

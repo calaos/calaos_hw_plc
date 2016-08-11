@@ -48,7 +48,7 @@ hal_serial_puts(const char *str)
 
 
 extern "C" int
-hal_debug_puts(const char *str)
+hal_dbg_log(const char *str)
 {
 	pc_serial.puts(str);
 

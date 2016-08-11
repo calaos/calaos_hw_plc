@@ -128,6 +128,7 @@ sensors_json_parse(json_value* section)
 	json_value *value;
 	const char *name;
 	struct sensor_handler *handler;
+	//~ json_value *constraints = NULL;
 
         length = section->u.object.length;
 
@@ -135,7 +136,12 @@ sensors_json_parse(json_value* section)
         for (i = 0; i < length; i++) {
 		value = section->u.object.values[i].value;
 		name = section->u.object.values[i].name;
-		debug_puts("Adding section %s\r\n", name);
+		dbg_log("Adding section %s\r\n", name);
+
+		//~ if (strcmp(name, "constraints") == 0) {
+			//~ constraints = value;
+			//~ continue;
+		//~ }
 	
 		SLIST_FOREACH(handler, &g_sensors_handler_list, link) {
 			if (strcmp(name, handler->name))
@@ -145,6 +151,9 @@ sensors_json_parse(json_value* section)
 			 break;
 		}
         }
+        
+        //~ if (constraints != NULL)
+		//~ constraint_parse_json(constraints);
 
 	return 0;
 }

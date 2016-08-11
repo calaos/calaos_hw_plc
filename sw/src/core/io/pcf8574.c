@@ -78,10 +78,10 @@ pcf8574_json_parse_one(json_value* sensor)
 			"Missing info for pcf8574\r\n");
         exp->output_value = 0;
         exp->need_update = 1;
-	debug_puts("Adding pcf8574 %s with address 0x%x\r\n", exp->name, exp->addr);
+	dbg_log("Adding pcf8574 %s with address 0x%x\r\n", exp->name, exp->addr);
 
 	if (i2c_bus_read(exp->i2c, exp->addr, &exp->input_value, 1) != 0) {
-		debug_puts("pcf8574 %s with address 0x%x did not answer, freeing\r\n", exp->name, exp->addr);
+		dbg_log("pcf8574 %s with address 0x%x did not answer, freeing\r\n", exp->name, exp->addr);
 		free(exp);
 		return 1;
 	}
@@ -160,7 +160,7 @@ pcf8574_io_read(void *io)
 	if (gen_io_read(exp->int_io) || exp->need_update) {
 		ret = i2c_bus_read(exp->i2c, exp->addr, &exp->input_value, 1);
 		PANIC_ON(ret != 0, "Failed to read PCF");
-		debug_puts("PCF8574 new value ! %x\r\n", exp->input_value);
+		dbg_log("PCF8574 new value ! %x\r\n", exp->input_value);
 		exp->need_update = 0;
 	}
 

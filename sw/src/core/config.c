@@ -25,17 +25,17 @@ config_init()
 	int length = 0;
 	char filename[FILENAME_MAX_LENGTH];
 
-	debug_puts("Config init\r\n");
+	dbg_log("Config init\r\n");
 
 	snprintf(filename, FILENAME_MAX_LENGTH, "%s"CONFIG_NAME, hal_get_filesystem_prefix());
 
 	config = fopen(filename, "r");
 	if (config == NULL) {
-		debug_puts("Using default configuration\r\n");
+		dbg_log("Using default configuration\r\n");
 		buffer = (json_char *) &__config_start;
 		length = &__config_end - &__config_start;
 	} else {
-		debug_puts("Loading configuration from filesystem\r\n");
+		dbg_log("Loading configuration from filesystem\r\n");
 		fseek(config, 0, SEEK_END);
 
 		length = ftell(config);
@@ -70,7 +70,7 @@ config_get_section(json_value *json, const char *section_name)
         length = json->u.object.length;
         for (i = 0; i < length; i++) {
 		if (strcmp(json->u.object.values[i].name, section_name) == 0) {
-			debug_puts("Found section %s\r\n", section_name);
+			dbg_log("Found section %s\r\n", section_name);
 			return json->u.object.values[i].value;
 		}
         }

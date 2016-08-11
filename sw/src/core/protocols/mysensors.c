@@ -79,7 +79,7 @@ int mysensors_parse_message(char *query)
 	};
 
 	if (ack) {
-		debug_puts("Ack requested\r\n");
+		dbg_log("Ack requested\r\n");
 	}
 
 	return 1;
@@ -140,7 +140,7 @@ mysensors_json_parse_section(json_value* section)
 		name = section->u.object.values[i].name;
 		if (strcmp(name, "node_id") == 0) {
 			g_assigned_node_id = entry->u.integer;
-			debug_puts("Node id: %d\r\n", g_assigned_node_id);
+			dbg_log("Node id: %d\r\n", g_assigned_node_id);
 		}
         }
 

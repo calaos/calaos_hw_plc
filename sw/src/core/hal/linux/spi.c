@@ -6,7 +6,7 @@
 hal_spi_t *
 hal_spi_setup(const char *mosi, const char *miso, const char *sck, uint32_t frequency)
 {
-	debug_puts("SPI: init freq %d\n", frequency);
+	dbg_log("SPI: init freq %d\n", frequency);
 
 	return NULL;
 }

@@ -107,7 +107,7 @@ display_json_parse(json_value* section)
 		}
 	}
 	PANIC_ON(!disp_data, "Failed to find display data section");
-	debug_puts("Setup display w %d, h %d\r\n", g_display.width, g_display.height);
+	dbg_log("Setup display w %d, h %d\r\n", g_display.width, g_display.height);
 
 	for (i = 0; i < ARRAY_SIZE(g_display_ops); i++) {
 		disp_ops = g_display_ops[i];
@@ -146,7 +146,7 @@ display_main_loop()
 	s = qr.quot;
 
 	snprintf(buffer, 10, "%02d:%02d:%02d\r\n", h, m, s);
-	debug_puts("Uptime: %s\r\n", buffer);
+	dbg_log("Uptime: %s\r\n", buffer);
 
 	display_print(0, 0, "Uptime:   ", g_display.colors[COLOR_NAVY], g_display.colors[COLOR_BLACK]);
 	display_print(0, 10, buffer, g_display.colors[COLOR_RED], g_display.colors[COLOR_BLACK]);

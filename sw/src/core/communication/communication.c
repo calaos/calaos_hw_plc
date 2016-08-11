@@ -17,9 +17,6 @@ static SLIST_HEAD( ,com_handler) g_com_handlers = SLIST_HEAD_INITIALIZER();
 
 static char g_io_buffer[MAX_BUF_SIZE];
 
-
-
-
 void
 generic_send(com_type_t com_type, const char *str)
 {
@@ -94,7 +91,7 @@ uart_put_str(com_type_t com_type, const char *str)
 	if (com_type == COM_TYPE_STD)
 		hal_serial_puts(str);
 	else if (com_type == COM_TYPE_DBG)
-		hal_debug_puts(str);
+		hal_dbg_log(str);
 
 }
 

@@ -45,7 +45,7 @@ hal_serial_getc(char *c);
  * @return 1 if there is a char, 0 if not
  */
 int
-hal_debug_puts(const char *str);
+hal_dbg_log(const char *str);
 
 /**
  * Enter critical section. Typically, this will disable irq

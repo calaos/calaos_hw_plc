@@ -61,7 +61,7 @@ bh1750_configure(bh1750_sensor_t *bh1750, uint8_t mode)
 	uint8_t value;
 
 	if (i2c_bus_read(bh1750->i2c, bh1750->addr, &value, 1) != 0) {
-		debug_puts("bh1750 with address 0x%x did not answer, freeing\r\n", bh1750->addr);
+		dbg_log("bh1750 with address 0x%x did not answer, freeing\r\n", bh1750->addr);
 		return 1;
 	}
 	
@@ -93,7 +93,7 @@ uint16_t bh1750_read(bh1750_sensor_t *bh1750) {
 	/* convert to lux */
 	level /= 1.2;
 
-	debug_puts("Light level: %d\r\n", level);
+	dbg_log("Light level: %d\r\n", level);
 
 	return level;
 }
@@ -183,7 +183,7 @@ bh1750_json_parse_one(json_value* section)
         if (bh1750->autolevel) {
 		bh1750->max_value = 0;
 		bh1750->min_value = (uint16_t) -1;
-		debug_puts("Using autolevel for bh1750 \r\n");
+		dbg_log("Using autolevel for bh1750 \r\n");
 	}
 
         if (bh1750_configure(bh1750, BH1750_CONTINUOUS_HIGH_RES_MODE)) {

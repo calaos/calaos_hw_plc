@@ -64,7 +64,7 @@ network_tcp_main_loop(com_type_t com_type, char *buf, unsigned int size)
 	int ret, ret_size;
 	
 	if (wiznet_tcp_sock_is_fin_received(con->tcp_sock)){
-		debug_puts("Closing socket for com %d\r\n", com_type);
+		dbg_log("Closing socket for com %d\r\n", com_type);
 		wiznet_tcp_sock_close(con->tcp_sock);
 	}
 
@@ -73,13 +73,13 @@ network_tcp_main_loop(com_type_t com_type, char *buf, unsigned int size)
 		ret = wiznet_tcp_server_accept(con->tcp_serv, con->tcp_sock); 
 		if (ret != 0) {
 			if (ret == -2) {
-				debug_puts("Failed to accept connection: too many socket opened\r\n");
+				dbg_log("Failed to accept connection: too many socket opened\r\n");
 				wiznet_tcp_sock_close(con->tcp_sock);
 			}
 			return 0;
 		}
 
-		debug_puts("Incoming connection from %s: com %d\r\n",
+		dbg_log("Incoming connection from %s: com %d\r\n",
 			wiznet_tcp_sock_get_address(con->tcp_sock),
 			com_type);
 	}
@@ -112,7 +112,7 @@ network_main_loop(void)
 		return;
 
 	buf[size] = '\0';
-	debug_puts("Parsing message packet received from network\r\n");
+	dbg_log("Parsing message packet received from network\r\n");
 
 	module_handle_message(COM_TYPE_STD, buf, size);
 }
@@ -145,13 +145,13 @@ network_init_udp_sock(net_if_con_t *con)
 
 	con->udp_sock = wiznet_udp_sock_create();
 	if(!con->udp_sock) {
-		debug_puts("Failed to create network interface");
+		dbg_log("Failed to create network interface");
 		return 1;
 	}
 
 	ret = wiznet_udp_sock_init(con->udp_sock);
 	if(ret) {
-		debug_puts("Failed to bind UDP interface");
+		dbg_log("Failed to bind UDP interface");
 		return 1;
 	}
 
@@ -159,25 +159,25 @@ network_init_udp_sock(net_if_con_t *con)
 
 	ret = wiznet_udp_sock_bind(con->udp_sock, con->port);
 	if(ret) {
-		debug_puts("Failed to listen to UDP interface");
+		dbg_log("Failed to listen to UDP interface");
 		return 1;
 	}
 
 	con->recv_ep = wiznet_ep_create();
 	if (!con->recv_ep) {
-		debug_puts("Failed create recv endpoint");
+		dbg_log("Failed create recv endpoint");
 		return 1;
 	}
 
 	con->send_ep = wiznet_ep_create();
 	if (!con->send_ep) {
-		debug_puts("Failed create send endpoint");
+		dbg_log("Failed create send endpoint");
 		return 1;
 	}
 
 	ret = wiznet_ep_set_address(con->send_ep, g_master_server, con->port);
 	if (ret) {
-		debug_puts("Master adress does not exists");
+		dbg_log("Master adress does not exists");
 		return 1;
 	}
 
@@ -207,19 +207,19 @@ network_init_tcp_sock(net_if_con_t *con)
 
 	con->tcp_serv = wiznet_tcp_server_create();
 	if(!con->tcp_serv) {
-		debug_puts("Failed to create tcp serv");
+		dbg_log("Failed to create tcp serv");
 		return 1;
 	}
 
 	ret = wiznet_tcp_server_bind(con->tcp_serv, con->port);
 	if(ret) {
-		debug_puts("Failed to bind tcp interface");
+		dbg_log("Failed to bind tcp interface");
 		return 1;
 	}
 	
 	ret = wiznet_tcp_server_listen(con->tcp_serv, 1);
 	if(ret) {
-		debug_puts("Failed to set tcp interface to listen");
+		dbg_log("Failed to set tcp interface to listen");
 		return 1;
 	}
 
@@ -227,7 +227,7 @@ network_init_tcp_sock(net_if_con_t *con)
 
 	con->tcp_sock = wiznet_tcp_sock_create();
 	if(!con->tcp_sock) {
-		debug_puts("Failed to create tcp socket");
+		dbg_log("Failed to create tcp socket");
 		return 1;
 	}
 
@@ -259,19 +259,19 @@ network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
 
 	g_net_iface = wiznet_iface_create(spi, cs, rst);
 	if (!g_net_iface) {
-		debug_puts("Failed create network interface");
+		dbg_log("Failed create network interface");
 		return 1;
 	}
 
 	ret = wiznet_iface_init_dhcp(g_net_iface, g_mac);
 	if (ret) {
-		debug_puts("Failed to init network");
+		dbg_log("Failed to init network");
 		return 1;
 	}
 
 	ret = wiznet_iface_connect(g_net_iface);
 	if (ret) {
-		debug_puts("Failed to obtain ip through DHCP");
+		dbg_log("Failed to obtain ip through DHCP");
 		return 1;
 	}
 	
@@ -282,11 +282,11 @@ network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
 	}
 	
 	if (ret) {
-		debug_puts("Failed to init sockets");
+		dbg_log("Failed to init sockets");
 		return 1;
 	}
 
-	debug_puts("Network initialized: ip %s, listening on port %d, dbg port: %d, type: %s\r\n",
+	dbg_log("Network initialized: ip %s, listening on port %d, dbg port: %d, type: %s\r\n",
 		wiznet_iface_get_ip(g_net_iface),
 		g_net_con[COM_TYPE_STD].port,
 		g_net_con[COM_TYPE_DBG].port,
@@ -308,7 +308,7 @@ network_set_mac(const char *mac)
 		g_mac[i] = macc;
 	}
 
-	debug_puts("Read mac %02X:%02X:%02X:%02X:%02X:%02X\r\n",
+	dbg_log("Read mac %02X:%02X:%02X:%02X:%02X:%02X\r\n",
 		g_mac[0],g_mac[1],g_mac[2],g_mac[3],g_mac[4],g_mac[5]);
 		
 	return 0;

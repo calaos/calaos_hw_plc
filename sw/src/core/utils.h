@@ -8,7 +8,7 @@
 
 #define __unused__ __attribute__ ((unused))
  
-#define PANIC(format, ...) do { debug_puts("PANIC: " format "\r\n", ##__VA_ARGS__); hal_panic(); } while(0);
+#define PANIC(format, ...) do { dbg_log("PANIC: " format "\r\n", ##__VA_ARGS__); hal_panic(); } while(0);
 
 #define PANIC_ON(test, format, ...) do { if (test) {PANIC(format, ##__VA_ARGS__);} } while(0);
 

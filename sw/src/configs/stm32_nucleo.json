@@ -499,5 +499,13 @@
 				"auto": 1
 			}
 		]
+		"constraints": [
+			{	
+				# NOR type constraint only applies to input digital_io
+				"type": "nor",
+				"io1": 1,
+				"io2": 2,
+			}
+		]
 	}
 }

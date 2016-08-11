@@ -16,12 +16,12 @@
  *	ds1820.startConversion();
  *	wait(1.0);
  *	while(1) {
- *	    debug_puts("temp = %3.1f\r\n", ds1820.read());     // read temperature
+ *	    dbg_log("temp = %3.1f\r\n", ds1820.read());     // read temperature
  *	    ds1820.startConversion();     // start temperature conversion
  *	    wait(1.0);		    // let DS1820 complete the temperature conversion
  *	}
  *    } else
- *	debug_puts("No DS1820 sensor found!\r\n");
+ *	dbg_log("No DS1820 sensor found!\r\n");
  * }
  *
  * 
@@ -76,7 +76,7 @@ bool ds1820_search(ds1820_t *ds) {
 	ms_delay(250);
 
 	if(!onewire_bus_search(ds->onewire, ds->addr)) {
-		debug_puts("No addresses.\r\n");
+		dbg_log("No addresses.\r\n");
 		onewire_bus_reset_search(ds->onewire);
 		ms_delay(250);
 		return false;
@@ -89,21 +89,21 @@ bool ds1820_search(ds1820_t *ds) {
 	switch(ds->addr[0]) {
 	case 0x10:
 		ds->model_s = true;
-		debug_puts("DS18S20 or old DS1820\r\n");
+		dbg_log("DS18S20 or old DS1820\r\n");
 		break;
 
 	case 0x28:
 		ds->model_s = false;
-		debug_puts("DS18B20\r\n");
+		dbg_log("DS18B20\r\n");
 		break;
 
 	case 0x22:
 		ds->model_s = false;
-		debug_puts("DS1822\r\n");
+		dbg_log("DS1822\r\n");
 		break;
 
 	default:
-		debug_puts("Device doesn't belong to the DS1820 family\r\n");
+		dbg_log("Device doesn't belong to the DS1820 family\r\n");
 		return false;
 	}
 
@@ -190,7 +190,7 @@ uint8_t ds1820_read(ds1820_t *ds, float *temp)
 	// Convert the raw bytes to a 16bit unsigned value
 	uint16_t *p_word = (uint16_t *) ds->data;
  
-	debug_puts("raw = %#x\r\n", *p_word);
+	dbg_log("raw = %#x\r\n", *p_word);
  
 	if(ds->model_s) {
 	    *p_word = *p_word << 3;	 // 9 bit resolution,  max conversion time = 750ms

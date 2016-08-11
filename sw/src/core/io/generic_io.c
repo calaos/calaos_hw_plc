@@ -52,7 +52,7 @@ gen_io_poll_one(gen_io_t *gen_io)
 	if (gen_io->samples == DEBOUNCE_SAMPLES_COUNT) {
 		gen_io->debounced_value = value;
 
-		debug_puts("gen_io: %s changed: %d\r\n", gen_io->name, value);
+		dbg_log("gen_io: %s changed: %d\r\n", gen_io->name, value);
 		if (gen_io->cb) {
 			gen_io->cb(gen_io, value ^ gen_io->reverse, gen_io->cb_data);
 		}
@@ -105,7 +105,7 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 	char *prefix, *io_name;
 	char name_cpy[GEN_IO_MAX_NAME_SIZE];
 
-	debug_puts("Setting generic io for %s\r\n", name);
+	dbg_log("Setting generic io for %s\r\n", name);
 
 	PANIC_ON(direction == GPIO_DIR_OUTPUT && debounce, "Can not debounce output pin...");
 	
@@ -114,7 +114,7 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 		PANIC_ON(io->dir != direction || io->debounce != debounce || io->reverse != reverse,
 			"IO required already setup with different parameters");
 
-		debug_puts("Retrieving already existing io %s\r\n", name);
+		dbg_log("Retrieving already existing io %s\r\n", name);
 		return io;
 	}
 

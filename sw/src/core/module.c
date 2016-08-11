@@ -19,7 +19,7 @@ int module_register(const module_t * mod)
 {
 	registered_module_t *rmod;
 
-	debug_puts("Registering module %s\r\n", mod->name);
+	dbg_log("Registering module %s\r\n", mod->name);
 
 	rmod = malloc(sizeof(registered_module_t));
 	rmod->mod = mod;
@@ -44,14 +44,14 @@ int module_json_parse(json_value* value)
 
 		section = config_get_section(value, rmod->mod->name);
 		if (!section) {
-			debug_puts("No json for module %s\r\n", rmod->mod->name);
+			dbg_log("No json for module %s\r\n", rmod->mod->name);
 			continue;
 		}
 
 		if (rmod->mod->json_parse(section) == 0) {
 			TAILQ_INSERT_TAIL(&g_active_module, rmod, link);
 		} else {
-			debug_puts("Failed to parse json for module %s\r\n", rmod->mod->name);
+			dbg_log("Failed to parse json for module %s\r\n", rmod->mod->name);
 			free(rmod);
 		}
 	}
