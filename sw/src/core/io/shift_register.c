@@ -154,9 +154,9 @@ shift_register_io_read(void *io)
 {
 	shift_register_io_t *sr_io = io;
 	shift_register_t *sr = sr_io->sr;
-	
-	return (sr->current_value >> sr_io->output) & 1;
-}	
+
+	return (sr->current_value >> sr_io->output) & 0x1;
+}
 
 /**
  * Module

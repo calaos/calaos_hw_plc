@@ -57,19 +57,6 @@ typedef struct sensor_constraint_ptr {
 typedef struct sensors_ops sensors_ops_t;
 
 /**
- * Sensor struct
- */
-struct sensor {
-	char name[SENSOR_MAX_NAME_LENGTH];
-	const sensors_ops_t *ops;
-	unsigned int id;
-	sensors_type_t type;
-	void *data;
-
-	SLIST_HEAD(,sensor_constraint_ptr) constraints;
-};
-
-/**
  * Sensor value for callbacks
  */
 typedef union sensor_value {
@@ -77,6 +64,20 @@ typedef union sensor_value {
 	float val_f;
 } sensor_value_t;
 
+
+/**
+ * Sensor struct
+ */
+struct sensor {
+	char name[SENSOR_MAX_NAME_LENGTH];
+	const sensors_ops_t *ops;
+	sensor_value_t val;
+	unsigned int id;
+	sensors_type_t type;
+	void *data;
+
+	SLIST_HEAD(,sensor_constraint_ptr) constraints;
+};
 
 struct sensors_ops {
 	/**

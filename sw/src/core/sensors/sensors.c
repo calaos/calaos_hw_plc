@@ -11,6 +11,11 @@
 #define SENSOR_MAX_NAME_LENGTH		32
 #define MAX_SENSOR_COUNT		128
 
+typedef enum constraint_res {
+	CONSTRAINT_OK = 0,
+	CONSTRAINT_VIOLATED,
+} constraint_res_t;
+
 /**
  * Sensor management
  */
@@ -81,6 +86,9 @@ sensor_create(sensors_type_t type, const char *name, unsigned char id, const sen
 	s->data = data;
 	g_sensors[id] = s;
 
+
+	sensor_get_value(s, &s->val);
+	dbg_log("Sensor %s initial value: %d\r\n", s->name, s->val.val_i);
 	sensors_sensor_created(s);
 
 	return s;
@@ -112,10 +120,47 @@ sensors_sensor_update(sensor_t* s, sensor_value_t new_value)
 	return 0;
 }
 
+static constraint_res_t
+sensor_check_constraint(sensor_t *s, sensor_value_t new_value)
+{
+	sensor_constraint_ptr_t *cst_ptr;
+	sensor_constraint_t *cst;
+	sensor_t *other;
+	
+	SLIST_FOREACH(cst_ptr, &s->constraints, link) {
+		cst = cst_ptr->cst;
+		switch (cst->type) {
+			case SENSORS_CST_TYPE_NOR:
+				/* Determine other sensor */
+				other = (s == cst->data.nor.s1) ? cst->data.nor.s2 : cst->data.nor.s1;
+
+				dbg_log("Checking nor constraint for sensor %s val %d and %s val %d\r\n",
+						sensor_get_name(s),
+						new_value.val_i,
+						sensor_get_name(other),
+						other->val.val_i);
+
+				if (new_value.val_i == 1 && other->val.val_i == 1) {
+					return CONSTRAINT_VIOLATED;
+				}
+
+			break;
+		}
+	}
+	return CONSTRAINT_OK;
+}
 
 void
 sensor_set_value(sensor_t *s, sensor_value_t value)
 {
+	if (sensor_check_constraint(s, value) == CONSTRAINT_VIOLATED) {
+		dbg_log("Constraint violated\r\n");
+		return;
+	}
+
+	/* Update value */
+	s->val = value;
+
 	if (s->ops->set)
 		s->ops->set(s, s->data, value);
 }
@@ -128,7 +173,7 @@ sensor_get_value(sensor_t *s, sensor_value_t *value)
 }
 
 static void
-sensors_add_constraint(sensor_constraint_t *cst, sensor_t *s)
+sensor_add_constraint(sensor_constraint_t *cst, sensor_t *s)
 {
 	sensor_constraint_ptr_t *cst_ptr = malloc(sizeof(sensor_constraint_ptr_t));
 	PANIC_ON(!cst_ptr, "Failed to alloc constraint ptr");
@@ -164,12 +209,12 @@ constraint_json_parse_one(json_value* section)
         }
 
 	dbg_log("Adding constraint type %s, to sensor %s and %s\r\n", 
-			constraint_type_to_str,
+			constraint_type_to_str[cst->type],
 			sensor_get_name(cst->data.nor.s1),
 			sensor_get_name(cst->data.nor.s2));
 	SLIST_INSERT_HEAD(&g_sensors_constraint_list, cst, link);
-	sensors_add_constraint(cst, cst->data.nor.s1);
-	sensors_add_constraint(cst, cst->data.nor.s2);
+	sensor_add_constraint(cst, cst->data.nor.s1);
+	sensor_add_constraint(cst, cst->data.nor.s2);
 
 	return 0;
 }
@@ -183,6 +228,7 @@ constraint_json_parse(json_value* section)
 	if (section->type != json_array)
 		return 1;
 
+	dbg_log("Parsing contraints\r\n");
 	for (i = 0; i < section->u.array.length; i++) {
 		constraint_json_parse_one(section->u.array.values[i]);
 	}
