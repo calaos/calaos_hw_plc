@@ -141,6 +141,9 @@ gen_io_setup(const char *name, int reverse, gpio_dir_t direction, gpio_debounce_
 		io->debounce = debounce;
 		io->name = strdup(name);
 
+		if (io->dir == GPIO_DIR_OUTPUT)
+			gen_io_write(io, 0);
+
 		SLIST_INSERT_HEAD(&g_gen_io_list, io, link);
 		
 		if (debounce)
