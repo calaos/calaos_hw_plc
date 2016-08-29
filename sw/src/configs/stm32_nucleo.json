@@ -485,13 +485,40 @@
 		# Extra direct pins
 		#########################
 			{
-				"name": "inext_pa12",
+				"name": "in_ext_pa12",
 				"dir": "in",
 				"io": "gpio@PA_12",
 				"active_low": 1,
 				"mode": "^",
 				"debounce": 1,
 				"id": 70
+			},
+			{
+				"name": "in_ext_pa5",
+				"dir": "in",
+				"io": "gpio@PA_5",
+				"active_low": 1,
+				"mode": "^",
+				"debounce": 1,
+				"id": 71
+			},
+			{
+				"name": "in_ext_pa11",
+				"dir": "in",
+				"io": "gpio@PA_11",
+				"active_low": 1,
+				"mode": "^",
+				"debounce": 1,
+				"id": 72
+			},
+			{
+				"name": "in_ext_pa6",
+				"dir": "in",
+				"io": "gpio@PA_6",
+				"active_low": 1,
+				"mode": "^",
+				"debounce": 1,
+				"id": 73
 			}
 		],
 		"bme280": [

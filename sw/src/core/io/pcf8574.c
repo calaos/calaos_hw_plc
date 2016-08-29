@@ -160,7 +160,6 @@ pcf8574_io_read(void *io)
 	if (gen_io_read(exp->int_io) || exp->need_update) {
 		ret = i2c_bus_read(exp->i2c, exp->addr, &exp->input_value, 1);
 		PANIC_ON(ret != 0, "Failed to read PCF");
-		dbg_log("PCF8574 new value ! %x\r\n", exp->input_value);
 		exp->need_update = 0;
 	}
 
