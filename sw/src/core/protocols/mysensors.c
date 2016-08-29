@@ -47,11 +47,13 @@ static void mysensors_set_sensor(sensor_t *s, __unused__ int subtype, char *payl
 	}
 }
 
-int mysensors_parse_message(char *query)
+int mysensors_parse_single_message(char *query)
 {
 	unsigned char child_sensor_id, message_type, ack, subtype;
 	char *split_str[6], *payload;
 	sensor_t *sensor;
+	
+	dbg_log("Parsing message %s\r\n", query);
 
 	if (mysensors_split_message(query, split_str) != 0)
 		return 0;
@@ -85,13 +87,33 @@ int mysensors_parse_message(char *query)
 	return 1;
 }
 
+int mysensors_parse_message(char *query)
+{
+	char *tmp = query;
+	char *start = query;
+	
+	do {
+		tmp = strchr(start, '\n');
+		if (tmp != NULL)
+			*tmp = 0;
+		if (start == '\0')
+			break;
+
+		mysensors_parse_single_message(start);
+
+		if (tmp == NULL) {
+			break;
+		} else {
+			tmp++;
+			start = tmp;
+		}
+	} while(1);
+
+	return 1;
+}
+
 
 #define MYSENSORS_MSG_FORMAT	"%d;%d;%d;%d;%d;"
-
-static void mysensor_send_message(char *str)
-{
-	std_puts(str);
-}
 
 /**
  * FIXME: generate or make these function generic
@@ -103,7 +125,7 @@ mysensors_serial_send_str(uint16_t node_id, uint8_t child_sensor_id, uint16_t me
 	char buffer[MYSENSOR_MAX_MSG_LENGTH];
 
 	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%s\n", node_id, child_sensor_id, message_type, ack, sub_type, payload);
-	mysensor_send_message(buffer);
+	std_puts(buffer);
 }
 
 static void
@@ -113,7 +135,7 @@ mysensors_send_int(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_t
 	char buffer[MYSENSOR_MAX_MSG_LENGTH];
 
 	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%d\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
-	mysensor_send_message(buffer);
+	std_puts(buffer);
 }
 
 static void
@@ -123,7 +145,7 @@ mysensors_send_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message
 	char buffer[MYSENSOR_MAX_MSG_LENGTH];
 
 	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%.2f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
-	mysensor_send_message(buffer);
+	std_puts(buffer);
 }
 
 static int
