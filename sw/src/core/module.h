@@ -10,11 +10,17 @@
 #define likely(x)       __builtin_expect((x),1)
 #define unlikely(x)     __builtin_expect((x),0)
 
-enum handle_message_ret {
+typedef enum handle_message_ret {
 	MESSAGE_HANDLED = 0,
 	MESSAGE_STOP_PROCESSING,
 	MESSAGE_IGNORED,
-};
+} handle_message_ret_t;
+
+typedef struct module_command {
+	const char *name;
+	const char *help;
+	int num_args;
+} module_command_t;
 
 /**
  *  Module struct
@@ -29,15 +35,26 @@ typedef struct module {
 	 */
 	unsigned int poll_time;
 	/**
+	 * Command related stuff
+	 */
+	const module_command_t *commands;
+	unsigned int command_count;
+
+	/**
 	 * Module main loop hook
 	 */
 	void (*main_loop)(void);
 	/**
 	 * Handle message callback
 	 * Allow the module to catch some specific message and handle them
+	 * @param buf Buffer to parse
+	 * @param len Buffer length
 	 */
-	int (*handle_message)(com_type_t type, char *buf, unsigned int len);
-	/* Parse a json section
+	handle_message_ret_t (*handle_message)(char *buf, unsigned int len);
+
+	/**
+	 * Parse a json section
+	 * @param value Json value
 	 * return 0 if ok, or a negative value in case of error */
 	int (*json_parse)(json_value* value);
 } module_t;

@@ -74,16 +74,37 @@ void module_main_loop()
 }
 
 
+
+void module_handle_command(char *buf, unsigned int len)
+{
+	//~ struct registered_module *rmod;
+
+	dbg_log("Handling command %s\n", buf);
+	/* split the command in multiple tokens */
+	//~ TAILQ_FOREACH(rmod, &g_active_module, link) {
+		//~ if (rmod->mod->handle_message) {
+			//~ ret = rmod->mod->handle_message(buf, len);
+			//~ if (ret == MESSAGE_STOP_PROCESSING)
+				//~ return;
+		//~ }
+	//~ }
+	
+}
+
 void module_handle_message(com_type_t com_type, char *buf, unsigned int len)
 {
 	struct registered_module *rmod;
-	int ret;
+	handle_message_ret_t ret;
 	
-	TAILQ_FOREACH(rmod, &g_active_module, link) {
-		if (rmod->mod->handle_message) {
-			ret = rmod->mod->handle_message(com_type, buf, len);
-			if (ret == MESSAGE_STOP_PROCESSING)
-				return;
+	if (com_type == COM_TYPE_STD) {
+		TAILQ_FOREACH(rmod, &g_active_module, link) {
+			if (rmod->mod->handle_message) {
+				ret = rmod->mod->handle_message(buf, len);
+				if (ret == MESSAGE_STOP_PROCESSING)
+					return;
+			}
 		}
+	} else {
+		module_handle_command(buf, len);
 	}
 }

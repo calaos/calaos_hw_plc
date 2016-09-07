@@ -104,17 +104,17 @@ network_main_loop(void)
 {
 	char buf[MYSENSOR_MAX_MSG_LENGTH];
 	int size;
+	com_type_t type = COM_TYPE_STD;
+	
+	for (type = COM_TYPE_STD; type < COM_TYPE_COUNT; type++) {
+		size = proto_main_loop[g_net_proto](type, buf, MYSENSOR_MAX_MSG_LENGTH);
+		if (size == 0)
+			return;
 
-	proto_main_loop[g_net_proto](COM_TYPE_DBG, buf, MYSENSOR_MAX_MSG_LENGTH);
+		buf[size] = '\0';
 
-	size = proto_main_loop[g_net_proto](COM_TYPE_STD, buf, MYSENSOR_MAX_MSG_LENGTH);
-	if (size == 0)
-		return;
-
-	buf[size] = '\0';
-	dbg_log("Parsing message packet received from network\r\n");
-
-	module_handle_message(COM_TYPE_STD, buf, size);
+		module_handle_message(type, buf, size);
+	}
 }
 
 static void

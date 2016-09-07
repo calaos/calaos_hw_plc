@@ -217,13 +217,12 @@ static sensor_watcher_t mysensor_watcher = {
 };
 
 
-int mysensor_handle_message(com_type_t com_type, char *buf, unsigned int len)
+handle_message_ret_t
+mysensor_handle_message(char *buf, unsigned int len)
 {
-	if (com_type == COM_TYPE_STD) {
-		if (mysensors_parse_message(buf) == 1) {
-			return MESSAGE_STOP_PROCESSING;
-		}
-	}
+
+	if (mysensors_parse_message(buf) == 1)
+		return MESSAGE_STOP_PROCESSING;
 	
 	return MESSAGE_IGNORED;		
 }
