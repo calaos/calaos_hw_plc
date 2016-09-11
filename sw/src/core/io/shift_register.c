@@ -74,7 +74,7 @@ shift_register_json_parse_one(json_value* sensor)
 		}
         }
 
-	dbg_log("Adding shift register %s with %d output\r\n", sr->name, sr->count);
+	dbg_log("Adding shift register %s with %d output\n", sr->name, sr->count);
 	SLIST_INSERT_HEAD(&g_shift_registers, sr, link);
 
 	return 0;
@@ -113,7 +113,7 @@ shift_register_update(shift_register_t *sr)
 static int
 shift_register_set_output(shift_register_t *sr, int output, int state)
 {
-	dbg_log("Setting shift register ouput %d to value %d\r\n", output, state);
+	dbg_log("Setting shift register ouput %d to value %d\n", output, state);
 
 	if (state == 0)
 		sr->current_value &= ~(1 << output);
@@ -132,7 +132,7 @@ shift_register_io_setup(const char *prefix, const char *srio_name, int reverse, 
 	if (!srio)
 		return NULL;
 
-	dbg_log("Setup shift register io %s, reverse: %d, dir: %d, debounce: %d\r\n",
+	dbg_log("Setup shift register io %s, reverse: %d, dir: %d, debounce: %d\n",
 			srio_name, reverse, direction, debounce);
 
 	srio->output = atoi(srio_name);

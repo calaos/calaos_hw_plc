@@ -64,7 +64,7 @@ network_tcp_main_loop(com_type_t com_type, char *buf, unsigned int size)
 	int ret, ret_size;
 	
 	if (wiznet_tcp_sock_is_fin_received(con->tcp_sock)){
-		dbg_log("Closing socket for com %d\r\n", com_type);
+		dbg_log("Closing socket for com %d\n", com_type);
 		wiznet_tcp_sock_close(con->tcp_sock);
 	}
 
@@ -73,20 +73,17 @@ network_tcp_main_loop(com_type_t com_type, char *buf, unsigned int size)
 		ret = wiznet_tcp_server_accept(con->tcp_serv, con->tcp_sock); 
 		if (ret != 0) {
 			if (ret == -2) {
-				dbg_log("Failed to accept connection: too many socket opened\r\n");
+				dbg_log("Failed to accept connection: too many socket opened\n");
 				wiznet_tcp_sock_close(con->tcp_sock);
 			}
 			return 0;
 		}
 
-		dbg_log("Incoming connection from %s: com %d\r\n",
+		dbg_log("Incoming connection from %s: com %d\n",
 			wiznet_tcp_sock_get_address(con->tcp_sock),
 			com_type);
 	}
 
-	if (com_type == COM_TYPE_DBG)
-		return 0;
-	
 	ret_size = wiznet_tcp_sock_receive_all(con->tcp_sock, buf, size);
 	if (ret_size < 0)
 		return 0; 
@@ -109,10 +106,10 @@ network_main_loop(void)
 	for (type = COM_TYPE_STD; type < COM_TYPE_COUNT; type++) {
 		size = proto_main_loop[g_net_proto](type, buf, MYSENSOR_MAX_MSG_LENGTH);
 		if (size == 0)
-			return;
+			continue;
 
 		buf[size] = '\0';
-
+		dbg_log("Message received from network type %d\n", type);
 		module_handle_message(type, buf, size);
 	}
 }
@@ -286,7 +283,7 @@ network_init_interface(spi_bus_t *spi, gen_io_t *cs, gen_io_t *rst)
 		return 1;
 	}
 
-	dbg_log("Network initialized: ip %s, listening on port %d, dbg port: %d, type: %s\r\n",
+	dbg_log("Network initialized: ip %s, listening on port %d, dbg port: %d, type: %s\n",
 		wiznet_iface_get_ip(g_net_iface),
 		g_net_con[COM_TYPE_STD].port,
 		g_net_con[COM_TYPE_DBG].port,
@@ -308,7 +305,7 @@ network_set_mac(const char *mac)
 		g_mac[i] = macc;
 	}
 
-	dbg_log("Read mac %02X:%02X:%02X:%02X:%02X:%02X\r\n",
+	dbg_log("Read mac %02X:%02X:%02X:%02X:%02X:%02X\n",
 		g_mac[0],g_mac[1],g_mac[2],g_mac[3],g_mac[4],g_mac[5]);
 		
 	return 0;
@@ -337,7 +334,7 @@ wiznet_parse_json(json_value* net_data)
 		}
 	}
 	PANIC_ON(cs == NULL || rst == NULL || spi_bus == NULL,
-			"Missing io for network\r\n");
+			"Missing io for network\n");
 
 	return network_init_interface(spi_bus, cs, rst);
 }

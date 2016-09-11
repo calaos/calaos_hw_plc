@@ -57,7 +57,7 @@ spi_json_parse_one(json_value* json_spi)
 
         spibus->hal_spi = hal_spi_setup(mosi, miso, sck, freq);
 
-	dbg_log("Adding spi bus %s\r\n", spibus->name);
+	dbg_log("Adding spi bus %s\n", spibus->name);
 	SLIST_INSERT_HEAD(&g_spis, spibus, link);
 	return 0;
 }

@@ -138,7 +138,7 @@ ssd1306_parse_json(json_value *disp_data)
 		}
 	}
 	PANIC_ON(g_ssd1306_address == 0 || g_ssd1306_i2c == NULL,
-			"Missing ssd1306 info\r\n");
+			"Missing ssd1306 info\n");
 }
 
 display_ops_t ssd1306_display_ops = {

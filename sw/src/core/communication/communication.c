@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "HAL.h"
+#include "utils.h"
 #include "debug.h"
 #include "config.h"
 #include "module.h"
@@ -36,7 +37,7 @@ generic_puts(com_type_t com_type, const char *format, ...)
 	va_start(args, format);
 	vsnprintf(g_io_buffer, sizeof(g_io_buffer), format, args);
 	va_end(args);
-	
+
 	generic_send(com_type, g_io_buffer);
 }
 
@@ -79,7 +80,7 @@ com_json_parse(json_value* section)
 		}
 	}
 
-	std_puts("Debug enabled: %d, setting serial baudrate to %d\r\n", g_debug_enabled, baudrate);
+	std_puts("Debug enabled: %d, setting serial baudrate to %d\n", g_debug_enabled, baudrate);
 	hal_serial_set_baudrate(baudrate);
 
 	return 0;
@@ -100,14 +101,38 @@ static com_handler_t uart_com_hdler = {
 	.put_str = uart_put_str,
 };
 
+static void 
+handle_debug(int argc, char **argv)
+{
+	
+	if (argc >= 2) {
+		if (atoi(argv[1])) {
+			g_debug_enabled = 1;
+		} else {
+			g_debug_enabled = 0;
+		}
+	}
+	dbg_puts("Debug: %s\n", g_debug_enabled ? "enable" : "disable");
+}
+
+static module_command_t com_commands[] = 
+{
+	{
+		.name = "debug",
+		.help = "Enable or disable debug",
+		.hdler = handle_debug,
+	}
+};
+
+
 
 /**
  * Module
  */
 static const module_t com_module = {
 	.name = "communication",
-	.main_loop = NULL,
 	.json_parse = com_json_parse,
+	MODULE_COMMANDS(com_commands),
 };
 
 

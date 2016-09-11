@@ -198,7 +198,7 @@ ili9341_parse_json(json_value *disp_data)
 		}
 	}
 	PANIC_ON(g_ili9341_cs == NULL || g_ili9341_dc == NULL || g_ili9341_spi == NULL,
-			"Missing info for screen\r\n");
+			"Missing info for screen\n");
 	/* Deselect cs */
 	gen_io_write(g_ili9341_cs, 1);
 

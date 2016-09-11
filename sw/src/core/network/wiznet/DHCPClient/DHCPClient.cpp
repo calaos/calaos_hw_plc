@@ -9,7 +9,7 @@
 
 #if DBG_DHCP
 #define DBG(...) do{debug("[%s:%d]", __PRETTY_FUNCTION__,__LINE__);debug(__VA_ARGS__);} while(0);
-#define DBG_HEX(A,B) do{debug("[%s:%d]\r\n", __PRETTY_FUNCTION__,__LINE__);debug_hex(A,B);} while(0);
+#define DBG_HEX(A,B) do{debug("[%s:%d]\n", __PRETTY_FUNCTION__,__LINE__);debug_hex(A,B);} while(0);
 #else
 #define DBG(...) while(0);
 #define DBG_HEX(A,B) while(0);
@@ -69,7 +69,7 @@ int DHCPClient::offer(uint8_t buf[], int size) {
         }
         int len = *p++;
  
-        DBG("DHCP option: %d\r\n", code);
+        DBG("DHCP option: %d\n", code);
         DBG_HEX(p, len);
 
         switch(code) {

@@ -16,11 +16,18 @@ typedef enum handle_message_ret {
 	MESSAGE_IGNORED,
 } handle_message_ret_t;
 
+
+typedef void (*command_handler_t)(int argc, char **argv);
+
 typedef struct module_command {
 	const char *name;
 	const char *help;
-	int num_args;
+	command_handler_t hdler;
 } module_command_t;
+
+#define MODULE_COMMANDS(__cmds)			\
+	.commands = __cmds,			\
+	.command_count = ARRAY_SIZE(__cmds)
 
 /**
  *  Module struct

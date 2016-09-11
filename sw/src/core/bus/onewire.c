@@ -502,7 +502,7 @@ onewire_json_parse_one(json_value* json_onewire)
 		}
 	}
 
-	dbg_log("Adding 1w bus %s\r\n", onewire_bus->name);
+	dbg_log("Adding 1w bus %s\n", onewire_bus->name);
 	SLIST_INSERT_HEAD(&g_onewires, onewire_bus, link);
 
 #if ONEWIRE_SEARCH

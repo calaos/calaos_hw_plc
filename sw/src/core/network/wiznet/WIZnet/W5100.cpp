@@ -30,9 +30,9 @@
 //Debug is disabled by default
 #if 0
 #define DBG(...) do{debug("%p %d %s ", this,__LINE__,__PRETTY_FUNCTION__); debug(__VA_ARGS__); } while(0);
-//#define DBG(x, ...) debug("[WIZnet_Chip:DBG]"x"\r\n", ##__VA_ARGS__);
-#define WARN(x, ...) debug("[WIZnet_Chip:WARN]"x"\r\n", ##__VA_ARGS__);
-#define ERR(x, ...) debug("[WIZnet_Chip:ERR]"x"\r\n", ##__VA_ARGS__);
+//#define DBG(x, ...) debug("[WIZnet_Chip:DBG]"x"\n", ##__VA_ARGS__);
+#define WARN(x, ...) debug("[WIZnet_Chip:WARN]"x"\n", ##__VA_ARGS__);
+#define ERR(x, ...) debug("[WIZnet_Chip:ERR]"x"\n", ##__VA_ARGS__);
 #else
 #define DBG(x, ...)
 #define WARN(x, ...)
@@ -40,7 +40,7 @@
 #endif
 
 #if 1
-#define INFO(x, ...) debug("[WIZnet_Chip:INFO]"x"\r\n", ##__VA_ARGS__);
+#define INFO(x, ...) debug("[WIZnet_Chip:INFO]"x"\n", ##__VA_ARGS__);
 #else
 #define INFO(x, ...)
 #endif
@@ -302,7 +302,7 @@ void WIZnet_Chip::spi_write(uint16_t addr, const uint8_t *buf, uint16_t len)
             break;
         }
     }
-    debug("\r\n");
+    debug("\n");
 #endif    
 }
 
@@ -327,7 +327,7 @@ void WIZnet_Chip::spi_read(uint16_t addr, uint8_t *buf, uint16_t len)
             break;
         }
     }
-    debug("\r\n");
+    debug("\n");
     if ((addr&0xf0ff)==0x4026 || (addr&0xf0ff)==0x4003) {
         ms_delay(200);
     }

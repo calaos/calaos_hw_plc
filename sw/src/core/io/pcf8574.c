@@ -75,13 +75,13 @@ pcf8574_json_parse_one(json_value* sensor)
 		}
         }
         PANIC_ON(exp->i2c == NULL || exp->addr == 0 || exp->int_io == NULL,
-			"Missing info for pcf8574\r\n");
+			"Missing info for pcf8574\n");
         exp->output_value = 0;
         exp->need_update = 1;
-	dbg_log("Adding pcf8574 %s with address 0x%x\r\n", exp->name, exp->addr);
+	dbg_log("Adding pcf8574 %s with address 0x%x\n", exp->name, exp->addr);
 
 	if (i2c_bus_read(exp->i2c, exp->addr, &exp->input_value, 1) != 0) {
-		dbg_log("pcf8574 %s with address 0x%x did not answer, freeing\r\n", exp->name, exp->addr);
+		dbg_log("pcf8574 %s with address 0x%x did not answer, freeing\n", exp->name, exp->addr);
 		free(exp);
 		return 1;
 	}

@@ -56,7 +56,7 @@ i2c_json_parse_one(json_value* json_i2c)
 	i2cstruct->hal_i2c = hal_i2c_setup(sda, scl, freq);
 	PANIC_ON(!i2cstruct->hal_i2c, "Failed to setup I2C bus");
 
-	dbg_log("Adding i2c bus %s, speed %d, sda %s, scl %s\r\n", i2cstruct->name, freq, sda, scl);
+	dbg_log("Adding i2c bus %s, speed %d, sda %s, scl %s\n", i2cstruct->name, freq, sda, scl);
 	SLIST_INSERT_HEAD(&g_i2cs, i2cstruct, link);
 
 	return 0;

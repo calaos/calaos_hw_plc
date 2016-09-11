@@ -16,7 +16,6 @@ void
 generic_puts(com_type_t com_type, const char *format, ...);
 
 #define std_puts(format, ...) generic_puts(COM_TYPE_STD, format, ##__VA_ARGS__)
-#define shell_puts(format, ...) generic_puts(COM_TYPE_SHELL, format, ##__VA_ARGS__)
 
 void
 dbg_puts(const char *format, ...);

@@ -18,7 +18,8 @@
  */
 static unsigned char g_assigned_node_id = 0;
 
-static int mysensors_split_message(char *str, char *split_str[6])
+static int
+mysensors_split_message(char *str, char *split_str[6])
 {
 	int i;
 	char *next = str;
@@ -38,26 +39,31 @@ static int mysensors_split_message(char *str, char *split_str[6])
 	return 0;
 }
 
-static void mysensors_set_sensor(sensor_t *s, __unused__ int subtype, char *payload)
+static void
+mysensors_set_sensor(sensor_t *s, __unused__ int subtype, char *payload)
 {
 	sensor_value_t value;
 	if (sensor_get_type(s) == SENSORS_TYPE_SWITCH) {
 		value.val_i = atoi(payload);
 		sensor_set_value(s, value);
+	} else {
+		dbg_log("Request to set sensor which is not a switch one\n");
 	}
 }
 
-int mysensors_parse_single_message(char *query)
+static int
+mysensors_parse_single_message(char *query)
 {
 	unsigned char child_sensor_id, message_type, ack, subtype;
 	char *split_str[6], *payload;
 	sensor_t *sensor;
 	
-	dbg_log("Parsing message %s\r\n", query);
+	dbg_log("Parsing message\n");
 
 	if (mysensors_split_message(query, split_str) != 0)
 		return 0;
 
+	dbg_log("Message parsed\n");
 	if (atoi(split_str[0]) != g_assigned_node_id)
 		return 0;
 
@@ -81,22 +87,23 @@ int mysensors_parse_single_message(char *query)
 	};
 
 	if (ack) {
-		dbg_log("Ack requested\r\n");
+		dbg_log("Ack requested\n");
 	}
 
 	return 1;
 }
 
-int mysensors_parse_message(char *query)
+static int
+mysensors_parse_message(char *query)
 {
 	char *tmp = query;
 	char *start = query;
-	
+
 	do {
 		tmp = strchr(start, '\n');
 		if (tmp != NULL)
 			*tmp = 0;
-		if (start == '\0')
+		if (start[0] == '\0')
 			break;
 
 		mysensors_parse_single_message(start);
@@ -162,7 +169,7 @@ mysensors_json_parse_section(json_value* section)
 		name = section->u.object.values[i].name;
 		if (strcmp(name, "node_id") == 0) {
 			g_assigned_node_id = entry->u.integer;
-			dbg_log("Node id: %d\r\n", g_assigned_node_id);
+			dbg_log("Node id: %d\n", g_assigned_node_id);
 		}
         }
 

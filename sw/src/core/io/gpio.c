@@ -24,12 +24,12 @@ en_gpio_setup(const char *prefix, const char *gpio_name, int reverse,
 	if (!gpio)
 		return NULL;
 
-	dbg_log("Setup gpio %s, reverse: %d, dir: %d, debounce: %d\r\n",
+	dbg_log("Setup gpio %s, reverse: %d, dir: %d, debounce: %d\n",
 			gpio_name, reverse, direction, debounce);
 
 	gpio->hal_gpio = hal_gpio_setup(gpio_name, reverse, direction, mode);
 
-	dbg_log("GPIO address %p\r\n", gpio);
+	dbg_log("GPIO address %p\n", gpio);
 	return gpio;
 }
 

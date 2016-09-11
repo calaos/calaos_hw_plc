@@ -122,7 +122,4 @@ typedef enum
 void
 mysensors_init();
 
-int
-mysensors_parse_message(char *query);
-
 #endif

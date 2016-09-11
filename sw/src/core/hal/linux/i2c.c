@@ -23,7 +23,7 @@ hal_i2c_setup(const char *sda, const char *scl, uint32_t frequency)
 int
 hal_i2c_write(hal_i2c_t *i2c, uint8_t addr, const uint8_t *data, unsigned int length)
 {
-	dbg_log("I2C write at addr %x\r\n", addr);
+	dbg_log("I2C write at addr %x\n", addr);
 	return 1;
 }
 
@@ -37,6 +37,6 @@ hal_i2c_write(hal_i2c_t *i2c, uint8_t addr, const uint8_t *data, unsigned int le
 int
 hal_i2c_read(hal_i2c_t *i2c, uint8_t addr, uint8_t *data, unsigned int length)
 {	
-	dbg_log("I2C read at addr %x\r\n", addr);
+	dbg_log("I2C read at addr %x\n", addr);
 	return 1;
 }

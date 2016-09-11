@@ -40,7 +40,7 @@ main()
 
 	config_init();
 	
-	dbg_log("Entering main loop\r\n");
+	dbg_log("Entering main loop\n");
 	while(1) {
 		/* Main loop */
 		module_main_loop();

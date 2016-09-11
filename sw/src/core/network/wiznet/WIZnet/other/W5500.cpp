@@ -25,9 +25,9 @@
 //Debug is disabled by default
 #if 0
 #define DBG(...) do{debug("%p %d %s ", this,__LINE__,__PRETTY_FUNCTION__); debug(__VA_ARGS__); } while(0);
-//#define DBG(x, ...) debug("[W5500:DBG]"x"\r\n", ##__VA_ARGS__);
-#define WARN(x, ...) debug("[W5500:WARN]"x"\r\n", ##__VA_ARGS__);
-#define ERR(x, ...) debug("[W5500:ERR]"x"\r\n", ##__VA_ARGS__);
+//#define DBG(x, ...) debug("[W5500:DBG]"x"\n", ##__VA_ARGS__);
+#define WARN(x, ...) debug("[W5500:WARN]"x"\n", ##__VA_ARGS__);
+#define ERR(x, ...) debug("[W5500:ERR]"x"\n", ##__VA_ARGS__);
 #else
 #define DBG(x, ...)
 #define WARN(x, ...)
@@ -35,7 +35,7 @@
 #endif
 
 #if 1
-#define INFO(x, ...) debug("[W5500:INFO]"x"\r\n", ##__VA_ARGS__);
+#define INFO(x, ...) debug("[W5500:INFO]"x"\n", ##__VA_ARGS__);
 #else
 #define INFO(x, ...)
 #endif
@@ -340,7 +340,7 @@ void WIZnet_Chip::spi_write(uint16_t addr, uint8_t cb, const uint8_t *buf, uint1
             break;
         }
     }
-    debug("\r\n");
+    debug("\n");
 #endif
 }
 
@@ -364,7 +364,7 @@ void WIZnet_Chip::spi_read(uint16_t addr, uint8_t cb, uint8_t *buf, uint16_t len
             break;
         }
     }
-    debug("\r\n");
+    debug("\n");
     if ((addr&0xf0ff)==0x4026 || (addr&0xf0ff)==0x4003) {
         wait_ms(200);
     }
