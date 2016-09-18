@@ -109,6 +109,8 @@ display_help()
 	unsigned int i;
 
 	dbg_puts("Available commands:\n");
+	dbg_puts("  - help: display this help\n");
+
 	TAILQ_FOREACH(rmod, &g_active_module, link) {
 		mod = rmod->mod;
 		for (i = 0; i < mod->command_count; i++) {
