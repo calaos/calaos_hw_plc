@@ -32,14 +32,6 @@ void
 hal_serial_set_baudrate(int baudrate);
 
 /**
- * Get a char from the serial port
- * @param c Pointer to store the char
- * @return 0 if a char was received, a positive value if not.
- */
-int
-hal_serial_getc(char *c);
-
-/**
  * Output a string on the serial port
  * @param str The string to output
  * @return 1 if there is a char, 0 if not
@@ -176,6 +168,36 @@ hal_spi_setup(const char *mosi, const char *miso, const char *sck, uint32_t freq
  */
 int
 hal_spi_write(hal_spi_t *spi, uint8_t value);
+
+
+/**
+ * Uart
+ */
+ 
+typedef struct hal_uart hal_uart_t;
+
+/**
+ * Initialize I2C bus 
+ */
+hal_uart_t *
+hal_uart_setup(const char *tx, const char *rx, unsigned int baudrate);
+
+/**
+ * Write data to uart bus
+ * @param data Data to send
+ * @param length Length of data
+ */
+int
+hal_uart_write(hal_uart_t *uart, const uint8_t *data, unsigned int length);
+
+/**
+ * Read data from uart
+ * @param data Data read
+ * @param length Length of data
+ */
+int
+hal_uart_read(hal_uart_t *uart, uint8_t *data, unsigned int length);
+
 
 #ifdef __cplusplus
 }

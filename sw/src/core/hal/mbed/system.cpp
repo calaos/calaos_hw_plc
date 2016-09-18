@@ -1,33 +1,16 @@
 #include "mbed.h"
 #include "SDFileSystem.h"
 
-#define SERIAL_RX_BUFFER_SIZE	128
-
 SDFileSystem sd(SPI_MOSI, SPI_MISO, SPI_SCK, SPI_CS, "sd");
 
 Serial pc_serial(USBTX, USBRX);
-Serial debug_serial(PA_9, PA_10);
 Timer t;
 
-static char serial_rx_buffer[SERIAL_RX_BUFFER_SIZE];
-static volatile uint8_t rx_head = 0, rx_tail = 0;
-
-void serial_pc_rx_interrupt()
-{
-	uint8_t next_rx_tail = (rx_tail + 1) % SERIAL_RX_BUFFER_SIZE;
-
-	while (pc_serial.readable() && next_rx_tail != rx_head) {
-		serial_rx_buffer[rx_tail] = pc_serial.getc();
-		rx_tail = next_rx_tail;
-		next_rx_tail = (rx_tail + 1) % SERIAL_RX_BUFFER_SIZE;
-	}
-}
 
 extern "C" void
 hal_system_init()
 {
 	t.start();
-	pc_serial.attach(&serial_pc_rx_interrupt, Serial::RxIrq);
 	pc_serial.baud(115200);
 }
 
@@ -54,20 +37,6 @@ hal_dbg_log(const char *str)
 
 	return 0;
 }
-
-
-extern "C" int
-hal_serial_getc(char *c)
-{
-	if (rx_head != rx_tail) {
-		*c = serial_rx_buffer[rx_head];
-		rx_head = (rx_head + 1) % SERIAL_RX_BUFFER_SIZE;
-		return 1;
-	}
-
-	return 0;
-}
-
 
 extern "C" void
 hal_panic(void)
