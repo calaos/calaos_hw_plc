@@ -50,16 +50,18 @@ hal_uart_write(hal_uart_t *uart, const uint8_t *data, unsigned int length)
 }
 
 extern "C" int
-hal_uart_read(hal_uart_t *uart, uint8_t *data, unsigned int length)
+hal_uart_read(hal_uart_t *uart, uint8_t *data, unsigned int length, unsigned int *ret_len)
 {
 	struct hal_uart  *uartp = uart;
-	int i = 0;
+	unsigned int i = 0;
 
 	while (uartp->rx_head != uartp->rx_tail) {
 		data[i++] = uartp->rx_buffer[uartp->rx_head];
 		uartp->rx_head = (uartp->rx_head + 1) % SERIAL_RX_BUFFER_SIZE;
 		return 1;
 	}
+	
+	*ret_len = i;
 
 	return 0;
 }

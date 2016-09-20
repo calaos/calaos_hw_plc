@@ -184,6 +184,7 @@ hal_uart_setup(const char *tx, const char *rx, unsigned int baudrate);
 
 /**
  * Write data to uart bus
+ * @param uart Uart to write data on
  * @param data Data to send
  * @param length Length of data
  */
@@ -192,11 +193,13 @@ hal_uart_write(hal_uart_t *uart, const uint8_t *data, unsigned int length);
 
 /**
  * Read data from uart
+ * @param uart Uart to read data on
  * @param data Data read
  * @param length Length of data
+ * @param ret_len Returned read length
  */
 int
-hal_uart_read(hal_uart_t *uart, uint8_t *data, unsigned int length);
+hal_uart_read(hal_uart_t *uart, uint8_t *data, unsigned int length, unsigned int *ret_len);
 
 
 #ifdef __cplusplus
