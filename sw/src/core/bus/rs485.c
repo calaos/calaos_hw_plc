@@ -23,7 +23,7 @@ typedef struct rs485_bus {
 SLIST_HEAD(, rs485_bus) g_rs485_bus_list = SLIST_HEAD_INITIALIZER(g_rs485_bus_list);
 
 
-int
+static int
 rs485_bus_write(rs485_bus_t *rs, const uint8_t *data, unsigned int length)
 {
 	/* Set Data Enable high to drive the line */
@@ -33,6 +33,14 @@ rs485_bus_write(rs485_bus_t *rs, const uint8_t *data, unsigned int length)
 	gen_io_write(rs->de, 0);
 
 	return 0;
+}
+
+static int
+rs485_bus_read(rs485_bus_t *rs, const uint8_t *data, unsigned int *ret_len)
+{
+	int ret_len
+
+	hal_uart_write(rs->uart, data, length *ret_len);
 }
 
 static int
@@ -70,6 +78,8 @@ rs485_json_parse_one(json_value* sensor)
 
 	rs->uart = hal_uart_setup(tx, rx, baudrate);
 	PANIC_ON(rs->uart == NULL, "Failed to create uart for rs485 bus");
+
+	gen_io_write(rs->de, 0);
 
 	dbg_log("Adding rs485 bus %s with %d baudrate\n", rs->name, baudrate);
 	SLIST_INSERT_HEAD(&g_rs485_bus_list, rs, link);
