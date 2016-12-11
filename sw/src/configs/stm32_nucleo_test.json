@@ -1,0 +1,127 @@
+{
+	"communication": {
+		"baudrate": 115200,
+		"debug": 1
+	},
+	"mysensors": {
+		"node_id": 42
+	},
+	"i2c": [{
+		"name": "i2c1",
+		"sda": "PB_9",
+		"scl": "PB_8",
+		"freq": 100000
+	}, {
+		"name": "i2c3",
+		"sda": "PB_4",
+		"scl": "PA_8",
+		"freq": 100000
+	}],
+	"spi": [{
+		"name": "spi1",
+		"mosi": "PB_15",
+		"miso": "PB_14",
+		"sck": "PB_13",
+		"freq": 20000000
+	}, {
+		"name": "spi3",
+		"mosi": "PC_12",
+		"miso": "PC_11",
+		"sck": "PC_10",
+		"freq": 20000000
+	}],
+	"1w": [{
+		"name": "1w1",
+		"pin": "gpio@PC_10"
+	}],
+	"shift_registers": [{
+		"name": "sr1",
+		"data": "gpio@PB_1",
+		"clock": "gpio@PB_6",
+		"latch": "gpio@PB_2",
+		"count": 32
+	}],
+	"pcf8574": [{
+		"name": "pcf1",
+		"addr": "0x20",
+		"int": "gpio@PA_9",
+		"i2c": "i2c3"
+	}, {
+		"name": "pcf2",
+		"addr": "0x21",
+		"int": "gpio@PA_9",
+		"i2c": "i2c3"
+	}, {
+		"name": "pcf3",
+		"addr": "0x20",
+		"int": "gpio@PC_9",
+		"i2c": "i2c1"
+	}],
+	"network": {
+		"type": "w5100",
+		"mac": "78:ac:c0:97:f2:68",
+		"port": 14987,
+		"dbg_port": 14988,
+		"proto": "tcp",
+		# not needed when using proto tcp
+		"master": "192.168.1.10",
+		"data": {
+			"spi": "spi3",
+			"rst": "gpio@PD_2",
+			"cs": "gpio@PA_13"
+		}
+	},
+	"sensors": {
+		"digital_io" : [
+			{
+				"name": "sw1",
+				"io": "gpio@PC_13",
+				"dir": "in",
+				"active_low": 1,
+				"debounce": 1,
+				"id": 0
+			},
+		###################################
+		# Outputs for shift register 1 (24V)
+		###################################
+			{
+				"name": "outh1",
+				"dir": "out",
+				"io": "sr1@0",
+				"active_low": 0,
+				"id": 1
+			}, {
+				"name": "outh2",
+				"dir": "out",
+				"io": "sr1@1",
+				"active_low": 0,
+				"id": 2
+			}
+		],
+		"bme280": [
+			{
+				"i2c": "i2c1",
+				"addr": "0x76",
+				"refresh": 5000,
+				"id": 60
+			}
+		],
+		"bh1750": [
+			{
+				"i2c": "i2c1",
+				"addr": "0x23",
+				"refresh": 5000,
+				"id": 63,
+				"auto": 1
+			}
+		],
+		"constraints": [
+			{	
+				# NOR type constraint only applies to input digital_io
+				"type": "nor",
+				"io1": 1,
+				"io2": 2
+			}
+		]
+	}
+}
